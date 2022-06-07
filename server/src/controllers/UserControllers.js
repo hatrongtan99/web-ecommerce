@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 class UserController {
-    // @desc login
-    // @route POST/api/login
-    // @access Private/Admin || Public
+    // @desc    login
+    // @route   POST/api/login
+    // @access  Private/Admin || Public
     async login(req, res, next) {
         const {userEmail, password} = req.body
 
@@ -37,8 +37,8 @@ class UserController {
         }
     }
 
-    // @desc verify user
-    // @route GET/verify
+    // @desc    verify user
+    // @route   GET/verify
     // @accsess Public
     async verify(req, res, next) {
         try {
@@ -54,9 +54,9 @@ class UserController {
         }
     }
 
-    // @desc create a new admin
-    // @route POST/api/...
-    // @access Public
+    // @desc    create a new admin
+    // @route   POST/api/...
+    // @access  Public
     async createUser(req, res, next) {
         try {
             const userInfo = req.body

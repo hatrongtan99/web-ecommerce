@@ -21,7 +21,6 @@ route(app)
 
 //####################
 
-
 // Handling Errors
 app.use((err, req, res, next) => {
   // console.log(err);

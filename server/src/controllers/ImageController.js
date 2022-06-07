@@ -1,11 +1,10 @@
 const multer = require('multer');
-const imageSevice = require('../services/img');
 const storeImageMiddleware = require('../middlewares/storeImg');
 
 class ImageController {
-    // @desc store avatar production
-    // @route
-    // @access Private
+    // @desc   store avatar production
+    // @route  POST/api/admin/upload-single
+    // @access Private/Admin
     storeSingleImage(req, res) {
         const upload = storeImageMiddleware.single('image')
         upload(req, res, async (err) => {
@@ -24,6 +23,9 @@ class ImageController {
         })
     }
 
+    // @Desc   update multiple image
+    // @route  POST/api/admin/update-multiple
+    // @access Private/Admin
     async storeMultipleImage(req, res) {
         const upload = storeImageMiddleware.array('image', 5);
         upload(req, res, (err) => {

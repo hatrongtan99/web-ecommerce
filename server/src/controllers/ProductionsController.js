@@ -1,9 +1,9 @@
 const productService = require('../services/products');
 
 class ProductionsController {
-    // @desc get mutipleProduct
-    // @route GET/api/:category
-    // @access Public
+    // @desc    get mutipleProduct
+    // @route   GET/api/:category
+    // @access  Public
     async getProductsByCategory(req, res, next) {
         try {
             const category = req.params.category;

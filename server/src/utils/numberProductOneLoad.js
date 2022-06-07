@@ -9,4 +9,9 @@ const emptyOrRows = (rows) => {
     return rows;
 }
 
-module.exports = { loadExtraProduct, emptyOrRows, numberProductOneLoad }
+const datetimeSQL = () => {
+    return new Date().toISOString().slice(0, 19).replace('T', ' ');
+    
+};
+
+module.exports = { loadExtraProduct, emptyOrRows, numberProductOneLoad, datetimeSQL }

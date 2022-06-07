@@ -1,5 +1,5 @@
 const db = require('../configs/db');
-const { loadExtraProduct, emptyOrRows, numberProductOneLoad } = require('../utils/numberProductOneLoad');
+const { loadExtraProduct, emptyOrRows, numberProductOneLoad, datetimeSQL} = require('../utils/numberProductOneLoad');
 const slugGenerator = require('../utils/slugGenaration');
 
 class Products {
@@ -20,7 +20,7 @@ class Products {
                 FROM products AS p
             INNER JOIN product_brand AS b ON p.Product_brand_ID = b.Brand_ID
             INNER JOIN product_categories AS c ON p.Product_category_ID = c.Category_ID
-            WHERE c.Category_slug = ? limit ${numberProductOneLoad} offset ${offset};`;
+            WHERE c.Category_slug = ? AND p.Is_delete = false limit ${numberProductOneLoad} offset ${offset};`;
         const res = await db.execute(sql, [category])
         return emptyOrRows(res)
     }
@@ -46,7 +46,7 @@ class Products {
             INNER JOIN product_images AS i ON p.Product_ID = i.Product_ID
             INNER JOIN product_discount AS d On p.Product_ID = d.Product_ID
             INNER JOIN product_inventory AS n ON p.Product_ID = n.Product_ID
-            WHERE c.Category_slug = ? AND p.Product_slug = ?;`;
+            WHERE c.Category_slug = ? AND p.Product_slug = ? AND p.Is_delete = false;`;
             
         const res = await db.execute(sql, [category, slug]);
         if (res[0].id == null) {
@@ -134,7 +134,7 @@ class Products {
                 FROM desc_product AS d WHERE Product_ID = ?;`;
         const res = await db.execute(sql, [id]);
         return emptyOrRows(res);
-    }
+    };
 
     // get product catalog
     async getProductCatalog(req) {
@@ -160,7 +160,8 @@ class Products {
         const pr3 = db.execute(`DELETE FROM product_discount WHERE Product_ID = ?`, [id]);
         const pr4 = db.execute(`DELETE FROM product_images WHERE Product_ID = ?`, [id]);
         const pr5 = db.execute(`DELETE FROM product_inventory WHERE Product_ID = ?`, [id]);
-        const pr6 = db.execute(`DELETE FROM products WHERE Product_ID = ?`, [id]);
+        const pr6 = db.execute(`UPDATE products SET delete_at = ?,  
+            Is_delete = ? WHERE Product_ID = ?`, [datetimeSQL(), true, id]);
         await Promise.all([pr1, pr2, pr3, pr4, pr5, pr6]);
     }
 }
