@@ -1,0 +1,46 @@
+.header-wrapper {
+    @include flex (center, center);
+    height: 50px;
+    // width: 100%;
+    background-color: $base-color;
+}
+
+// .header-container {
+    
+// }
+
+.header__search {
+    @include flex (center, center);
+    height: 32px;
+    border-radius: 20px;
+    overflow: hidden;
+
+    input {
+        border: none;
+        outline: none;
+        background-color: #f5f5f5;
+        height: 100%;
+        width: 180px;
+        padding-left: 20px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+
+        @media (min-width: 768px) {
+            width: 400px;
+        }
+    }
+
+    &__icon {
+        border: none;
+        height: 100%;
+        width: 40px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        
+        &:hover i {
+            color: red;
+        }
+    }
+}
