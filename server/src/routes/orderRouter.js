@@ -8,7 +8,7 @@ router.post('/add-to-cart', orderController.addToCart);
 // checkout
 router.post('/checkout', orderController.createOrder);
 
-// get cart info by user id
-router.get('/:userId/cart', orderController.getCartByUserId)
+// get cart products by user id
+router.get('/cart/:userId', orderController.getCartByUserId);
 
 module.exports = router

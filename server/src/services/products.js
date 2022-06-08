@@ -38,12 +38,12 @@ class Products {
             c.Category_name AS categoryName,
             c.Category_slug AS category,
             d.Discount as discount,
-            n.Quantity as quantity,
+            n.Inventory as quantity,
             group_concat(DISTINCT i.Image SEPARATOR ', ') AS images
                 FROM products AS p 
             INNER JOIN product_brand AS b ON p.Product_brand_ID = b.Brand_ID
             INNER JOIN product_categories AS c ON p.Product_category_ID = c.Category_ID
-            INNER JOIN product_images AS i ON p.Product_ID = i.Product_ID
+            LEFT JOIN product_images AS i ON p.Product_ID = i.Product_ID
             INNER JOIN product_discount AS d On p.Product_ID = d.Product_ID
             INNER JOIN product_inventory AS n ON p.Product_ID = n.Product_ID
             WHERE c.Category_slug = ? AND p.Product_slug = ? AND p.Is_delete = false;`;
@@ -124,8 +124,7 @@ class Products {
     };
 
     // get product description
-    async getProductDesc(req) {
-        const {id} = req.params;
+    async getProductDesc(id) {
         const sql = `SELECT 
             d.Desc_ID AS descId, 
             d.Title AS titleDesc, 
@@ -137,8 +136,7 @@ class Products {
     };
 
     // get product catalog
-    async getProductCatalog(req) {
-        const {id} = req.params;
+    async getProductCatalog(id) {
         const sql = `SELECT 
             c.Catalog_ID AS catalogId, 
             c.Title_catalog AS titleCatalog, 
@@ -149,8 +147,25 @@ class Products {
     }
 
     // update product
-    async updateProduct(category, id) {
-        
+    async updateProduct(req) {
+        const {id} = req.params;
+        const updateObj = req.body;
+        const promises = [];
+
+        Object.keys(updateObj).map((tableName) => {
+            const sql = `UPDATE ${tableName} 
+            SET ${Object.keys(updateObj[tableName]).map(column => `${column} = ?`).join(', ')} WHERE Product_ID = ?;`;
+
+            const res = db.execute(sql, [...Object.values(updateObj[tableName]), id]);
+            promises.push(res);
+        });
+
+        const result = await Promise.all(promises);
+
+        for (let i = 0; i < result.length; i++) {
+            if (!result[i].affectedRows) return false
+        }
+        return true;
     }
 
     // delete product by id

@@ -25,8 +25,16 @@ class ProductionsController {
             const {category, slug} = req.params
             const response = await productService.getProductByCategoryAndSlug(category, slug);
             if (response) {
-                const arrImages = response.images.split(', ')
-                response.images = arrImages
+                if (response.images) {
+                    const arrImages = response.images.split(', ')
+                    response.images = arrImages
+                } else {
+                    response.images = []
+                }
+                const desc = await productService.getProductDesc(response.id);
+                const catalog = await productService.getProductCatalog(response.id);
+                response.description = desc;
+                response.catalog = catalog;
                 return res.status(200).json({success: true, message: 'Get product by slug successfully', products: response})
             }
             return res.status(400).json({success: false, message: 'Get product by slug failed'})
@@ -35,36 +43,6 @@ class ProductionsController {
             res.status(404)
         }        
     };
-
-    // @desc    create description
-    // @router  GET/admin/products/:id/description
-    // @access  Public
-    async getProductDescById(req, res, next) {
-        try {
-            const response = await productService.getProductDesc(req);
-            if (response) {
-                return res.json({success: true, message: 'Get product description successfully', desc: response})
-            } 
-            return res.json({success: false, message: 'Get product description failed'})
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    // @desc    create catalog
-    // @router  GET/admin/products/:id/catalog
-    // @access  Public
-    async getProductCatalog(req, res, next) {
-        try {
-            const response = await productService.getProductCatalog(req);
-            if (response) {
-                return res.json({success: true, message: 'Get product catalog successfully', catalog: response})
-            } 
-            return res.json({success: false, message: 'Get product catalog failed'})
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     // @desc    create product
     // @route   POST/api/admin/products
@@ -135,14 +113,20 @@ class ProductionsController {
             console.log(error)
         }
     }
-
-    
     
     // @desc    Update a product
     // @route   PUT /api/admin/products/:id
     // @access  Private/Admin
     async updateProduct(req, res, next) {
-
+        try {
+            const response = await productService.updateProduct(req);
+            if (response) {
+                return res.json({success: true, message: 'Update successful'});
+            }
+            return res.status(400).json({success: false, message: 'Update failed'});
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     // @desc    delete product

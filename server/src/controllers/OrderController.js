@@ -39,11 +39,17 @@ class OrderController {
         }
     }
 
-    // @desc    get cart by user userId
+    // @desc    get cart products by user userId
     // @route   GET/api/:userId/cart
     // @access  Public
     async getCartByUserId(req, res, next) {
-
+        const {userId} = req.params;
+        try {
+            const response = await orderService.productsCart(userId);
+            return res.json({success: true, message: 'Get cart products by user id', cart: response})
+        } catch (error) {
+            console.log(error)
+        }
     }
 };
 
