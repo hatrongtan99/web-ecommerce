@@ -13,7 +13,6 @@ class ProductionsController {
 
         } catch (error) {
             console.log(error);
-            res.status(404)
         }
     }
 
@@ -40,7 +39,6 @@ class ProductionsController {
             return res.status(400).json({success: false, message: 'Get product by slug failed'})
         } catch (error) {
             console.log(error);
-            res.status(404)
         }        
     };
 

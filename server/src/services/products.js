@@ -1,11 +1,13 @@
 const db = require('../configs/db');
 const { loadExtraProduct, emptyOrRows, numberProductOneLoad, datetimeSQL} = require('../utils/numberProductOneLoad');
 const slugGenerator = require('../utils/slugGenaration');
+const generateFilterQuery = require('../utils/genarateFilterQuery');
 
 class Products {
     // get product by category
     async mutipleProductsByCategory(category, req) {
-        const { page } = req.query
+        const { page, ...rest } = req.query
+        
         const offset = loadExtraProduct(page);
         const sql = `SELECT 
             p.Product_ID AS id,
@@ -20,7 +22,7 @@ class Products {
                 FROM products AS p
             INNER JOIN product_brand AS b ON p.Product_brand_ID = b.Brand_ID
             INNER JOIN product_categories AS c ON p.Product_category_ID = c.Category_ID
-            WHERE c.Category_slug = ? AND p.Is_delete = false limit ${numberProductOneLoad} offset ${offset};`;
+            WHERE c.Category_slug = ? AND p.Is_delete = false ${generateFilterQuery(rest)} limit ${numberProductOneLoad} offset ${offset};`;
         const res = await db.execute(sql, [category])
         return emptyOrRows(res)
     }

@@ -9,7 +9,7 @@ const app = express();
 // apply middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors())
+app.use(cors());
 
 // static files
 app.use('/public', express.static(path.join(__dirname, 'public')))
@@ -18,7 +18,6 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 route(app)
 
 //#########################
-
 //####################
 
 // Handling Errors

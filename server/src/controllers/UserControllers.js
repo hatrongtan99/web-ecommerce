@@ -87,8 +87,6 @@ class UserController {
             if (!existUser[0]) {
                 return res.status(400).json({success: false, message: 'Sai tên tài khoản hoặc mật khẩu!'})
             }
-            
-
             const match = await bcrypt.compare(prevPassword, existUser[0].userPassword)
             if (match) {
                 const response = await authUser.changePassword(userEmail, newPassword)

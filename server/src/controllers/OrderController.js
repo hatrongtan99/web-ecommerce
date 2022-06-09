@@ -51,6 +51,36 @@ class OrderController {
             console.log(error)
         }
     }
+
+    // @desc    delete product in cart
+    // @route   DELETE/api/cart/:userId/:productId
+    // @access  Public
+    async deleteProductInCart(req, res, next) {
+        try {
+            const response = await orderService.deleteProductInCart(req);
+            if (response) {
+                return res.json({success: true, message: 'Delete successfuly'});
+            }
+            return res.json({success: false, message: 'Delete product failed'});
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    // @desc    update quantity product in cart
+    // @route   PUT/api/cart/:userId/:productId
+    // @access  Public
+    async updateQuantityProduct(req, res, next) {
+        try {
+            const response = await orderService.updateQuantityProduct(req);
+            if (response) {
+                return res.json({success: true, message: 'Update quantity successfully'})
+            }
+            return res.json({success: false, message: 'Update quantity failed'});
+        } catch (error) {
+            console.log(error)
+        }
+    }
 };
 
 module.exports = new OrderController();
