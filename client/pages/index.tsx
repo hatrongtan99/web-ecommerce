@@ -1,46 +1,33 @@
-import type { NextPage } from 'next'
-import {MainLayout} from '../components'
-import axios from 'axios';
-import { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
-import {useRouter } from 'next/router'
+import {NextPage} from 'next';
+import {MainLayout, Button, LinkButton} from '~/components/index';
+import Link from 'next/link';
+import {BsSearch} from 'react-icons/bs';
+import {MouseEvent} from 'react'
 
-const Home = () => {
-  const router = useRouter()
-
-  const [image, setimage] = useState<any>()
-
-  const handleUpdate: MouseEventHandler<HTMLButtonElement> = async (e) => {
-    e.preventDefault()
-    if (image) {
-      const formData = new FormData();
-      for (let item of image) {
-        formData.append('image', item);
-      }
-      
-      const res = await axios.post('http://localhost:5000/api/upload-single', formData)
-      if (res.data.success) {
-        router.push('/get-img')
-      }
-      console.log("res ", res.data)
-    }
-  }
-
-  const handleButtonClick: ChangeEventHandler<HTMLInputElement> = (e) => {
-    if (e.target.files) {
-      setimage(e.target.files)
-    }
-  };
-
+const Home: NextPage = () => {
   return (
     // <MainLayout titlePage='Trang Chủ'>
-    //   <div>main tết </div>
+      
     // </MainLayout>
-    <form encType="multipart/form-data">
-      <label>Store Image</label><br/><br/>
-      <input type="file"  name="image" onChange={handleButtonClick} multiple/>
-      <button type="submit" onClick={handleUpdate}>Upload</button>
-    </form>
+    // <Link href='http://localhost:3002/checkout' passHref>
+    //   <a>
+    //     <BsSearch/>
+    //     click
+    //   </a>
+    // </Link>
+    <>
+    <Button variant='secondary-border' size='lg'>
+      Log in
+    </Button>
+    <Button size='sm'>
+      search
+    </Button>
+    <LinkButton leftIcon={<BsSearch/>} href='facebook.com' disable>
+      search
+    </LinkButton>
+
+    </>
   )
 }
 
-export default Home
+export default Home;

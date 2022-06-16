@@ -1,7 +1,6 @@
 import React from 'react'
-import { NextPage } from 'next'
 
-const Footer: NextPage = () => {
+const Footer = () => {
   return (
     <div>Footer</div>
   )

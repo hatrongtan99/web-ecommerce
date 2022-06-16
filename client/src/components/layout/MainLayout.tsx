@@ -9,7 +9,7 @@ interface LayoutProps {
   titlePage?: string
 }
 
-const MainLayout: NextPage = ({ children, titlePage }: LayoutProps) => {
+const MainLayout = ({ children, titlePage }: LayoutProps) => {
   return (
     <>
       <Head>

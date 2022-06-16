@@ -1,14 +1,14 @@
-import '../styles/index.scss';
 import "bootstrap/dist/css/bootstrap.css";
+import '../styles/index.scss';
 
 // import "@fortawesome/fontawesome-svg-core/styles.css";
 // import { config } from "@fortawesome/fontawesome-svg-core";
 // config.autoAddCss = false;
 // import '@fortawesome/fontawesome-free/css/all.css'
 
-import { ReactElement, ReactNode, useEffect } from 'react'
-import { NextPage } from 'next'
-import { AppProps } from 'next/app'
+import { ReactElement, ReactNode, useEffect } from 'react';
+import { NextPage } from 'next';
+import { AppProps } from 'next/app';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode

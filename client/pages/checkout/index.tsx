@@ -1,11 +1,11 @@
 import React from 'react';
 import { NextPage } from 'next';
-import {MainLayout} from '../../components'
+import {MainLayout} from '~/components/index'
 
 const Checkout: NextPage = () => {
     return (
         <MainLayout>
-            Checkout
+            <div> test</div>    
         </MainLayout>
     )
 }

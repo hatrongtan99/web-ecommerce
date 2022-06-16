@@ -1,9 +1,8 @@
 import React from 'react'
-import type { NextPage } from 'next';
 import {BsSearch, BsCart3} from 'react-icons/bs'
 
 
-const Header: NextPage = () => {
+const Header = () => {
 
   return (
     <div className='header-wrapper'>
