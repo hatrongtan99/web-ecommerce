@@ -2,6 +2,18 @@ const express = require('express');
 const router = express.Router()
 const productionsController = require('../controllers/ProductionsController')
 
+// get producs by search
+router.get('/search', productionsController.getProductBySeach);
+
+// get all brand products
+router.get('/brands', productionsController.getBrandProduct);
+
+// create brand product
+router.post('/admin/brands', productionsController.createNewBrand)
+
+// delete brand product by id
+router.delete('/admin/brands/:idBrand', productionsController.deleteBrand)
+
 // get multiple products by category
 router.get('/:category', productionsController.getProductsByCategory);
 

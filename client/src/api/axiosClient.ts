@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import queryString from 'query-string';
 
 const axiosClient = axios.create({
-    baseURL: 'base url',
+    baseURL: 'http://localhost:5000/api',
     headers: {
         'content-type': 'application/json',
     },
@@ -14,9 +14,9 @@ axiosClient.interceptors.request.use(async (config) => {
     return config;
 })
 
-axiosClient.interceptors.response.use((response) => {
+axiosClient.interceptors.response.use((response: AxiosResponse) => {
     if (response && response.data) {
-        return response.data
+        return response
     }
     return response;
     }, (error) => {

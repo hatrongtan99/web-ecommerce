@@ -1,6 +1,9 @@
 import {ReactNode} from 'react';
 import Link from 'next/link';
-import {MouseEvent} from 'react'
+import classNames from 'classnames/bind';
+import styles from './linkButton.module.scss';
+
+const cx = classNames.bind(styles)
 
 type LinkButtonProps = {
     href: string;
@@ -23,11 +26,11 @@ const LinkButton = ({
     ...props
 }: LinkButtonProps) => {
   
-    const allClass = `custom-link-btn ${variant} ${size} ${disable ? 'btn-disabled' : ''}`;
+    const allClassName = cx('custom-link-btn', {[size]: size, [variant]: variant, 'btn-disable': disable})
 
     return (
     <Link href={href} {...props}>
-        <a className={allClass} onClick={(e) => disable ? e.preventDefault() : null}>
+        <a className={allClassName} onClick={(e) => disable ? e.preventDefault() : null}>
             {leftIcon && <span style={{marginLeft: '-2px'}}>{leftIcon}</span>}
             {children}
             {rightIcon && <span style={{marginRight: '-2px'}}>{rightIcon}</span>}

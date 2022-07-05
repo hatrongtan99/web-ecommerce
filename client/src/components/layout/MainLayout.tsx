@@ -1,11 +1,10 @@
 import React from 'react';
-import { NextPage } from 'next';
-import Header from './header/Header';
+import Header from './header/index';
 import Footer from './footer/Footer';
 import Head from 'next/head'
 
 interface LayoutProps {
-  children?: React.ReactNode,
+  children: React.ReactNode,
   titlePage?: string
 }
 
@@ -18,7 +17,7 @@ const MainLayout = ({ children, titlePage }: LayoutProps) => {
       </Head>
 
       <Header />
-      <main>{children}</main>
+      {children}
       <Footer />
     </>
   )

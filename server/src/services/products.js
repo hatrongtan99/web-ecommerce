@@ -57,6 +57,26 @@ class Products {
         return res[0]
     }
 
+    // get propducts by seach
+    async searchProducts(textSearch) {
+        const sql = `SELECT 
+        p.Product_ID AS id,
+        p.Product_name AS productName,
+        p.Product_price AS price,
+        p.Product_thumb AS productThumb,
+        p.Product_slug AS slug,
+        b.Brand_name AS brandName,
+        b.Brand_image AS brandImg,
+        c.Category_name AS categoryName,
+        c.Category_slug AS category
+            FROM products AS p
+        INNER JOIN product_brand AS b ON p.Product_brand_ID = b.Brand_ID
+        INNER JOIN product_categories AS c ON p.Product_category_ID = c.Category_ID
+        WHERE Product_name LIKE ?;`;
+        const res = await db.execute(sql, [`%${textSearch}%`]);
+        return emptyOrRows(res)
+    }
+
     // create product 
     async createProduct(req) {
         const {
@@ -81,7 +101,7 @@ class Products {
             const values = images.map(image => [productId, image])
             const pr1 = db.query("INSERT INTO product_images (Product_ID, Image) VALUES ? ", [values]);
             const pr2 = db.query("INSERT INTO product_discount (Product_ID, Discount) VALUES (?, ?)", [productId, discount]);
-            const pr3 = db.query("INSERT INTO product_inventory (Product_ID, Quantity) VALUES (?, ?)", [productId, quantity]);
+            const pr3 = db.query("INSERT INTO product_inventory (Product_ID, Inventory) VALUES (?, ?)", [productId, quantity]);
             const [res1, res2, res3] = await Promise.all([pr1, pr2, pr3]);
             return res1?.affectedRows && res2?.affectedRows && res3?.affectedRows;
         }
@@ -107,7 +127,7 @@ class Products {
         return res?.affectedRows;
     };
 
-    // create desc product
+    // create catalog product
     async createCatalog(req) {
         const {id} = req.params;
         const {titleCatalog, contentCatalog} = req.body;
@@ -180,6 +200,32 @@ class Products {
         const pr6 = db.execute(`UPDATE products SET delete_at = ?,  
             Is_delete = ? WHERE Product_ID = ?`, [datetimeSQL(), true, id]);
         await Promise.all([pr1, pr2, pr3, pr4, pr5, pr6]);
+    }
+
+    // get all brand product
+    async getBrand () {
+        const sql = `SELECT
+            Brand_ID as idBrand,
+            Brand_name as brandName,
+            Brand_image as brandThumb
+            FROM product_brand`;
+        const res = await db.execute(sql)
+        return emptyOrRows(res)
+    }
+
+    // create brand
+    async createBrand ( req ) {
+        const {brandName, brandThumb} = req.body;
+        const sql = 'INSERT INTO product_brand (Brand_name, Brand_image) VALUES (?, ?);';
+        const res = await db.execute(sql, [brandName, brandThumb]);
+        return res.affectedRows;
+    }
+
+    // delete brand by id
+    async deleteBrand (id) {
+        const sql = `DELETE FROM product_brand WHERE Brand_ID = ?`
+        const res = await db.execute(sql, [id])
+        return res?.affectedRows
     }
 }
 

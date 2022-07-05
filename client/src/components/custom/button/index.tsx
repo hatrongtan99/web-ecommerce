@@ -1,10 +1,14 @@
-import { ElementType, ReactNode, ComponentProps } from "react";
+import { ElementType, ReactNode, ComponentProps, CSSProperties} from "react";
+import classNames from 'classnames/bind';
+import styles from './button.module.scss';
+
+const cx = classNames.bind(styles);
 
 type ButtonProps <T extends ElementType> = {
   as?: T;
   children: ReactNode;
   size?: 'sm' | 'md' | 'lg';
-  variant?: 'primary' | 'primary-border' | 'secondary-border';
+  variant?: 'primary' | 'primary-border' | 'secondary-border' | 'secondary';
   disable?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
@@ -19,12 +23,13 @@ const Button = <T extends ElementType> ({
   variant = 'primary', 
   disable = false,
   leftIcon, 
-  rightIcon, 
+  rightIcon,
   ...props
 } : MyButtonProps<T>) => {
 
   let Component = as || 'button';
-  const allClassName = `custom-btn ${size} ${variant} ${disable ? 'btn-disabled' : ''}`;
+
+  const allClassName = cx('custom-btn', {[size]: size, [variant]: variant, 'btn-disable': disable})
 
   if (disable) {
     Object.keys(props as {}).forEach(key => {

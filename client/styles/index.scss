@@ -1,9 +1,3 @@
 @import './reset';
-@import './mixin';
+@import './mixins';
 @import './variable';
-
-// layout
-@import './components/layout/header';
-
-// custom
-@import './components/custom/customButton';

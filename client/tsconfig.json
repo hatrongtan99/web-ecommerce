@@ -19,7 +19,11 @@
       "~/api/*": ["src/api/*"],
       "~/components/*": ["src/components/*"],
       "~/redux/*": ["src/redux/*"],
-      "~/utils/*": ["src/utils/*"]
+      "~/utils/*": ["src/utils/*"],
+      "~/hook/*" : ["src/hook/*"],
+      "~/fakeData/*": ["src/fakeData/*"],
+      "~/interface/*": ["src/interface/*"],
+      "~/styles/*": ["styles/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

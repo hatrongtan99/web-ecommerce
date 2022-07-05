@@ -1,15 +1,18 @@
-.custom-btn, .custom-link-btn {
+@import '~styles/variable';
+
+.custom-link-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border: none;
     outline: none;
-    padding: 6px 8px;
+    padding: 8px 10px;
     border-radius: 4px;
     font-weight: 500;
     min-height: 36px;
     min-width: 100px;
     text-decoration: none;
+    border: 1px solid transparent;
 
     span:first-child {
         margin-right: 6px;
@@ -19,17 +22,26 @@
         margin-left: 6px;
     }
 
-    &+.custom-btn, +.custom-link-btn {
+    +.custom-link-btn {
         margin-left: 8px;
     }
 
-    // variant
-    &.primary {
+   // variant
+   &.primary {
+    color: #fff;
+    background-color: $primary-color;
+
+    &:hover {
+        background-color: #f05d40;
+    }
+    }
+
+    &.secondary {
         color: #fff;
-        background-color: $primary-color;
+        background-color: $secondary-color;
 
         &:hover {
-            background-color: #f05d40;
+            background-color: $secondary-light-color;
         }
     }
 
@@ -45,7 +57,7 @@
 
     &.secondary-border {
         background-color: #fff;
-        border: 1px solid $secondary-color;
+        border: 1px solid $secondary-light-color;
         font-weight: 500;
         color: $secondary-color;
 
@@ -65,11 +77,11 @@
     &.lg {
         min-width: 168px;
         min-height: 48px;
-        font-size: 1.2rem
+        font-size: 1.2rem;
     }
 
     // disable
-    &.btn-disabled {
+    &.btn-disable {
         user-select: none;
         border: 1px solid #999;
         background-color: #ccc;
@@ -82,4 +94,3 @@
         }
     }
 }
-

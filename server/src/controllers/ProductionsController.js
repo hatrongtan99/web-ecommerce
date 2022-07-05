@@ -42,6 +42,23 @@ class ProductionsController {
         }        
     };
 
+    // @desc    get product by seach
+    // @route   GET/api/search
+    // @accsess Public
+    async getProductBySeach(req, res, next) {
+        const { _q } = req.query;
+        if (!_q) {
+            return res.status(400).json({succsess: false, message: 'Search query not fotmatted properly!'})
+        }
+
+        try {
+            const response = await productService.searchProducts(_q)
+            return res.json({success: true, message: 'Search products successfully', result: response})
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     // @desc    create product
     // @route   POST/api/admin/products
     // @accsess Private/Admin
@@ -135,6 +152,54 @@ class ProductionsController {
             const {category, id} = req.params
             await productService.deleteProduct(category, id);
             res.json({success: true, message: 'Product deleted successfully'})
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // @desc    Get all brand
+    // @route   GET/api/admin/brand
+    // @access  Public
+    async getBrandProduct(req, res) {
+        try {
+            const response = await productService.getBrand();
+            res.json({success: true, message: 'Get all brand products successfully', data: response})
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // @desc    Create new brand
+    // @route   POST/api/admin/brands
+    // @acsess  Private/Amin
+    async createNewBrand(req, res) {
+        const {brandName, brandThumb} = req.body;
+        if (!brandName && !brandThumb) {
+            return res.json({success: false, message: 'Data fotmatted not properly'})
+        }
+        try {
+            const response = await productService.createBrand(req);
+            if (!response) {
+                return res.json({success: false, message: 'Error creating brand'})
+            }
+            return res.json({success: true, message: 'Create brand successfully'})
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // @desc    Delete brand product by id
+    // @route   DELETE/api/brands/:idBrand
+    // @access  Private/admin
+    async deleteBrand (req, res) {
+        const {idBrand} = req.params;
+        try {
+            const response = await productService.deleteBrand(idBrand);
+            if (!response) {
+                return res.json({success: false, message: 'Failed delete brand'});
+            }
+            return res.json({success: true, message: 'Success delete brand'})
+
         } catch (error) {
             console.log(error);
         }
