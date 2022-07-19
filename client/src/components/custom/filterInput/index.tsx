@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './filterInput.module.scss';
-import {GrCheckboxSelected, GrCheckbox} from 'react-icons/gr';
+import {GrCheckbox} from 'react-icons/gr';
 import {BsCheckLg} from 'react-icons/bs';
 const cx = classNames.bind(styles);
 import type {MouseEvent} from 'react';

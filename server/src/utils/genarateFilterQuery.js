@@ -1,7 +1,8 @@
 const generateFilterQuery = (query) => {
+
     const key = Object.keys(query);
     const values = Object.values(query);
-    if (key.length == 0) return null;
+    if (key.length == 0) return '';
     let condition = '';
     let and = 'AND';
 

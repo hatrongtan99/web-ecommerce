@@ -1,7 +1,7 @@
 const productService = require('../services/products');
 
 class ProductionsController {
-    // @desc    get mutipleProduct
+    // @desc    get mutipleProduct by category
     // @route   GET/api/:category
     // @access  Public
     async getProductsByCategory(req, res, next) {
@@ -9,16 +9,16 @@ class ProductionsController {
             const category = req.params.category;
             const products = await productService.mutipleProductsByCategory(category, req);
             return res.status(200)
-            .json({success: true, message: 'Get mutiple products successfully', products})
+            .json({success: true, message: 'Get mutiple products successfully', data: products})
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    // @desc get single product by category and slug
-    // @route GET/api/:category/:slug
-    // @access Public
+    // @desc    get single product by category and slug
+    // @route   GET/api/:category/:slug
+    // @access  Public
     async getProductByCategoryAndSlug(req, res, next) {
         try {
             const {category, slug} = req.params
@@ -34,7 +34,7 @@ class ProductionsController {
                 const catalog = await productService.getProductCatalog(response.id);
                 response.description = desc;
                 response.catalog = catalog;
-                return res.status(200).json({success: true, message: 'Get product by slug successfully', products: response})
+                return res.status(200).json({success: true, message: 'Get product by slug successfully', data: response})
             }
             return res.status(400).json({success: false, message: 'Get product by slug failed'})
         } catch (error) {
@@ -53,7 +53,19 @@ class ProductionsController {
 
         try {
             const response = await productService.searchProducts(_q)
-            return res.json({success: true, message: 'Search products successfully', result: response})
+            return res.json({success: true, message: 'Search products successfully', data: response})
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // @desc    get all categories
+    // @route   GET/api/categories
+    // @accsess  Public
+    async getCategories(req, res, next) {
+        try {
+            const response = await productService.getAllCategories();
+            return res.json({success: true, message: 'Get all categories successfully', data: response})
         } catch (error) {
             console.log(error);
         }
@@ -79,14 +91,13 @@ class ProductionsController {
 
             const response = await productService.createProduct(req)
             if (response) {
-                return res.json({success: true, message: 'Tạo thành công'})
+                return res.json({success: true, message: 'Create successfully'})
             } else {
-                return res.status(400).json({success: false, message: 'Tạo thất bại!'})
+                return res.status(400).json({success: false, message: 'Create failed'})
             }
         } catch (error) {
             console.log(error)
         }
-        
     }
 
     // @desc    create description
@@ -162,7 +173,7 @@ class ProductionsController {
     // @access  Public
     async getBrandProduct(req, res) {
         try {
-            const response = await productService.getBrand();
+            const response = await productService.getAllBrand();
             res.json({success: true, message: 'Get all brand products successfully', data: response})
         } catch (error) {
             console.log(error);
@@ -178,11 +189,19 @@ class ProductionsController {
             return res.json({success: false, message: 'Data fotmatted not properly'})
         }
         try {
-            const response = await productService.createBrand(req);
-            if (!response) {
-                return res.json({success: false, message: 'Error creating brand'})
+            const allBrand = await productService.getAllBrand();
+            const brandAlreadyInDB = allBrand.find((brand) => brand.brandName === brandName);
+
+            if (brandAlreadyInDB) {
+                return res.json({success: false, message: 'Brand already exists'})
+            } else {
+                const response = await productService.createBrand(req);
+                if (!response) {
+                    return res.json({success: false, message: 'Error creating brand'})
+                }
+                return res.json({success: true, message: 'Create brand successfully'})
             }
-            return res.json({success: true, message: 'Create brand successfully'})
+            
         } catch (error) {
             console.log(error)
         }

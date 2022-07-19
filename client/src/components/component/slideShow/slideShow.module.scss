@@ -1,11 +1,15 @@
 @use '~/styles/mixins';
 
-.slide-wrapper {
+.wrapper {
     width: 100%;
     min-height: 100px;
     height: auto;
     position: relative;
     overflow: hidden;
+}
+
+.slide-wrapper {
+    display: flex;
 }
 
 .slide-btn {

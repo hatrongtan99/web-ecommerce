@@ -2,6 +2,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import 'tippy.js/dist/tippy.css';
 import '../styles/index.scss';
 
+import {wrapper} from '~/redux/store';
+
 import { ReactElement, ReactNode, useEffect } from 'react';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
@@ -14,7 +16,7 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap");
@@ -25,3 +27,5 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return getLayout(<Component {...pageProps} />)
 }
+
+export default wrapper.withRedux(MyApp);

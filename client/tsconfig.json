@@ -21,9 +21,10 @@
       "~/redux/*": ["src/redux/*"],
       "~/utils/*": ["src/utils/*"],
       "~/hook/*" : ["src/hook/*"],
-      "~/fakeData/*": ["src/fakeData/*"],
+      "~/fakeData/*": ["src/data/*"],
       "~/interface/*": ["src/interface/*"],
-      "~/styles/*": ["styles/*"]
+      "~/styles/*": ["styles/*"],
+      "~/types/*": ["src/types/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

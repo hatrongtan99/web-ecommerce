@@ -1,9 +1,12 @@
-import React from 'react'
-import {NextPage} from 'next'
+import {NextPage} from 'next';
 
+import LayoutAdmin from '~/components/admin/layoutAdmin';
 const Admin: NextPage = () => {
+
   return (
-    <div>Admin</div>
+    <LayoutAdmin>
+      <h1>header</h1>
+    </LayoutAdmin>
   )
 }
 

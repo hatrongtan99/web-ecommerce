@@ -1,3 +1,36 @@
+@use '~/styles/mixins';
+
 .star-wrapper {
+    @include mixins.flex(center, center);
     margin-left: 16px;
+}
+
+.star {
+    margin-top: -6px;
+    padding: 0 4px;
+}
+
+.separate {
+    display: inline-block;
+    height: 24px;
+    width: 1px;
+    background-color: #999;
+    margin: 0 6px;
+}
+
+.rating {
+    p, span {
+        display: inline-block;
+    }
+
+    span {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    p {
+        font-size: 1rem;
+        font-weight: 500;
+        text-decoration: underline;
+    }
 }

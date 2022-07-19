@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from 'axios';
 import queryString from 'query-string';
 
-const axiosClient = axios.create({
+const configAxios = axios.create({
     baseURL: 'http://localhost:5000/api',
     headers: {
         'content-type': 'application/json',
@@ -9,14 +9,14 @@ const axiosClient = axios.create({
     paramsSerializer: params => queryString.stringify(params),
 });
 
-axiosClient.interceptors.request.use(async (config) => {
+configAxios.interceptors.request.use(async (config) => {
     // handle token here
     return config;
 })
 
-axiosClient.interceptors.response.use((response: AxiosResponse) => {
+configAxios.interceptors.response.use((response) => {
     if (response && response.data) {
-        return response
+        return response.data
     }
     return response;
     }, (error) => {
@@ -24,4 +24,4 @@ axiosClient.interceptors.response.use((response: AxiosResponse) => {
     }
 );
 
-export default axiosClient
+export default configAxios

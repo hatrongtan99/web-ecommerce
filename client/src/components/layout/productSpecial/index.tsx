@@ -2,7 +2,7 @@ import {memo} from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './productSpecial.module.scss';
-import SlideSpecialProduct from '~/components/component/slideShow/slideSpecialProduct';
+import SlideSpecialProduct from '~/components/layout/productSpecial/slideSpecialProduct';
 
 const cx = classNames.bind(styles);
 

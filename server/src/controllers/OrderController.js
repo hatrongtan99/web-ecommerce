@@ -46,7 +46,7 @@ class OrderController {
         const {userId} = req.params;
         try {
             const response = await orderService.productsCart(userId);
-            return res.json({success: true, message: 'Get cart products by user id', cart: response})
+            return res.json({success: true, message: 'Get cart products by user id', data: response})
         } catch (error) {
             console.log(error)
         }

@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
-import SlideDetailProduct from "~/components/component/slideShow/slideDetailProduct";
-import PriceDeltailProduct from "../priceDeltailProduct";
-import RightDeltailProduct from "../rightDeltailProduct";
+import SlideDetailProduct from "~/components/layout/productContent/slideDetailProduct";
+import PriceDeltailProduct from "./priceDeltailProduct";
+import RightDeltailProduct from "./rightDeltailProduct";
 
 import styles from './productContent.module.scss';
 const cx = classNames.bind(styles);

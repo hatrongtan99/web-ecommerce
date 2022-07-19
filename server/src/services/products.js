@@ -7,7 +7,6 @@ class Products {
     // get product by category
     async mutipleProductsByCategory(category, req) {
         const { page, ...rest } = req.query
-        
         const offset = loadExtraProduct(page);
         const sql = `SELECT 
             p.Product_ID AS id,
@@ -18,7 +17,7 @@ class Products {
             b.Brand_name AS brandName,
             b.Brand_image AS brandImg,
             c.Category_name AS categoryName,
-            c.Category_slug AS category
+            c.Category_slug AS categorySlug
                 FROM products AS p
             INNER JOIN product_brand AS b ON p.Product_brand_ID = b.Brand_ID
             INNER JOIN product_categories AS c ON p.Product_category_ID = c.Category_ID
@@ -39,8 +38,10 @@ class Products {
             b.Brand_image AS brandImg,
             c.Category_name AS categoryName,
             c.Category_slug AS category,
-            d.Discount as discount,
-            n.Inventory as quantity,
+            d.Discount AS discount,
+            n.Inventory AS quantity,
+            p.SKU AS sku,
+            p.Insurance_time as insurance,
             group_concat(DISTINCT i.Image SEPARATOR ', ') AS images
                 FROM products AS p 
             INNER JOIN product_brand AS b ON p.Product_brand_ID = b.Brand_ID
@@ -77,6 +78,16 @@ class Products {
         return emptyOrRows(res)
     }
 
+    // get all categories
+    async getAllCategories() {
+        const sql = `SELECT Category_ID as categoryId,
+            Category_name as categoryName,
+            Category_slug as categorySlug 
+            FROM product_categories;`
+        const res = await db.execute(sql)
+        return emptyOrRows(res)
+    }
+
     // create product 
     async createProduct(req) {
         const {
@@ -87,18 +98,20 @@ class Products {
             productThumb,
             images,
             discount,
-            quantity
+            quantity,
+            sku,
+            insurance
         } = req.body;
         const slug = slugGenerator(productName)
 
         const sql = `INSERT INTO products 
-            (Product_name, Product_price, Product_thumb, Product_category_ID, Product_brand_ID, Product_slug) 
-            VALUES (?, ?, ?, ?, ?, ?);`;
-        const res = await db.execute(sql, [productName, productPrice, productThumb, productCategoryId, productBrandId, slug]);
+            (Product_name, Product_price, Product_thumb, Product_category_ID, Product_brand_ID, Product_slug, SKU, Insurance_time) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);`;
+        const res = await db.execute(sql, [productName, productPrice, productThumb, productCategoryId, productBrandId, slug, sku, insurance]);
         if (res.affectedRows) {
             const productId = res.insertId;
             
-            const values = images.map(image => [productId, image])
+            const values = images.map(image => [productId, image]);
             const pr1 = db.query("INSERT INTO product_images (Product_ID, Image) VALUES ? ", [values]);
             const pr2 = db.query("INSERT INTO product_discount (Product_ID, Discount) VALUES (?, ?)", [productId, discount]);
             const pr3 = db.query("INSERT INTO product_inventory (Product_ID, Inventory) VALUES (?, ?)", [productId, quantity]);
@@ -110,17 +123,17 @@ class Products {
     // create desc product
     async createDesc(req) {
         const {id} = req.params;
-        const {title, content, imageDesc, titleImageDesc} = req.body;
+        const {data} = req.body;
         const sql = `INSERT INTO desc_product (Product_ID, Title, Content, Image_desc, Title_Image_desc) VALUES ?;`;
         
         const values = [];
-        for (let i = 0; i < title.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             const arr = []
             arr.push(id)
-            arr.push(title[i])
-            arr.push(content[i])
-            arr.push(imageDesc[i])
-            arr.push(titleImageDesc[i]);
+            arr.push(data[i].title)
+            arr.push(data[i].content)
+            arr.push(data[i].imageDesc)
+            arr.push(data[i].titleImageDesc);
             values.push(arr)
         }
         const res = await db.query(sql, [values]);
@@ -203,7 +216,7 @@ class Products {
     }
 
     // get all brand product
-    async getBrand () {
+    async getAllBrand () {
         const sql = `SELECT
             Brand_ID as idBrand,
             Brand_name as brandName,

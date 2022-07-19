@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './header/index';
 import Footer from './footer/Footer';
 import Head from 'next/head'
+import Breadcrumb from '../component/breabcrumb';
 
 interface LayoutProps {
   children: React.ReactNode,

@@ -8,6 +8,9 @@ router.get('/search', productionsController.getProductBySeach);
 // get all brand products
 router.get('/brands', productionsController.getBrandProduct);
 
+// get all categorys product
+router.get('/categories', productionsController.getCategories)
+
 // create brand product
 router.post('/admin/brands', productionsController.createNewBrand)
 

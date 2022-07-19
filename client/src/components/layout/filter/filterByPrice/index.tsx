@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
 
-import {filterByPriceData} from '~/fakeData/filter';
+import {filterByPriceData} from 'src/data/filter';
 import FilterInput from "~/components/custom/filterInput";
 import styles from '../../filter/filterProducts.module.scss';
 import type { MouseEvent } from "react";
