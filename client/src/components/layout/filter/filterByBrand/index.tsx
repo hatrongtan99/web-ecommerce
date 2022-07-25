@@ -1,30 +1,25 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import classNames from "classnames/bind";
 import type {MouseEvent} from 'react';
 
 import styles from '../../filter/filterProducts.module.scss';
 
 import FilterInput from '~/components/custom/filterInput';
+import { BrandProductResult } from '~/types/index';
+import addQueryFilterInUrl from '~/utils/addQueryFilterInUrl';
+import useInitialStateInFilters from '~/hook/useInitialStateInFilters';
 
 const cx = classNames.bind(styles);
 
-interface test {
-    idBrand: string;
-    brandName: string;
-    brandThumb: string;
+interface FilterProductsProps {
+    dataAllBrands: BrandProductResult[]
 }
 
-const FilterByBrand = () => {
-    const [data, setData] = useState<test[] | null>([]);
-    const [dataSet, setDataSet] = useState<string[]>([])
+const FilterByBrand = ({dataAllBrands}: FilterProductsProps) => {
 
-    const fetchData = async () => {
-        const res = await (await fetch('http://localhost:5000/api/brands')).json()
-        setData(res.data)
-    }
-    useEffect(() => {
-        fetchData()
-    }, [])
+    const initialStateDataSet = useInitialStateInFilters('brand_ID');
+
+    const [dataSet, setDataSet] = useState<string[]>(initialStateDataSet);
 
     const handleClick = (e: MouseEvent<HTMLElement>) => {   
         const id = e.currentTarget.dataset.id as string;
@@ -35,22 +30,23 @@ const FilterByBrand = () => {
             setDataSet([...dataSet, id])
         }
     }
+
+    addQueryFilterInUrl({keyQuery: 'brand_ID', value: dataSet});
     
   return (
     <div className={cx('filter-group')}>
         <h4>CHỌN THEO HÃNG SẢN XUẤT</h4>
     
         <div className={`row ${cx('input-group')}`}>
-            {data && data.map(item => (
+            {dataAllBrands && dataAllBrands.map(item => (
                 <div className='col-6' key={item.idBrand}>
                     <FilterInput 
                         active={dataSet.includes(item.idBrand.toString())}
-                        image={`http://localhost:5000/public/images/${item.brandThumb}`} 
+                        image={`${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${item.brandThumb}`} 
                         data-id={item.idBrand}
                         handleclick={handleClick}
                     />
                 </div>
-
             ))}
         </div>
     </div>

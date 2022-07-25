@@ -27,7 +27,7 @@ const SlideDetailProduct = () => {
   const magnifyImgRef = useRef<HTMLDivElement[]>([]);
 
   // zoom img
-  const habdleMouseMove = (e: MouseEvent<HTMLElement>, i: number) => {
+  const handleMouseMove = (e: MouseEvent<HTMLElement>, i: number) => {
     if (magnifyLensRef.current !== null && magnifyImgRef !== null) {
       const imgRect = magnifyImgRef.current[i].getBoundingClientRect();
       let x = e.pageX - imgRect.left - window.scrollX - (magnifyLensRef.current[i].offsetWidth / 2)
@@ -98,12 +98,12 @@ const SlideDetailProduct = () => {
                 <div 
                   className={cx('magnify-lens')} 
                   ref={el => el && (magnifyLensRef.current[index] = el)} 
-                  onMouseMove={(e) => habdleMouseMove(e, index)}
+                  onMouseMove={(e) => handleMouseMove(e, index)}
                 ></div>
                 <div 
                   className={cx('magnify')} 
                   onMouseOut={(e) => habdleMouseOut(e, index)}
-                  onMouseMove={(e) => habdleMouseMove(e, index)}
+                  onMouseMove={(e) => handleMouseMove(e, index)}
                   ref={el => el && (magnifyImgRef.current[index] = el)}
                 ></div>
               </div>

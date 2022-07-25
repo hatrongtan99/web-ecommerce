@@ -1,8 +1,7 @@
-import {useState} from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import {wrapper} from '~/redux/store';
+import { useAppSelector } from '~/redux/hooks'; 
 
-import Button from '~/components/custom/button';
 import MainLayout from '~/components/layout/MainLayout';
 import ProductSpecial from '~/components/layout/productSpecial';
 import SortProduct from '~/components/component/sortProducts';
@@ -11,60 +10,62 @@ import FilterProducts from '~/components/layout/filter';
 import Breadcrumb from '~/components/component/breabcrumb';
 import productionApi from '~/api/productions';
 
-import type { ProductsByCategoryResult} from '~/types/index';
+import type { BrandProductResult, ProductsByCategoryResult} from '~/types/index';
 import { saveProductByCategory } from '~/redux/slice/productsSlice';
+import ButtonLoadExtraProducts from '~/components/component/buttonLoadExtraProducts';
 
 
 interface CategoryProps {
-  data: ProductsByCategoryResult[]
+  data: ProductsByCategoryResult[];
+  dataAllBrands: BrandProductResult[]
 }
 
-const Category: NextPage<CategoryProps> = ({data}) => {
-  const [sortValue, setSortValue] = useState<string>('');
+const Category: NextPage<CategoryProps> = ({data, dataAllBrands}) => {
+  useAppSelector(state => console.log(state.products.dataByCategory))
   return (
     <MainLayout>
-        {/* <main className='container'>
+        <main className='container'>
           <Breadcrumb/>
           <div className='row'>
             <div className='col-9'>
               
               <ProductSpecial/>
-              <SortProduct sortValue={sortValue} setSortValue={setSortValue}/>
+              <SortProduct/>
               <ProductList/>
 
-              <div className='d-flex justify-content-center' style={{margin: '10px 0'}}>
-                <Button size='lg'>
-                  Xem thêm ... 
-                </Button>
-              </div>
+              <ButtonLoadExtraProducts/>
             </div>
 
             <div className="col-3">
-            <FilterProducts/>
+            <FilterProducts dataAllBrands={dataAllBrands}/>
             </div>
           </div>
-        </main> */}
+        </main>
     </MainLayout>
   )
 }
 export default Category;
 
 export const getServerSideProps: GetServerSideProps<CategoryProps> = wrapper.getServerSideProps(store => async ({params, query}) => {
-  const {category} = params!
-  let {page} = query
+  let {page = '1', category, ...rest} = query;
   try {
-    const getProductsByCategory = await productionApi.getProductsByCategory(category as string, page = '1');
+    const getProductsByCategory = productionApi.getProductsByCategory(category as string, page as string, rest);
+    const getAllBrands = productionApi.getAllBrands();
 
-    store.dispatch(saveProductByCategory(getProductsByCategory.data))
-
+    const [dataProductByCategory, dataAllBrands] = await Promise.all([getProductsByCategory, getAllBrands]);
+    store.dispatch(saveProductByCategory(dataProductByCategory.data))
     return {
       props: {
-        data: getProductsByCategory.data
+        data: dataProductByCategory.data,
+        dataAllBrands: dataAllBrands.data
       }
     }
   } catch (error) {
     return {
-      props: {data: []}
+      props: {
+        data: [],
+        dataAllBrands: []
+      }
     }
   }
 });

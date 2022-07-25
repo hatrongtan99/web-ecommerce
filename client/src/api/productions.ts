@@ -15,14 +15,20 @@ class ProductionApi {
     }
 
     // get products by category
-    getProductsByCategory(category: string, page: string) {
+    getProductsByCategory(category: string, page: string, params?: any) {
         const url = `/${category}?page=${page}`;
-        return configAxios.get<never, ResponseWithData>(url)
+        return configAxios.get<never, ResponseWithData>(url, {params})
     }
 
     // get product by category and slug
     getProductBycategoryAndSlug = (category: string, slug: string) => {
         const url = `/${category}/${slug}`;
+        return configAxios.get<never, ResponseWithData>(url);
+    }
+
+    // get all brands
+    getAllBrands() {
+        const url = '/brands';
         return configAxios.get<never, ResponseWithData>(url);
     }
 }

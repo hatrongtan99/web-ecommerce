@@ -6,7 +6,7 @@ const generateFilterQuery = require('../utils/genarateFilterQuery');
 class Products {
     // get product by category
     async mutipleProductsByCategory(category, req) {
-        const { page, ...rest } = req.query
+        const { page, ...rest } = req.query;
         const offset = loadExtraProduct(page);
         const sql = `SELECT 
             p.Product_ID AS id,

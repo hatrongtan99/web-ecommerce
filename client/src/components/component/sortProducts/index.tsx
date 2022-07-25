@@ -1,34 +1,35 @@
-import type {MouseEvent} from 'react';
+import {MouseEvent, useState} from 'react';
 import classNames from 'classnames/bind';
 import styles from './sortProducts.module.scss';
 
 import FilterInput from '~/components/custom/filterInput';
+import addQueryFilterInUrl from '~/utils/addQueryFilterInUrl';
+import useInitialStateInFilters from '~/hook/useInitialStateInFilters';
 
 const cx = classNames.bind(styles)
 
-interface SortProductProps {
-  sortValue: string;
-  setSortValue: (value: string) => void;
-}
-
-const SortProduct = ({sortValue, setSortValue}: SortProductProps) => {
+const SortProduct = () => {
+  const initialStateSortValue = useInitialStateInFilters('sort')
+  const [sortValue, setSortValue] = useState<string[]>(initialStateSortValue);
 
   const handleCheckBox = (e: MouseEvent<HTMLElement>) => {
-    if (sortValue == e.currentTarget.dataset.sort) {
-      setSortValue('')
+    if (sortValue.includes(e.currentTarget.dataset.sort as string)) {
+      setSortValue([])
     } else {
-      setSortValue(e.currentTarget.dataset.sort as string)
+      setSortValue([e.currentTarget.dataset.sort as string])
     }
   }
+
+  addQueryFilterInUrl({keyQuery: 'sort', value: sortValue})
 
   return (
     <div className={cx('sort-wrapper')}>
       <h5>Sắp xếp: </h5>
       <div className={cx('sort-item')}>
-        <FilterInput active={sortValue == 'asc'} title='Giá thấp đến cao' data-sort='asc' handleclick={handleCheckBox}/>
+        <FilterInput active={sortValue.includes('asc')} title='Giá thấp đến cao' data-sort='asc' handleclick={handleCheckBox}/>
       </div>
       <div className={cx('sort-item')}>
-        <FilterInput active={sortValue == 'desc'} title='Giá cao đến thấp' data-sort='desc' handleclick={handleCheckBox}/>
+        <FilterInput active={sortValue.includes('desc')} title='Giá cao đến thấp' data-sort='desc' handleclick={handleCheckBox}/>
       </div>
     </div>
   )

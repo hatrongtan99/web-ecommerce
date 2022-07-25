@@ -13,7 +13,7 @@ interface CheckoutProps {
     data: ProductsInCartResult[]
 }
 
-const Checkout: NextPage<CheckoutProps> = () => {
+const Checkout: NextPage<CheckoutProps> = ({data}) => {
     return (
         <MainLayout>
             <main className='container'>

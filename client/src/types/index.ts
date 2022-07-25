@@ -65,3 +65,9 @@ export interface ProductsInCartResult {
     slug: string;
 }
 
+export interface BrandProductResult {
+    idBrand: number;
+    brandName: string;
+    brandThumb: string;
+}
+

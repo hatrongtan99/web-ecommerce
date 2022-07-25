@@ -169,9 +169,9 @@ class ProductionsController {
     }
 
     // @desc    Get all brand
-    // @route   GET/api/admin/brand
+    // @route   GET/api/brands
     // @access  Public
-    async getBrandProduct(req, res) {
+    async getAllBrandProduct(req, res) {
         try {
             const response = await productService.getAllBrand();
             res.json({success: true, message: 'Get all brand products successfully', data: response})

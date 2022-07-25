@@ -6,7 +6,7 @@ const productionsController = require('../controllers/ProductionsController')
 router.get('/search', productionsController.getProductBySeach);
 
 // get all brand products
-router.get('/brands', productionsController.getBrandProduct);
+router.get('/brands', productionsController.getAllBrandProduct);
 
 // get all categorys product
 router.get('/categories', productionsController.getCategories)
