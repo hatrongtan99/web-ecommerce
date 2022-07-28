@@ -39,7 +39,6 @@ const generateFilterQuery = (query) => {
             }
         }
     }
-    console.log(condition)
     return condition
 }
 

@@ -7,8 +7,8 @@ import Link from 'next/link';
 const cx = classNames.bind(styles);
 
 const Breadcrumb = () => {
-    const router = useRouter();
-    const pathNames = router.asPath.split('/').filter(x => x);
+  const router = useRouter();
+  const pathNames = router.asPath.split('/').filter(x => x);
   return (
     <nav className={cx('wrapper')}>
         <ol className={cx("breadcrumb")}>

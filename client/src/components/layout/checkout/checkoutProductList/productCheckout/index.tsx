@@ -1,5 +1,7 @@
 import classNames from "classnames/bind";
 import Link from 'next/link';
+import { useState } from "react";
+
 import {TiDeleteOutline} from 'react-icons/ti';
 
 import styles from './productCheckout.module.scss';
@@ -7,6 +9,22 @@ import styles from './productCheckout.module.scss';
 const cx = classNames.bind(styles);
 
 const ProductCheckout = () => {
+
+    const [quantity, setQuantity] = useState<number>(1)
+
+    const handleDeleteProductIncart = async () => {
+
+    }
+
+    const hanldeChangeQuantity = (type: string) => {
+        if (type == 'desc') {
+            if (quantity == 1) return
+            setQuantity(quantity - 1)
+        } else {
+            setQuantity(quantity + 1)
+        }
+    }
+
   return (
     <div className={cx('product-checkout')}>
         <Link href='/'>
@@ -15,7 +33,7 @@ const ProductCheckout = () => {
             </a>
         </Link>
         <div className={cx('product-info')}>
-            <Link href=''>
+            <Link href='/'>
                 <a>
                     <h3>Máy khoan vặn vít dùng Pin Bosch GSB 180-LI</h3>
                 </a>
@@ -26,13 +44,13 @@ const ProductCheckout = () => {
 
             <div className={cx('product-info__quantity')}>
                 <p>Số lượng:</p>
-                <button>-</button>
-                <span>1</span>
-                <button>+</button>
+                <button onClick={() => hanldeChangeQuantity('desc')}>-</button>
+                <span>{quantity}</span>
+                <button onClick={() => hanldeChangeQuantity('asc')}>+</button>
             </div>
         </div>
 
-        <div className={cx('remove-icon')}>
+        <div className={cx('remove-icon')} onClick={handleDeleteProductIncart}>
             <TiDeleteOutline size='20' color="#337ab7"/>
         </div>
     </div>

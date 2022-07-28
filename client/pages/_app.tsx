@@ -7,6 +7,7 @@ import {wrapper} from '~/redux/store';
 import { ReactElement, ReactNode, useEffect } from 'react';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
+import generateUserSessionId from "~/utils/generateUserSessionId";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -20,6 +21,7 @@ type AppPropsWithLayout = AppProps & {
 
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap");
+    generateUserSessionId()
   }, []);
 
   // Use the layout defined at the page level, if available

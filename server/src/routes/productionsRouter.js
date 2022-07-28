@@ -36,7 +36,7 @@ router.post('/admin/products/:id/descriptions', productionsController.createProd
 router.post('/admin/products/:id/catalog', productionsController.createProductCatalog);
 
 // update product
-router.put('/admin/products/:id', productionsController.updateProduct);
+router.patch('/admin/products/:id/update', productionsController.updateProduct);
 
 router.get('/admin/products/top', productionsController.getTopRatedProducts);
 router.post('/admin/products/:id/reviews', productionsController.createNewReview);

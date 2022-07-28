@@ -10,13 +10,14 @@ class Order {
 
     // user checkout/order
     async orderProducts(req) {
-        const {userId, userName, userSex, userEmail, userPhone, userAddress, note} = req.body;
+        const {userId} = req.params
+        const {userName, typeSex, userEmail, userPhone, userAddress, note} = req.body;
         const getSession = await this.#getSession(userId);
-        const sessionId = getSession[0].id;
+        const sessionId = getSession[0]?.id;
         const sql =`INSERT INTO order_product 
             (User_name, User_sex, User_Email, User_phone_number, User_address, Note_content, Order_session_ID)
             VALUES (?, ?, ?, ?, ?, ?, ?)`;
-        const res = await db.execute(sql, [userName, userSex, userEmail, userPhone, userAddress, note, sessionId]);
+        const res = await db.execute(sql, [userName, typeSex, userEmail, userPhone, userAddress, note, sessionId]);
         return res?.affectedRows
     };
 
@@ -41,7 +42,7 @@ class Order {
     // get cart products by user id
     async productsCart(userId) {
         const getSession = await this.#getSession(userId);
-        const idCart = getSession[0].id;
+        const idCart = getSession[0]?.id;
         const sql = `SELECT 
             c.Cart_item_ID AS cartItemId, 
             o.Order_session_ID AS orderId,

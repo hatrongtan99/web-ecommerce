@@ -6,14 +6,14 @@ const orderController = require('../controllers/OrderController');
 router.post('/add-to-cart', orderController.addToCart);
 
 // checkout
-router.post('/checkout', orderController.createOrder);
+router.post('/checkout/:userId', orderController.createOrder);
 
 // get cart products by user id
 router.get('/cart/:userId', orderController.getCartByUserId);
 
 // delete product in cart/ update quantity product in cart
 router.route('/cart/:userId/:productId').delete(orderController.deleteProductInCart)
-.put(orderController.updateQuantityProduct)
+.patch(orderController.updateQuantityProduct)
 
 
 module.exports = router

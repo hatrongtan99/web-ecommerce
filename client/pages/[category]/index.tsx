@@ -21,7 +21,6 @@ interface CategoryProps {
 }
 
 const Category: NextPage<CategoryProps> = ({data, dataAllBrands}) => {
-  useAppSelector(state => console.log(state.products.dataByCategory))
   return (
     <MainLayout>
         <main className='container'>

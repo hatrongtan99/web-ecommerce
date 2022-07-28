@@ -5,7 +5,8 @@ class OrderController {
     // @route   POST/api/checkout
     // @access  Public
     async createOrder(req, res, next) {
-        const {userId, userName, userSex, userEmail, userPhone, userAddress} = req.body;
+        const {userId} = req.params
+        const {userName, userSex, userEmail, userPhone, userAddress} = req.body;
         if (!userId && !userName && !userSex && !userEmail && !userPhone && !userAddress) {
             return res.status(400).json({success: false, message: 'Data fotmatted not properly'})
         }

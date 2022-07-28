@@ -141,7 +141,7 @@ class ProductionsController {
     }
     
     // @desc    Update a product
-    // @route   PUT /api/admin/products/:id
+    // @route   PUT /api/admin/products/:id/update
     // @access  Private/Admin
     async updateProduct(req, res, next) {
         try {
