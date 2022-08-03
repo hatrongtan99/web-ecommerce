@@ -3,13 +3,20 @@ import { useState } from 'react';
 import { useDispatch } from "react-redux";
 
 import Button from "~/components/custom/button";
-import loadProductByCategory from "~/utils/loadProductByCategory";
+import { loadProductByCategory } from "~/utils/loadProduct";
 
+interface ButtonLoadExtraProductsProps {
+    metaData: {
+        totalCount: number;
+        restProducts: number
+    },
+    categoryProps?: string
+}
 
-const ButtonLoadExtraProducts = () => {
+const ButtonLoadExtraProducts = ({metaData, categoryProps}: ButtonLoadExtraProductsProps) => {
     const router = useRouter();
     const dispatch = useDispatch();
-    const {page = '1', category, ...rest} = router.query;
+    const {page, category, ...rest} = router.query;
 
     const [pageNumber, setPageNumber] = useState<number>(Number(page || 1));
 
@@ -19,15 +26,17 @@ const ButtonLoadExtraProducts = () => {
             pathname: router.pathname,
             query: {...router.query, page: pageNumber + 1}
         }, undefined, {shallow: true});
-        loadProductByCategory(dispatch, category as string, (pageNumber + 1).toString(), rest);
+        loadProductByCategory(dispatch, category as string || categoryProps as string, (pageNumber + 1).toString(), rest);
     }
 
   return (
-    <div className='d-flex justify-content-center' style={{margin: '10px 0'}}>
-        <Button size='lg' onClick={handlePlusPage}>
-            Xem thêm ... 
-        </Button>
-    </div>
+    metaData.restProducts > 0 ?
+        <div className='d-flex justify-content-center' style={{margin: '10px 0'}}>
+            <Button size='lg' onClick={handlePlusPage}>
+                Xem thêm {metaData.restProducts} 
+            </Button>
+        </div> 
+    : null
   )
 }
 

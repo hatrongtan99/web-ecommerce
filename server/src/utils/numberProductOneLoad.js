@@ -1,7 +1,7 @@
 const numberProductOneLoad = 8
 
 const loadExtraProduct = (currentPage = 1) => {
-    return (currentPage - 1) * numberProductOneLoad
+    return currentPage * numberProductOneLoad
 }
 
 const emptyOrRows = (rows) => {

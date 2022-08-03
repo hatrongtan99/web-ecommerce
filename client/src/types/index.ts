@@ -9,7 +9,7 @@ export interface Response {
     message: string;
 }
 
-export interface ProductsByCategoryResult {
+export interface ProductsByCategory {
     id: number;
     productName: string;
     price: number;
@@ -19,6 +19,14 @@ export interface ProductsByCategoryResult {
     brandImg: string;
     categoryName: string; 
     categorySlug: string;
+}
+
+export interface ProductsByCategoryResult {
+    products: ProductsByCategory[],
+    metaData: {
+        totalCount: number,
+        restProducts: number
+    }
 }
 
 interface DescriptionProduct {
@@ -69,5 +77,11 @@ export interface BrandProductResult {
     idBrand: number;
     brandName: string;
     brandThumb: string;
+}
+
+export interface CategoriesResult {
+    categoryId: number;
+    categoryName: string;
+    categorySlug: string;
 }
 

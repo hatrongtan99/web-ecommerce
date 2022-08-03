@@ -7,7 +7,7 @@ class Products {
     // get product by category
     async mutipleProductsByCategory(category, req) {
         const { page, ...rest } = req.query;
-        const offset = loadExtraProduct(page);
+        const limmit = loadExtraProduct(page);
         const sql = `SELECT 
             p.Product_ID AS id,
             p.Product_name AS productName,
@@ -21,9 +21,24 @@ class Products {
                 FROM products AS p
             INNER JOIN product_brand AS b ON p.Product_brand_ID = b.Brand_ID
             INNER JOIN product_categories AS c ON p.Product_category_ID = c.Category_ID
-            WHERE c.Category_slug = ? AND p.Is_delete = false ${generateFilterQuery(rest)} limit ${numberProductOneLoad} offset ${offset};`;
-        const res = await db.execute(sql, [category])
-        return emptyOrRows(res)
+            WHERE c.Category_slug = ? AND p.Is_delete = false ${generateFilterQuery(rest)} limit ${limmit};`;
+        const sqlTProductsCount = `SELECT 
+            COUNT(p.Product_name) as totalCount
+            FROM products AS p
+            INNER JOIN product_brand AS b ON p.Product_brand_ID = b.Brand_ID
+            INNER JOIN product_categories AS c ON p.Product_category_ID = c.Category_ID
+            WHERE c.Category_slug = ? AND p.Is_delete = false ${generateFilterQuery(rest)};`;
+        const res = db.execute(sql, [category]);
+        const res2 = db.execute(sqlTProductsCount, [category]);
+        const [products, count] = await Promise.all([res, res2]);
+        
+        return {
+            products: emptyOrRows(products),
+            metaData: {
+                totalCount: count[0]?.totalCount,
+                restProducts: count[0]?.totalCount - products.length 
+            }
+        }
     }
 
     // get product by slug
@@ -204,7 +219,7 @@ class Products {
     }
 
     // delete product by id
-    async deleteProduct(category, id) {
+    async deleteProduct(id) {
         const pr1 = db.execute(`DELETE FROM desc_product WHERE Product_ID = ?`, [id]);
         const pr2 = db.execute(`DELETE FROM product_catalog WHERE Product_ID = ?`, [id]);
         const pr3 = db.execute(`DELETE FROM product_discount WHERE Product_ID = ?`, [id]);

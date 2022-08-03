@@ -18,10 +18,10 @@ interface FilterProductsProps {
 const FilterProducts = ({dataAllBrands}: FilterProductsProps) => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const {page = '1', category, ...rest} = router.query;
+    const {page, category, ...rest} = router.query;
 
     useEffect(() => {
-        loadProductByCategory(dispatch, category as string, page as string, rest)
+        loadProductByCategory(dispatch, category as string, page as string || '1', rest)
     }, [rest]);
 
     return (

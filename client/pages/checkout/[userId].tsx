@@ -1,7 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { wrapper } from '~/redux/store';
 
-import MainLayout from '~/components/layout/MainLayout';
 import CheckoutTop from '~/components/layout/checkout/checkoutTop';
 import CheckoutProductList from '~/components/layout/checkout/checkoutProductList';
 import CustomerForm from '~/components/layout/checkout/cutomerForm';
@@ -16,18 +15,16 @@ interface CheckoutProps {
 
 const Checkout: NextPage<CheckoutProps> = ({data}) => {
     return (
-        <MainLayout>
-            <main className='container'>
-                <div className='col-6 offset-3'>
-                    <CheckoutTop/>
+        <main className='container'>
+            <div className='col-6 offset-3'>
+                <CheckoutTop/>
 
-                    <CheckoutProductList/>
+                <CheckoutProductList/>
 
-                    <CustomerForm/>
-                </div>
-            </main>   
+                <CustomerForm/>
+            </div>
             {/* <Spinner/> */}
-        </MainLayout>
+        </main>   
     )
 }
 

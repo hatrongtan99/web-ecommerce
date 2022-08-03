@@ -12,19 +12,20 @@ const Breadcrumb = () => {
   return (
     <nav className={cx('wrapper')}>
         <ol className={cx("breadcrumb")}>
-            <li className={cx("breadcrumb__item")}><Link href="/">Home</Link></li>
-            {pathNames.map((name, index) => {
-                
-                const hrefTo = `/${pathNames.slice(0, index + 1).join('/')}`;
+            <li className={cx("breadcrumb__item")}><Link href="/">Trang chủ</Link></li>
+            {pathNames.map((e, index) => {
+              
+              const hrefTo = `/${pathNames.slice(0, index + 1).join('/')}`;
+              const name = e.split('?')[0]
 
-                if (index == pathNames.length - 1) {
-                    return <li className={cx("breadcrumb__item")}>{name}</li>
-                }
-               return <li className={cx("breadcrumb__item")}><Link href={hrefTo}>{name}</Link></li>
+              if (index == pathNames.length - 1) {
+                return <li className={cx("breadcrumb__item")} key={index}>{name}</li>
+              }
+              return <li className={cx("breadcrumb__item")} key={index}><Link href={hrefTo}>{name}</Link></li>
             })}
         </ol>
     </nav>
   )
 }
 
-export default Breadcrumb
+export default Breadcrumb;

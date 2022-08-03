@@ -1,11 +1,19 @@
-import {NextPage} from 'next';
+import { NextPageWithLayout } from 'pages/_app';
+import { ReactElement } from 'react';
 
 import LayoutAdmin from '~/components/admin/layoutAdmin';
-const Admin: NextPage = () => {
+
+const Admin: NextPageWithLayout = () => {
 
   return (
-    <LayoutAdmin>
       <h1>header</h1>
+  )
+}
+
+Admin.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <LayoutAdmin>
+      {page}
     </LayoutAdmin>
   )
 }

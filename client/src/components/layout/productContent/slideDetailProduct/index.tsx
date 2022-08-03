@@ -91,22 +91,22 @@ const SlideDetailProduct = () => {
         <SlideShow handleMoveSlide={handleMoveSlide} handleTransitionEnd={handleTransitionEnd} style={style}>
             {imgFake.map((img, index) => {
               return (
-                <div className={cx('slide-item')}>
-                <img 
-                  src={img} 
-                />
-                <div 
-                  className={cx('magnify-lens')} 
-                  ref={el => el && (magnifyLensRef.current[index] = el)} 
-                  onMouseMove={(e) => handleMouseMove(e, index)}
-                ></div>
-                <div 
-                  className={cx('magnify')} 
-                  onMouseOut={(e) => habdleMouseOut(e, index)}
-                  onMouseMove={(e) => handleMouseMove(e, index)}
-                  ref={el => el && (magnifyImgRef.current[index] = el)}
-                ></div>
-              </div>
+                <div className={cx('slide-item')} key={img}>
+                  <img 
+                    src={img} 
+                  />
+                  <div 
+                    className={cx('magnify-lens')} 
+                    ref={el => el && (magnifyLensRef.current[index] = el)} 
+                    onMouseMove={(e) => handleMouseMove(e, index)}
+                  ></div>
+                  <div 
+                    className={cx('magnify')} 
+                    onMouseOut={(e) => habdleMouseOut(e, index)}
+                    onMouseMove={(e) => handleMouseMove(e, index)}
+                    ref={el => el && (magnifyImgRef.current[index] = el)}
+                  ></div>
+                </div>
               )
             })}
         </SlideShow>

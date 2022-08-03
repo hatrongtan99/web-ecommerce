@@ -9,12 +9,8 @@ interface Test {
 const LayoutAdmin = ({children}: Test) => {
   return (
     <main className='container-fluid'>
-      <div className='row'>
-        <SideBar/>
-        <div className='col'>
-          {children}
-        </div>
-      </div>
+      <SideBar/>
+      {children}
     </main>
   )
 }

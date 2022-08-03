@@ -7,9 +7,9 @@ class ProductionsController {
     async getProductsByCategory(req, res, next) {
         try {
             const category = req.params.category;
-            const products = await productService.mutipleProductsByCategory(category, req);
+            const response= await productService.mutipleProductsByCategory(category, req);
             return res.status(200)
-            .json({success: true, message: 'Get mutiple products successfully', data: products})
+            .json({success: true, message: 'Get mutiple products successfully', data: response})
 
         } catch (error) {
             console.log(error);
@@ -160,8 +160,8 @@ class ProductionsController {
     // @accsess Private/Admin
     async deleteProductById(req, res, next) {
         try {
-            const {category, id} = req.params
-            await productService.deleteProduct(category, id);
+            const {id} = req.params
+            await productService.deleteProduct(id);
             res.json({success: true, message: 'Product deleted successfully'})
         } catch (error) {
             console.log(error);

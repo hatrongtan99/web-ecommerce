@@ -5,11 +5,11 @@ import type {ProductsByCategoryResult, ProductBycategoryAndSlugResult} from 'src
 const productsCategorySlice = createSlice({
     name: 'products',
     initialState: {
-        dataByCategory: [] as ProductsByCategoryResult[],
+        dataByCategory: {} as ProductsByCategoryResult,
         dataByCategoryAndSlug: {} as ProductBycategoryAndSlugResult
     },
     reducers: {
-        saveProductByCategory: (state, action: PayloadAction<ProductsByCategoryResult[]>) => {
+        saveProductByCategory: (state, action: PayloadAction<ProductsByCategoryResult>) => {
             state.dataByCategory = action.payload
         },
 

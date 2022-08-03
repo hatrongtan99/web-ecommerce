@@ -6,13 +6,13 @@ interface InputFormProps extends FieldProps {
     className: string;
     name: string;
     id: string;
+    onchange: any
 }
 
 const InputForm = ({
     field,
     form: {touched, errors},
 
-    name, 
     id,
     leftlabel, 
     rightLabel, 
@@ -21,14 +21,16 @@ const InputForm = ({
 }: InputFormProps) => {
     return (
         <>
-            {leftlabel && <label htmlFor={id || name}>{leftlabel}</label>}
-            <input
-                {...field}
-                {...props}
-                id={id}
-                className={className} 
-            />
-            {rightLabel && <label htmlFor={id || name} >{rightLabel}</label>}
+            <div className='d-flex'>
+                {leftlabel && <label htmlFor={id || field.name}>{leftlabel}</label>}
+                <input
+                    {...field}
+                    {...props}
+                    id={id || field.name}
+                    className={className}
+                />
+                {rightLabel && <label htmlFor={id || field.name} >{rightLabel}</label>}
+            </div>
             {touched[field.name] && errors[field.name] && <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{errors[field.name] as string}</div>}
         </>
   )

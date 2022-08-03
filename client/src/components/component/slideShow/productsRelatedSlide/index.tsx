@@ -30,14 +30,14 @@ const ProductsRelatedSlide = ({title}: ProductsRelatedSlideProps) => {
   };
 
   const handleTransitionEnd = () => {
-    if (indexImg == data.length - 5) {
-        setNeedTransition(false)
-        setIndexImg(3);
-    } else if (indexImg == 3) {
-        setNeedTransition(false)
-        setIndexImg(data.length - 5);
-    }
-    setIsMove(false)
+    // if (indexImg == data.length - 5) {
+    //     setNeedTransition(false)
+    //     setIndexImg(3);
+    // } else if (indexImg == 3) {
+    //     setNeedTransition(false)
+    //     setIndexImg(data.length - 5);
+    // }
+    // setIsMove(false)
   }
 
   let style = {transform: `translateX(${indexImg * -25}%)`, transition: `${needTransition ? 'all 0.25s ease 0s' : 'none'}`};

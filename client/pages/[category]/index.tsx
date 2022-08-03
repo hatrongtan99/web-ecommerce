@@ -2,7 +2,6 @@ import { GetServerSideProps, NextPage } from 'next';
 import {wrapper} from '~/redux/store';
 import { useAppSelector } from '~/redux/hooks'; 
 
-import MainLayout from '~/components/layout/MainLayout';
 import ProductSpecial from '~/components/layout/productSpecial';
 import SortProduct from '~/components/component/sortProducts';
 import ProductList from '~/components/layout/productList';
@@ -16,31 +15,29 @@ import ButtonLoadExtraProducts from '~/components/component/buttonLoadExtraProdu
 
 
 interface CategoryProps {
-  data: ProductsByCategoryResult[];
+  data: ProductsByCategoryResult;
   dataAllBrands: BrandProductResult[]
 }
 
 const Category: NextPage<CategoryProps> = ({data, dataAllBrands}) => {
   return (
-    <MainLayout>
-        <main className='container'>
-          <Breadcrumb/>
-          <div className='row'>
-            <div className='col-9'>
-              
-              <ProductSpecial/>
-              <SortProduct/>
-              <ProductList/>
+      <main className='container'>
+        <Breadcrumb/>
+        <div className='row'>
+          <div className='col-9'>
+            
+            <ProductSpecial/>
+            <SortProduct/>
+            <ProductList/>
 
-              <ButtonLoadExtraProducts/>
-            </div>
-
-            <div className="col-3">
-            <FilterProducts dataAllBrands={dataAllBrands}/>
-            </div>
+            <ButtonLoadExtraProducts metaData={data.metaData}/>
           </div>
-        </main>
-    </MainLayout>
+
+          <div className="col-3">
+          <FilterProducts dataAllBrands={dataAllBrands}/>
+          </div>
+        </div>
+      </main>
   )
 }
 export default Category;
@@ -62,7 +59,7 @@ export const getServerSideProps: GetServerSideProps<CategoryProps> = wrapper.get
   } catch (error) {
     return {
       props: {
-        data: [],
+        data: {},
         dataAllBrands: []
       }
     }

@@ -64,7 +64,7 @@ const SideBar = () => {
     const [activeMemu, setActiveMenu] = useState<number>(0)
     
   return (
-    <div className={cx('side-bar')}>
+    <div className={`col-2 ${cx('side-bar')}`}>
         <div className={cx('header')}>
             <img src='https://www.ecommerce-admin.com/demo/images/logo.svg' alt='logo'/>
             
@@ -73,7 +73,7 @@ const SideBar = () => {
         <ul className={(cx('menu-aside'))}>
             {sidebarList.map((sidebar, index) => {
                 return (
-                    <li className={cx('menu-aside__item', {active: activeMemu == index})} onClick={() => setActiveMenu(index)}>
+                    <li key={index} className={cx('menu-aside__item', {active: activeMemu == index})} onClick={() => setActiveMenu(index)}>
                         {sidebar.path ? 
                             <Link href={sidebar.path} >
                                 <a className={cx('menu-aside__item__inner', 'no-children')}>
@@ -96,7 +96,7 @@ const SideBar = () => {
                                 <div className={cx('sub-menu-item', {active: openSubMenu == index})}>
                                     {sidebar.children?.map((subMenu, index) => {
                                         return (
-                                            <Link href={subMenu.path}>
+                                            <Link href={subMenu.path} key={index}>
                                                 <a>{subMenu.display}</a>
                                             </Link>
                                         )

@@ -20,7 +20,7 @@ const RatingBox = () => {
                 <p>{rating.toFixed(1)}</p> 
                 <div className={cx('rating__box__star')}>
                     {new Array(5).fill(0).map((star, index) => (
-                        <AiTwotoneStar size={25} color={index + 1 <= rating ? '#f4c91f' : '#ddd'} />
+                        <AiTwotoneStar size={25} color={index + 1 <= rating ? '#f4c91f' : '#ddd'} key={index}/>
                     ))}    
                 </div>
                 <span>1 đánh giá</span>
