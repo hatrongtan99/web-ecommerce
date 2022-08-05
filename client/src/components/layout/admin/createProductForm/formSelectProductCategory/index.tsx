@@ -5,8 +5,11 @@ import SelectForm from '~/components/custom/selectForm'
 import productionApi from '~/api/productions';
 import { CategoriesResult } from '~/types/index';
 
-const FormSelectProductCategory = () => {
-    console.log('run')
+interface FormSelectProductCategoryProps {
+    name: string
+}
+
+const FormSelectProductCategory = ({name}: FormSelectProductCategoryProps) => {
     const [categories, setCategories] = useState<CategoriesResult[]>([]);
 
     const fetchCategories = async () => {
@@ -21,15 +24,16 @@ const FormSelectProductCategory = () => {
     useEffect(() => {
         fetchCategories()
     }, [])
+
   return (
     <Field 
         component={SelectForm} 
-        name='productCategoryId' 
+        name={name} 
         className='form-select'
         leftlabel='Loại hàng:'
         aria-label=".form-select-sm"
     >
-            <option value={''}>Chọn loại hàng</option>
+            <option value={''} disabled hidden>Chọn loại hàng</option>
         {categories.length > 0 && categories.map(category => (
             <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
         ))}

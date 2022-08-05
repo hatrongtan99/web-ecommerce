@@ -58,7 +58,9 @@ export interface ProductBycategoryAndSlugResult {
     insurance: string;
     images: string[];
     description: DescriptionProduct[];
-    catalog: CatalogProduct[]
+    catalog: CatalogProduct[];
+    categoryId: number;
+    brandId: number;
 }
 
 export interface ProductsInCartResult {

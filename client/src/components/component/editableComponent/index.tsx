@@ -1,26 +1,34 @@
+import { FieldProps } from 'formik';
 import React, {useRef, ReactElement, ReactNode} from 'react'
 
-interface EditableComponentProps {
+interface EditableComponentProps extends FieldProps{
     children: ReactElement;
-    onChange?: (v: any) => void
+    onChangeProps?: (v: any) => void
 }
-const EditableComponent = ({children, onChange}: EditableComponentProps) => {
+
+const EditableComponent = ({
+    field,
+    form,
+    children, 
+    onChangeProps
+}: EditableComponentProps) => {
     const elementRef = useRef<HTMLElement>(null);
 
-    const onMouseUp = () => {
+    const onKeyUp = () => {
         if (elementRef.current) {
             const value = elementRef.current.innerText;
-            if (onChange) {
-              onChange(value);
+            if (onChangeProps) {
+                onChangeProps(value);
             }
         }
     };
 
     const element: ReactElement = React.cloneElement(children, {
+        ...field,
     contentEditable: true,
     suppressContentEditableWarning: true,
     ref: elementRef,
-    onKeyUp: onMouseUp
+    onKeyUp: onKeyUp
     });
     return element;
 }

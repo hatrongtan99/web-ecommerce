@@ -2,12 +2,11 @@ import classNames from "classnames/bind";
 import {ChangeEvent, useEffect, useState} from 'react';
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import {ToastContainer, toast} from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 
 import styles from './createProductForm.module.scss';
 import InputForm from "~/components/custom/inputForm";
 import Button from '~/components/custom/button';
-import SelectForm from "~/components/custom/selectForm";
 import adminApi from "~/api/admin";
 import FormSelectProductCategory from "./formSelectProductCategory";
 import FormSelectProductBrands from "./FormSelectProductBrands";
@@ -165,11 +164,11 @@ const CreateProductForm = () => {
                     ))}
 
                     <div className={cx('form-group')}>
-                        <FormSelectProductCategory/>
+                        <FormSelectProductCategory name='productCategoryId'/>
                     </div>
 
                     <div className={cx('form-group')}>
-                        <FormSelectProductBrands/>
+                        <FormSelectProductBrands name='productBrandId'/>
                     </div>
 
                     <div className={cx('form-group')}>

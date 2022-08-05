@@ -51,6 +51,8 @@ class Products {
             p.Product_slug AS slug,
             b.Brand_name AS brandName,
             b.Brand_image AS brandImg,
+            b.Brand_ID AS brandId,
+            c.Category_ID AS categoryId,
             c.Category_name AS categoryName,
             c.Category_slug AS category,
             d.Discount AS discount,
@@ -203,6 +205,9 @@ class Products {
         const promises = [];
 
         Object.keys(updateObj).map((tableName) => {
+            if (tableName == 'products') {
+                updateObj[tableName].Product_update_at = datetimeSQL();
+            }
             const sql = `UPDATE ${tableName} 
             SET ${Object.keys(updateObj[tableName]).map(column => `${column} = ?`).join(', ')} WHERE Product_ID = ?;`;
 
@@ -229,6 +234,21 @@ class Products {
             Is_delete = ? WHERE Product_ID = ?`, [datetimeSQL(), true, id]);
         await Promise.all([pr1, pr2, pr3, pr4, pr5, pr6]);
     }
+
+    // delete catalog by id
+    async deleteCatalogById(id) {
+        const res = await db.execute(`DELETE FROM product_catalog WHERE catalog_Id = ?`, [id]);
+        console.log(res);
+    }
+
+    // delete desc by id
+    async deleteDescById(id) {
+        const res = await db.execute(`DELETE FROM product_desc WHERE desc_Id = ?`, [id]);
+        console.log(res)
+    }
+
+    //delete image by id
+    
 
     // get all brand product
     async getAllBrand () {

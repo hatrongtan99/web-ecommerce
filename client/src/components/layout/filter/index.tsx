@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import FilterByBrand from './filterByBrand';
 import FilterByPrice from './filterByPrice';
 import { BrandProductResult } from '~/types/index';
-import loadProductByCategory from "~/utils/loadProductByCategory";
+import { loadProductByCategory } from '~/utils/loadProduct';
 
 const cx = classNames.bind(styles);
 

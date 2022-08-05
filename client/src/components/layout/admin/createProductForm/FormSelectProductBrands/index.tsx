@@ -5,7 +5,11 @@ import SelectForm from '~/components/custom/selectForm'
 import productionApi from '~/api/productions';
 import { BrandProductResult } from '~/types/index';
 
-const FormSelectProductBrands = () => {
+interface FormSelectProductBrandsProps {
+    name: string
+}
+
+const FormSelectProductBrands = ({name}: FormSelectProductBrandsProps) => {
     const [brands, setBrands] = useState<BrandProductResult[]>([]);
 
     const fetchCategories = async () => {
@@ -23,13 +27,13 @@ const FormSelectProductBrands = () => {
   return (
     <Field 
         component={SelectForm} 
-        name='productBrandId' 
+        name={name} 
         className='form-select'
         leftlabel='Hãng sản xuất:'
         aria-label=".form-select-sm"
         type='number'
     >
-            <option value={''}>Chọn hãng sản xuất:</option>
+            <option value={''}  disabled hidden>Chọn hãng sản xuất:</option>
         {brands.length > 0 && brands.map(brand => (
             <option key={brand.idBrand} value={brand.idBrand}>{brand.brandName}</option>
         ))}

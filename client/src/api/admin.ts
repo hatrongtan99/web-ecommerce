@@ -41,7 +41,7 @@ class AdminApi {
     // update product
     updateProduct(idProduct: string, params: any) {
         const url = `admin/products/${idProduct}/update`;
-        return configAxios.patch<never, Response>(url, {params});
+        return configAxios.patch<never, Response>(url, params);
     }
     
     // create product 

@@ -4,7 +4,7 @@ interface ModalPromtProps {
     content: string;
     title?: string;
     buttonTitle: string;
-    handle: () => void;
+    handle: (...argg: any) => void;
 }
 
 const ModalPromt = ({id, content, handle, title, buttonTitle}: ModalPromtProps) => {
