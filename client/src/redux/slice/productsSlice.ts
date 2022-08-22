@@ -10,20 +10,25 @@ const productsCategorySlice = createSlice({
     },
     reducers: {
         saveProductByCategory: (state, action: PayloadAction<ProductsByCategoryResult>) => {
-            state.dataByCategory = action.payload
+            return {
+                ...state,
+                dataByCategory: action.payload
+            }
         },
 
         saveProductByCategoryAndSlug: (state, action: PayloadAction<ProductBycategoryAndSlugResult>) => {
-            state.dataByCategoryAndSlug = action.payload
+            return {
+                ...state,
+                dataByCategoryAndSlug: action.payload
+            }
         }
     },
     extraReducers: {
         [HYDRATE]: (state, action) => {
-            state.dataByCategory = action.payload.products.dataByCategory;
-            state.dataByCategoryAndSlug = action.payload.products.dataByCategoryAndSlug;
-        }
+            // state.dataByCategory = {...state.dataByCategory, ...action.payload.products.dataByCategory};
+            // state.dataByCategoryAndSlug = {...state.dataByCategoryAndSlug, ...action.payload.products.dataByCategoryAndSlug};
     }
-
+}
 });
 
 export default productsCategorySlice.reducer;

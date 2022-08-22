@@ -8,6 +8,7 @@ import {IoCartSharp} from 'react-icons/io5';
 import {SiAddthis} from 'react-icons/si';
 
 import styles from './sidebar.module.scss';
+import Image from "next/image";
 
 const cx = classNames.bind(styles);
 
@@ -65,9 +66,8 @@ const SideBar = () => {
     
   return (
     <div className={`col-2 ${cx('side-bar')}`}>
-        <div className={cx('header')}>
-            <img src='https://www.ecommerce-admin.com/demo/images/logo.svg' alt='logo'/>
-            
+        <div className={cx('logo')}>
+            <Image layout="fill" objectFit="contain" src='https://www.ecommerce-admin.com/demo/images/logo.svg' alt='logo'/>
         </div>
 
         <ul className={(cx('menu-aside'))}>

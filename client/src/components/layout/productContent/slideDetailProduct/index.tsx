@@ -5,18 +5,15 @@ import SlideShow from "../../../component/slideShow";
 
 import styles from './slideDeltailProduct.module.scss';
 import {MouseEvent} from 'react';
-
-const imgFake = [
-  'https://maydochuyendung.com/img/uploads/cache_image/500x-bosch-gbh-2-24-dre-1-1601264004.jpg',
-  'https://maydochuyendung.com/img/uploads/cache_image/500x-GSB-120-li-2019.jpg', 
-  'https://maydochuyendung.com/img/uploads/cache_image/500x-may-khoan-bua-bosch-gbh-2-24-dre.jpg', 
-  'https://maydochuyendung.com/img/uploads/cache_image/500x-bosch-gbh-2-24-dre-1-1601264004.jpg',
-  'https://maydochuyendung.com/img/uploads/cache_image/500x-GSB-120-li-2019.jpg'
-]
+import { useAppSelector } from "~/redux/hooks";
+import Image from "next/image";
 
 const cx = classNames.bind(styles);
 
 const SlideDetailProduct = () => {
+  const imageList = useAppSelector(state => state.products.dataByCategoryAndSlug.images);
+  
+  const cloneArray = [imageList[imageList.length - 1], ...imageList, imageList[0]]
 
   const [indexImg, setIndexImg] = useState<number>(1);
   const [needTransition, setNeedTransition] = useState(true);
@@ -47,7 +44,7 @@ const SlideDetailProduct = () => {
 
       magnifyImgRef.current[i].style.cssText = `
         opacity: 1;
-        background: url(${imgFake[i]}) -${x*cx}px -${y*cy}px / ${imgRect.width * cx}px ${imgRect.height * cy}px no-repeat
+        background: url(${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${cloneArray[i]}) -${x*cx}px -${y*cy}px / ${imgRect.width * cx}px ${imgRect.height * cy}px no-repeat
       `
     }
   }
@@ -73,12 +70,12 @@ const SlideDetailProduct = () => {
   };
 
   const handleTransitionEnd = () => {
-    if (indexImg == imgFake.length - 1) {
-        setNeedTransition(false)
-        setIndexImg(1);
+    if (indexImg == cloneArray.length - 1) {
+      setNeedTransition(false)
+      setIndexImg(1);
     } else if (indexImg == 0) {
-        setNeedTransition(false)
-        setIndexImg(imgFake.length - 2);
+      setNeedTransition(false)
+      setIndexImg(cloneArray.length - 2);
     }
     setIsMove(false)
   }
@@ -89,12 +86,14 @@ const SlideDetailProduct = () => {
     <>
       <div className={cx('slide-wraper')}>
         <SlideShow handleMoveSlide={handleMoveSlide} handleTransitionEnd={handleTransitionEnd} style={style}>
-            {imgFake.map((img, index) => {
+            {cloneArray.map((img, index) => {
               return (
-                <div className={cx('slide-item')} key={img}>
-                  <img 
-                    src={img} 
-                  />
+                <div className={cx('slide-item')} key={index}>
+                  <div className={cx('img-slide')}>
+                    <Image 
+                      layout='fill' alt='product image.' src={`${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${img}`} 
+                    />
+                  </div>
                   <div 
                     className={cx('magnify-lens')} 
                     ref={el => el && (magnifyLensRef.current[index] = el)} 
@@ -113,11 +112,11 @@ const SlideDetailProduct = () => {
       </div>
 
       <div className={cx('img-list')}>
-        {imgFake.map((img, index) => {
-          if (index == 0 || index == imgFake.length - 1) return
+        {cloneArray.map((img, index) => {
+          if (index == 0 || index == cloneArray.length - 1) return
           return (
             <div className={cx('img-list__item', {active: indexImg == index})} key={index}>
-              <img src={img} onClick={() => setIndexImg(index)} />
+              <Image layout='fill' objectFit='contain' alt='' src={`${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${img}`} onClick={() => setIndexImg(index)} />
             </div> 
           )
         })}

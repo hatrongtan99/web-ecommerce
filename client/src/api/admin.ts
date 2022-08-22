@@ -29,13 +29,19 @@ class AdminApi {
     // create product description
     createProductDesc(idProduct: string, params: any) {
         const url = `/admin/products/${idProduct}/descriptions`;
-        return configAxios.post<never, Response>(url, {params});
+        return configAxios.post<never, Response>(url, params);
     }
 
     // create product catalog
     createCatalog(idProduct: string, params: any) {
         const url = `/admin/products/${idProduct}/catalog`;
-        return configAxios.post<never, Response>(url, {params});
+        return configAxios.post<never, Response>(url, params);
+    }
+
+    // add multiple images 
+    addMultipleImagesToProduct(idProduct: string, params: any) {
+        const url = `/admin/products/${idProduct}/images`;
+        return configAxios.post<never, Response>(url, params);
     }
 
     // update product

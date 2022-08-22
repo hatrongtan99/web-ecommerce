@@ -19,6 +19,7 @@ export interface ProductsByCategory {
     brandImg: string;
     categoryName: string; 
     categorySlug: string;
+    discount: number;
 }
 
 export interface ProductsByCategoryResult {
@@ -33,7 +34,8 @@ interface DescriptionProduct {
     descId: number;
     titleDesc: string;
     contentDesc: string;
-    imgDesc: string
+    imgDesc: string;
+    titleImageDesc: string;
 }
 
 interface CatalogProduct {

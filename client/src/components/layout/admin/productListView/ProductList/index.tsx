@@ -15,6 +15,7 @@ import { notifyError, notifySuccess } from '~/utils/toastify';
 import Spinner from '~/components/component/spinner';
 import { useAppDispatch } from '~/redux/hooks';
 import { loadProductByCategory } from '~/utils/loadProduct';
+import Image from 'next/image';
 
 const cx = classNames.bind(styles);
 
@@ -76,9 +77,11 @@ const ProductList = ({products}: ListProductProps) => {
       {products.map(product => (
         <div className={`row ${cx('product-item')}`} key={product.id}>
           <div className={`col-1 ${cx('align-center')}`}>
-            <Link href={`/${product.categorySlug}/${product.slug}`}>
-              <img src={`${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${product.productThumb}`} alt={product.productName}/>
-            </Link>
+            <div className={cx('image-product')}>
+              <Link href={`/${product.categorySlug}/${product.slug}`}>
+                <Image layout='fill' objectFit='cover' src={`${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${product.productThumb}`} alt={product.productName}/>
+              </Link>
+            </div>
           </div>
       
           <div className={`col-5 ${cx('align-center')}`}>

@@ -5,10 +5,10 @@ import StarEvaluate from '~/components/component/starEvaluate';
 
 const cx = classNames.bind(styles);
 
-const TitleDeltailProduct = () => {
+const TitleDeltailProduct = ({title}: {title: string}) => {
   return (
     <div className={cx('wrapper')}>
-      <h1 className={cx('name-detail')}>Máy khoan búa Milwaukee M18 CHX-0X0 (bare)</h1>
+      <h1 className={cx('name-detail')}>{title}</h1>
       <StarEvaluate/>
     </div>
   )

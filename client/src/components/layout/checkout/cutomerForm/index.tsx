@@ -9,11 +9,15 @@ import Button from "~/components/custom/button";
 import styles from './customerForm.module.scss';
 import InputForm from "~/components/custom/inputForm";
 import Spinner from "~/components/component/spinner";
+import { ToastContainer } from "react-toastify";
+import {notifySuccess, notifyError} from '~/utils/toastify';
+import { AxiosError } from "axios";
+import generateUserSessionId from "~/utils/generateUserSessionId";
 
 const cx = classNames.bind(styles);
 
 export interface FormSubmitProps {
-    typeSex: string;
+    typeSex: 'male' | 'female';
     userName: string;
     userEmail: string;
     userPhone: string;
@@ -40,11 +44,15 @@ const CustomerForm = () => {
         try {
             const res = await orderApi.createOrderByUserId(userId as string, value);
             if (res.success) {
+                window.localStorage.removeItem(process.env.NEXT_PUBLIC_USER_SESSION_ID as string);
+                generateUserSessionId()
+                notifySuccess(res.message)
                 router.push('/')
             }
         } catch (error) {
             console.log(error);
-            alert('false')
+            const err = error as AxiosError
+            notifyError(err.message)
         }
     }
     
@@ -55,7 +63,7 @@ const CustomerForm = () => {
         </div>
         <Formik
             initialValues={{
-                typeSex: 'male',
+                typeSex: 'male' as 'male' | 'female',
                 userName: '',
                 userEmail: '',
                 userPhone: '',
@@ -143,9 +151,8 @@ const CustomerForm = () => {
                     {isSubmitting && <Spinner/>}
                 </Form>
             )}
-            
         </Formik>
-
+        <ToastContainer/>
     </div>
   )
 }

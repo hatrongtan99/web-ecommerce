@@ -1,10 +1,12 @@
-import {NextPage} from 'next';
+import { NextPage } from 'next';
+import Link from 'next/link';
 
 const Home: NextPage = () => {
-
-  return (
-    <div> home</div>
-  )
-}
+    return (
+        <div>
+            <Link href="/may-khoan-bua-be-tong">clik</Link>
+        </div>
+    );
+};
 
 export default Home;

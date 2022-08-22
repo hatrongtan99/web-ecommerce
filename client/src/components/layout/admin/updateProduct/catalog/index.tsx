@@ -5,31 +5,23 @@ import {Field, FieldArray, FormikErrors, FormikTouched} from 'formik';
 import Button from "~/components/custom/button";
 import InputForm from "~/components/custom/inputForm";
 import { ProductBycategoryAndSlugResult } from "~/types/index";
-import { FormikValuesType } from "..";
 
 import styles from '../../updateProduct/updateProduct.module.scss';
+import { CreateOrUpdateCatalogType } from '../CreateOrUpdateCatalog';
 
 const cx = classNames.bind(styles);
 
-interface CreateOrUpdateCatalogProps<T> {
+interface CatalogProps<T extends CreateOrUpdateCatalogType> {
   product:  ProductBycategoryAndSlugResult;
-  touched:  FormikTouched<T>;
-  errors: FormikErrors<T>;
   values: T;
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
 }
 
-const CreateOrUpdateCatalog = <T extends FormikValuesType>({
+const Category = <T extends CreateOrUpdateCatalogType>({
   product,
-  touched,
-  errors,
-  setFieldValue,
   values
-}: CreateOrUpdateCatalogProps<T>) => {
-  
+}: CatalogProps<T>) => {
   return (
     <div className={cx('catalog-wrapper')}>
-
       <div className={cx('catalog')}>
         <h3 className={cx('catalog__title')}>THÔNG SỐ KỸ THUẬT</h3>
         
@@ -40,21 +32,6 @@ const CreateOrUpdateCatalog = <T extends FormikValuesType>({
               <span>{catalog.contentCatalog}</span>
             </li>
           ))}
-
-            <li className={cx('catalog__item')}>
-              <p>Mô-men xoắn, tối đa (cứng/mềm):</p>
-              <span>28 / 11 Nm</span>
-            </li>
-
-            <li className={cx('catalog__item')}>
-              <p>Mô-men xoắn, tối đa (cứng/mềm):</p>
-              <span>28 / 11 Nm</span>
-            </li>
-
-            <li className={cx('catalog__item')}>
-              <p>Mô-men xoắn, tối đa (cứng/mềm):</p>
-              <span>28 / 11 Nm</span>
-            </li>
         </ul>
 
       </div>
@@ -121,4 +98,4 @@ const CreateOrUpdateCatalog = <T extends FormikValuesType>({
   )
 }
 
-export default memo(CreateOrUpdateCatalog)
+export default memo(Category)

@@ -104,9 +104,9 @@ class ProductionsController {
     // @router  POST/admin/products/:id/description
     // @access  Private/Admin
     async createProductDescription(req, res, next) {
-        const {title, content} = req.body;
+        const {desc_product} = req.body;
         try {
-            if (title.length == 0 && content.length == 0) {
+            if (desc_product.length == 0 ) {
                 return res.status(400).json({success: false, message: 'Data fotmatted not properly'})
             }
             const response = await productService.createDesc(req);
@@ -124,9 +124,9 @@ class ProductionsController {
     // @router  POST/admin/products/:id/catalog
     // @access  Private/Admin
     async createProductCatalog(req, res, next) {
-        const {titleCatalog, contentCatalog} = req.body;
+        const {product_catalog} = req.body;
         try {
-            if (titleCatalog.length == 0 && contentCatalog.length == 0 && titleCatalog.length != contentCatalog.length) {
+            if (product_catalog.length == 0 ) {
                 return res.status(400).json({success: false, message: 'Data fotmatted not properly'})
             }
             const response = await productService.createCatalog(req);
@@ -137,6 +137,26 @@ class ProductionsController {
             }
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    // @desc    add multiple images to product
+    // @route   POST /api/admin/products/:id/images
+    // @access  Private/Admin
+    async addMultipleImages(req, res, next) {
+        const {product_images} = req.body
+        try {
+            if (product_images.length == 0) {
+                return res.json({success: false, message: 'Data fotmatted not properly'})
+            }
+            const response = await productService.addMultipleImagesToProduct(req);
+            if (response) {
+                return res.json({success: true, message: 'add images successfully!'})
+            } else {
+                return res.status(400).json({success: false, message: 'Add images Failed'})
+            }
+        } catch (error) {
+            
         }
     }
     

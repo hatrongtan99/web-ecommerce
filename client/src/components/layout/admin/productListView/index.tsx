@@ -27,7 +27,7 @@ const ProductListView = () => {
     // fetch data
     useEffect(() => {
         loadProductByCategory(dispatch, categoryValue, router.query.page as string || '1')
-    }, [categoryValue])
+    }, [categoryValue, dispatch, router.query.page])
 
   return (
     <div className='offset-2'>

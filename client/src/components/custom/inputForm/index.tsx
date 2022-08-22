@@ -1,4 +1,4 @@
-import { FieldProps } from 'formik';
+import { ErrorMessage, FieldProps } from 'formik';
 
 interface InputFormProps extends FieldProps {
     leftlabel?: string;
@@ -11,7 +11,7 @@ interface InputFormProps extends FieldProps {
 
 const InputForm = ({
     field,
-    form: {touched, errors},
+    form,
 
     id,
     leftlabel, 
@@ -31,7 +31,7 @@ const InputForm = ({
                 />
                 {rightLabel && <label htmlFor={id || field.name} >{rightLabel}</label>}
             </div>
-            {touched[field.name] && errors[field.name] && <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{errors[field.name] as string}</div>}
+            <ErrorMessage name={field.name} render={(msg) => <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{msg}</div>}/>
         </>
   )
 }

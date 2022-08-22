@@ -1,17 +1,18 @@
 import classNames from "classnames/bind";
-import {Field, FormikErrors, FormikTouched} from 'formik';
+import {ErrorMessage, Field, FormikErrors, FormikTouched} from 'formik';
 import {ChangeEvent, memo, useState} from 'react'
 
 import styles from '../../updateProduct/updateProduct.module.scss';
 import { ProductBycategoryAndSlugResult } from "~/types/index";
 import InputForm from "~/components/custom/inputForm";
-import { FormikValuesType } from "../../updateProduct";
 import FormSelectProductCategory from "../../createProductForm/formSelectProductCategory";
 import FormSelectProductBrands from "../../createProductForm/FormSelectProductBrands";
+import { UpdateProductType } from "../UpdateProductCore";
+import Image from "next/image";
 
 const cx = classNames.bind(styles);
 
-interface ProductCoreProps<T extends FormikValuesType> {
+interface ProductCoreProps<T extends UpdateProductType> {
   product:  ProductBycategoryAndSlugResult;
   touched:  FormikTouched<T>;
   errors: FormikErrors<T>;
@@ -19,13 +20,12 @@ interface ProductCoreProps<T extends FormikValuesType> {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
 }
 
-const ProductCore = <T extends FormikValuesType>({product, touched, errors, setFieldValue, values}: ProductCoreProps<T>) => {
+const ProductCore = <T extends UpdateProductType>({product, touched, errors, setFieldValue, values}: ProductCoreProps<T>) => {
   
   const [imageThumb, setImageThumb] = useState<string>('');
   const pathImages = product.images.map(img => `${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${img}`);
   const [images, setImages] = useState<string[]>([]);
   
-
   // hanldle Single Image
   const hanldleSingleImage = ({e, setFieldValue}: {e: ChangeEvent<HTMLInputElement>, setFieldValue:(field: string, value: any, shouldValidate?: boolean | undefined) => void}) => {
     if (e.target.files) {
@@ -38,7 +38,7 @@ const ProductCore = <T extends FormikValuesType>({product, touched, errors, setF
 
   const handleMultipleImage = ({e, setFieldValue}: {e: ChangeEvent<HTMLInputElement>, setFieldValue:(field: string, value: any, shouldValidate?: boolean | undefined) => void}) => {
     if (e.target.files) {
-      setFieldValue('images', e.target.files);
+      setFieldValue('product_images', e.target.files);
       const urlImages = [];
 
       for (let i = 0; i < e.target.files.length; i++) {
@@ -83,12 +83,12 @@ const ProductCore = <T extends FormikValuesType>({product, touched, errors, setF
                 onChange={(e: ChangeEvent<HTMLInputElement>) => hanldleSingleImage({e, setFieldValue})}
               />
           </div>
-          {touched.products && errors.products && <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{errors as string}</div> }
+          <ErrorMessage name='products.product_thumb' render={(msg) => <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{msg}</div>}/>
       </div>
 
       <div className={cx('img-wrapper')}>
-        {!imageThumb ? <img src={`${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${product.productThumb}`} height='100' width='100'/>
-          : <img src={imageThumb} height='100' width='100'/>
+        {!imageThumb ? <div className={cx('img')}><Image layout='fill' objectFit='contain' alt='' src={`${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${product.productThumb}`} /></div>
+          : <div className={cx('img')}><Image layout='fill' objectFit="contain" alt='' src={imageThumb}/></div>
         }
       </div>
 
@@ -97,24 +97,24 @@ const ProductCore = <T extends FormikValuesType>({product, touched, errors, setF
             <label>Ảnh mô tả:</label>
             <input 
               multiple
-              name='products.product_thumb'
+              name='product_images'
               type='file' 
               className='form-control' 
               onChange={(e: ChangeEvent<HTMLInputElement>) => handleMultipleImage({e, setFieldValue})}
             />
           </div>
-          {/* {touched.images && errors.images && <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{errors as string}</div> } */}
+          <ErrorMessage name='product_images' render={(msg) => <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{msg}</div>}/>
       </div>
 
       {/* multipale images exits of product */}
       <div className={cx('img-wrapper')}>
-        {pathImages.map((img, index) => <img src={img} key={index} height='100' width='100'/>)}
+        {pathImages.map((img, index) => <div key={index} className={cx('img')}><Image alt='' src={img} key={index} layout='fill' objectFit="contain" /></div>)}
       </div>
-      {/* new images */}
 
+      {/* new images */}
       {images.length > 0 ? (
         <div className={cx('img-wrapper')}>
-          {images.map((img, index) => <img src={img} key={index} height='100' width='100'/>)}
+          {images.map((img, index) => <div key={index} className={cx('img')}><Image alt='' src={img} key={index} layout='fill' objectFit="contain" /></div>)}
         </div>
       ) : null}
 

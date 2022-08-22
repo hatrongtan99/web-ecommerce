@@ -39,7 +39,7 @@ const FilterByBrand = ({dataAllBrands}: FilterProductsProps) => {
     
         <div className={`row ${cx('input-group')}`}>
             {dataAllBrands && dataAllBrands.map(item => (
-                <div className='col-6' key={item.idBrand}>
+                <div className='col-6' key={item.idBrand} >
                     <FilterInput 
                         active={dataSet.includes(item.idBrand.toString())}
                         image={`${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${item.brandThumb}`} 

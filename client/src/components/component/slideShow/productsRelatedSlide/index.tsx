@@ -45,7 +45,7 @@ const ProductsRelatedSlide = ({title}: ProductsRelatedSlideProps) => {
   return (
     <div className={cx('product-related')}>
         <h3 className={cx('title')}>{title}</h3>
-        <SlideShow handleMoveSlide={handleMoveSlide} handleTransitionEnd={handleTransitionEnd} style={style}>
+        {/* <SlideShow handleMoveSlide={handleMoveSlide} handleTransitionEnd={handleTransitionEnd} style={style}>
             
             <div className={`col-3`}>
                 <ProductItem brandImg={false}/>
@@ -62,7 +62,7 @@ const ProductsRelatedSlide = ({title}: ProductsRelatedSlideProps) => {
             <div className={`col-3`}>
                 <ProductItem brandImg={false}/>
             </div>
-        </SlideShow>
+        </SlideShow> */}
     </div>
   )
 }

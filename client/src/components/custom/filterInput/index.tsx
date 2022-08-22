@@ -4,6 +4,7 @@ import {GrCheckbox} from 'react-icons/gr';
 import {BsCheckLg} from 'react-icons/bs';
 const cx = classNames.bind(styles);
 import type {MouseEvent} from 'react';
+import Image from 'next/image';
 
 interface FilterInput {
     title?: string;
@@ -19,7 +20,7 @@ const FilterInput = ({title, image, active, handleclick, ...props}: FilterInput)
         <BsCheckLg className={cx('filter-input__checked')}/>
         <GrCheckbox className={cx('filter-input__unchecked')}/>
         {title ? <span>{title}</span> : null}
-        {image ? <img src={image} />: null}
+        {image ? <div className={cx('img')}><Image layout='fill' objectFit='contain' src={image} alt=''/></div>: null}
     </div>
   )
 }

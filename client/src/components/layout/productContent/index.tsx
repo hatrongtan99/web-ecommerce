@@ -9,17 +9,17 @@ const cx = classNames.bind(styles);
 const ProductContent = () => {
   return (
     <div className={`row ${cx('product_content')}`}>
-        <div className="col-5">
-          <SlideDetailProduct />
-        </div>
+      <div className="col-5">
+        <SlideDetailProduct />
+      </div>
 
-        <div className="col-4">
-          <PriceDeltailProduct/>
-        </div>
+      <div className="col-4">
+        <PriceDeltailProduct/>
+      </div>
 
-        <div className="col-3">
-          <RightDeltailProduct/>
-        </div>
+      <div className="col-3">
+        <RightDeltailProduct/>
+      </div>
     </div>
   )
 }

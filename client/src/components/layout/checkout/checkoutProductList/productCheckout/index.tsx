@@ -9,6 +9,7 @@ import { ProductsInCartResult } from "~/types/index";
 
 import styles from './productCheckout.module.scss';
 import { changeQuantityProductThunk, deleteProductInCartThunk } from "~/redux/slice/checkoutSlice";
+import Image from "next/image";
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +22,7 @@ const ProductCheckout = ({product}: ProductCheckoutProps) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
 
-    const [quantity, setQuantity] = useState<number>(1)
+    const [quantity, setQuantity] = useState<number>(product.quantity)
 
     // delete product in cart 
     const handleDeleteProductIncart = async () => {
@@ -43,18 +44,18 @@ const ProductCheckout = ({product}: ProductCheckoutProps) => {
   return (
     <div className={cx('product-checkout')}>
         <Link href='/'>
-            <a>
-                <img src='https://maydochuyendung.com/img/uploads/cache_image/100x-may-khoan-van-vit-dung-pin-bosch-gsb-180-li-500.jpg' alt=''/>
+            <a className={cx('img-product-checkout')}>
+                <Image layout='fill' objectFit='contain' src={`${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${product.productThumb}`} alt=''/>
             </a>
         </Link>
         <div className={cx('product-info')}>
-            <Link href='/'>
+            <Link href={`/`}>
                 <a>
-                    <h3>Máy khoan vặn vít dùng Pin Bosch GSB 180-LI</h3>
+                    <h3>{product.productName}</h3>
                 </a>
             </Link>
             <div className={cx('product-info__price')}>
-                <strong>Giá: {(3270000).toLocaleString()} đ</strong>
+                <strong>Giá: {(product.price).toLocaleString()} đ</strong>
             </div>
 
             <div className={cx('product-info__quantity')}>

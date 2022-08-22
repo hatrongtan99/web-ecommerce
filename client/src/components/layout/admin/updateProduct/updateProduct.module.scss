@@ -7,8 +7,12 @@
 }
 
 .wrapper {
+    background-color: #fff;
+    margin: 20px 10px 20px calc((100% / 12) * 2 + 10px);
+    border-radius: 5px;
 
     form {
+        margin-bottom: 20px;
         width: 100%;
         .button-group {
             text-align: end;
@@ -19,7 +23,11 @@
             margin: 10px 0;
             height: 100px;
             width: 100%;
-            img {
+
+            .img {
+                position: relative;
+                height: 100px;
+                width: 100px;
                 border: 1px solid #ccc;
                 margin: 0 2px;
             }
@@ -27,20 +35,17 @@
         .wrapper-form {
             display: flex;
             margin: auto;
-            padding: 14px 16px;
-            border-radius: 6px;
-            width: 90%;
-            background-color: #fff;
+            padding: 14px 0;
+            width: 100%;
         
             .product-core {
                 width: 100%;
             }
         
-            .catalog-wrapper {
+            .catalog-wrapper, .desc-wrapper {
                 width: 100%;
                 padding: 20px 0;
-                border-top: 2px solid #999;
-                border-bottom: 2px solid #999;
+                
             }
         
             .form-group {
@@ -71,6 +76,7 @@
     padding-bottom: 20px;
 }
 
+// catalog exits
 .catalog {
     padding: 10px 0;
     margin: 10px 0;
@@ -102,6 +108,30 @@
     &__item:nth-child(even) {
         background-color: #f4f4f4;
     }
+}
+
+.desc {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 10px;
+    margin-bottom: 20px;
+
+    &__item {
+        h1 {
+            color: red;
+        }
+    }
+
+    .img {
+        position: relative;
+        height: 200px;
+        width: auto;
+    }
+}
+
+.create-desc {
+    padding: 10px;
+    border: 1px solid #999;
+    margin-bottom: 10px;
 }
 
 

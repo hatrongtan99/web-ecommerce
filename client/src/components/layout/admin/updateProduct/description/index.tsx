@@ -1,13 +1,13 @@
-import {memo} from 'react';
+import {ChangeEvent, memo} from 'react';
 import classNames from "classnames/bind";
 import {Field, FieldArray, FormikErrors, FormikTouched} from 'formik';
 
+import styles from '../../updateProduct/updateProduct.module.scss';
 import Button from "~/components/custom/button";
 import InputForm from "~/components/custom/inputForm";
 import { ProductBycategoryAndSlugResult } from "~/types/index";
-import { FormikValuesType } from "..";
-
-import styles from '../../updateProduct/updateProduct.module.scss';
+import { CreateOrUpdateDescProductType } from '../createOrUpdateDesc';
+import Image from 'next/image';
 
 const cx = classNames.bind(styles);
 
@@ -19,23 +19,32 @@ interface CreateOrUpdateDescProductProps<T> {
   setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
 }
 
-const CreateOrUpdateDescProduct = <T extends FormikValuesType>({
+const Description = <T extends CreateOrUpdateDescProductType>({
   product,
   touched,
   errors,
   setFieldValue,
   values
 }: CreateOrUpdateDescProductProps<T>) => {
-  
   return (
-    <div className={cx('catalog-form')}>
+    <div className={cx('desc-wrapper')}>
+      <div className={cx('desc')}>
+        {product.description.map((desc, index) => (
+          <div key={desc.descId} className={cx('desc__item')}>
+            {desc.contentDesc ? <h1>{desc.titleDesc}</h1> : null}
+            {desc.contentDesc ? <p>{desc.contentDesc}</p> : null}
+            {desc.imgDesc ? <div className={cx('img')}><Image layout='fill' objectFit='contain' alt='Ảnh mô tả.' src={`${process.env.NEXT_PUBLIC_DB_HOST}/public/images/${desc.imgDesc}`}/></div> : null}
+            {desc.titleImageDesc ? <p>{desc.titleImageDesc}</p> : null}
+          </div>
+        ))}
+      </div>
       <FieldArray
         name='desc_product'
         render={({ insert, remove, push }) => (
           <div>
             {values.desc_product.map((desc, index) => (
-              <div className='row' key={index}>
-                <div className={`col-5 ${cx('form-group', 'half')}`}>
+              <div className={`row ${cx('create-desc')}`} key={index}>
+                <div className={`col-12 ${cx('form-group')}`}>
                   <Field 
                     leftlabel='Tiêu đề description:'
                     component={InputForm}
@@ -43,29 +52,42 @@ const CreateOrUpdateDescProduct = <T extends FormikValuesType>({
                     className='form-control'
                   />
                 </div>
-                <div className={`col-5 ${cx('form-group', 'half')}`}>
+                <div className={`col-12 ${cx('form-group')}`}>
                   <Field 
-                    leftlabel='Nội dung description:'
-                    component={InputForm}
+                    placeholder='Nội dung description:'
+                    as='textarea'
                     name={`desc_product.${index}.content`}
                     className='form-control'
                   />
                 </div>
-                <div className={`col-5 ${cx('form-group', 'half')}`}>
+
+                <div className={`col-12 ${cx('form-group')}`}>
                   <Field 
-                    type='file'
-                    leftlabel='Ảnh mô tả:'
+                    leftlabel='Tiêu đề ảnh:'
                     component={InputForm}
-                    name={`desc_product.${index}.image_desc`}
+                    name={`desc_product.${index}.title_image_desc`}
                     className='form-control'
                   />
                 </div>
 
                 <div className={`col-5 ${cx('form-group', 'half')}`}>
+                  <div className='d-flex'>
+                    <label>Ảnh mô tả:</label>
+                    <input 
+                      name={`desc_product.${index}.image_desc`}
+                      type='file' 
+                      className='form-control' 
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => e.target.files && setFieldValue(`desc_product.${index}.image_desc`, e.target.files[0])}
+                    />
+                  </div>
+                </div>
+
+                <div className={`col-5 ${cx('form-group', 'half')}`}>
                   <Field 
-                    leftlabel='Tiêu đề ảnh:'
+                    type='number'
+                    leftlabel='Thứ tự:'
                     component={InputForm}
-                    name={`desc_product.${index}.title_image_desc`}
+                    name={`desc_product.${index}.number_order`}
                     className='form-control'
                   />
                 </div>
@@ -119,4 +141,4 @@ const CreateOrUpdateDescProduct = <T extends FormikValuesType>({
   )
 }
 
-export default memo(CreateOrUpdateDescProduct)
+export default memo(Description)

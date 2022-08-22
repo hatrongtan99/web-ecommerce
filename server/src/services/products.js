@@ -14,6 +14,7 @@ class Products {
             p.Product_price AS price,
             p.Product_thumb AS productThumb,
             p.Product_slug AS slug,
+            d.Discount AS discount,
             b.Brand_name AS brandName,
             b.Brand_image AS brandImg,
             c.Category_name AS categoryName,
@@ -21,6 +22,7 @@ class Products {
                 FROM products AS p
             INNER JOIN product_brand AS b ON p.Product_brand_ID = b.Brand_ID
             INNER JOIN product_categories AS c ON p.Product_category_ID = c.Category_ID
+            INNER JOIN product_discount AS d On p.Product_ID = d.Product_ID
             WHERE c.Category_slug = ? AND p.Is_delete = false ${generateFilterQuery(rest)} limit ${limmit};`;
         const sqlTProductsCount = `SELECT 
             COUNT(p.Product_name) as totalCount
@@ -140,17 +142,18 @@ class Products {
     // create desc product
     async createDesc(req) {
         const {id} = req.params;
-        const {data} = req.body;
-        const sql = `INSERT INTO desc_product (Product_ID, Title, Content, Image_desc, Title_Image_desc) VALUES ?;`;
+        const {desc_product} = req.body;
+        const sql = `INSERT INTO desc_product (Product_ID, Title, Content, Image_desc, Title_Image_desc, number_order) VALUES ?;`;
         
         const values = [];
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < desc_product.length; i++) {
             const arr = []
             arr.push(id)
-            arr.push(data[i].title)
-            arr.push(data[i].content)
-            arr.push(data[i].imageDesc)
-            arr.push(data[i].titleImageDesc);
+            arr.push(desc_product[i].title)
+            arr.push(desc_product[i].content)
+            arr.push(desc_product[i].image_desc)
+            arr.push(desc_product[i].title_image_desc);
+            arr.push(desc_product[i].number_order);
             values.push(arr)
         }
         const res = await db.query(sql, [values]);
@@ -160,20 +163,36 @@ class Products {
     // create catalog product
     async createCatalog(req) {
         const {id} = req.params;
-        const {titleCatalog, contentCatalog} = req.body;
+        const {product_catalog} = req.body;
         const sql = `INSERT INTO product_catalog (Product_ID, Title_catalog, Content_catalog) VALUES ?;`;
-
         const values = [];
-        for (let i = 0; i < titleCatalog.length; i++) {
+        for (let i = 0; i < product_catalog.length; i++) {
             const arr = []
             arr.push(id)
-            arr.push(titleCatalog[i])
-            arr.push(contentCatalog[i]);
+            arr.push(product_catalog[i].title_catalog)
+            arr.push(product_catalog[i].content_catalog);
             values.push(arr)
         }
         const res = await db.query(sql, [values]);
         return res?.affectedRows;
     };
+
+    // add mutiple image to product
+    async addMultipleImagesToProduct(req) {
+        const {id} = req.params
+        const {product_images} = req.body
+        const sql = `INSERT INTO product_images (Product_ID, image) VALUES ?;`;
+        const values = [];
+        for (let i = 0; i < product_images.length; i++) {
+            const arr = [];
+            arr.push(id);
+            arr.push(product_images[i])
+            values.push(arr);
+        }
+
+        const res = await db.query(sql, [values]);
+        return res?.affectedRows
+    }
 
     // get product description
     async getProductDesc(id) {
@@ -181,8 +200,10 @@ class Products {
             d.Desc_ID AS descId, 
             d.Title AS titleDesc, 
             d.Content AS contentDesc, 
-            d.Image_desc AS imgDesc 
-                FROM desc_product AS d WHERE Product_ID = ?;`;
+            d.Image_desc AS imgDesc,
+            d.Title_image_desc AS titleImageDesc
+                FROM desc_product AS d WHERE Product_ID = ?
+            ORDER BY number_order ASC`;
         const res = await db.execute(sql, [id]);
         return emptyOrRows(res);
     };
@@ -207,6 +228,7 @@ class Products {
         Object.keys(updateObj).map((tableName) => {
             if (tableName == 'products') {
                 updateObj[tableName].Product_update_at = datetimeSQL();
+                updateObj[tableName].Product_slug = slugGenerator(updateObj[tableName].product_name)
             }
             const sql = `UPDATE ${tableName} 
             SET ${Object.keys(updateObj[tableName]).map(column => `${column} = ?`).join(', ')} WHERE Product_ID = ?;`;

@@ -22,7 +22,7 @@ const FilterProducts = ({dataAllBrands}: FilterProductsProps) => {
 
     useEffect(() => {
         loadProductByCategory(dispatch, category as string, page as string || '1', rest)
-    }, [rest]);
+    }, [rest, category, dispatch, page]);
 
     return (
         <div className={cx('filter-wrapper')}>

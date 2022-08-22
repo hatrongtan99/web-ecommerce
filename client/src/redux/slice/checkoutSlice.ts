@@ -39,22 +39,58 @@ export const changeQuantityProductThunk = createAsyncThunk(
     }   
 )
 
+export const addProductToCartThunk = createAsyncThunk(
+    'checkout/addProductToCart',
+    async ({userId, productId, quantity}: {userId: string, productId: number, quantity: number}, {fulfillWithValue, rejectWithValue}) => {
+        const params = {
+            userId,
+            productId,
+            quantity
+        }
+        try {
+            const response = await orderApi.addToCart(params)
+            if (response.success) {
+                const getProductsInCart = await orderApi.getProductsInCart(userId);
+                return fulfillWithValue(getProductsInCart.data)
+            }
+        } catch (error) {
+            const err = error as AxiosError
+            return rejectWithValue(err.message)
+        }
+    }
+)
+
 const checkoutSlice = createSlice({
     name: 'checkout',
     initialState: {
         productsIncart: {status: 'idle', data: [] as ProductsInCartResult[], error: null},
+        userSessionId: ''
     },
     reducers: {
         saveProductsInCart: (state, action: PayloadAction<ProductsInCartResult[]>) => {
-            state.productsIncart = {
-                ...state.productsIncart,
-                data: action.payload
+            return {
+                ...state,
+                productsIncart: {
+                    ...state.productsIncart,
+                    data: action.payload
+                }
+            }
+        },
+
+        saveUserSessionId: (state, action: PayloadAction<string>) => {
+            return {
+                ...state,   
+                userSessionId: action.payload
             }
         }
     },
     extraReducers: {
         [HYDRATE]: (state, action) => {
-            state.productsIncart = action.payload.checkout.productsIncart
+            return {
+                ...state,
+                productsIncart: {...state.productsIncart, ...action.payload.checkout.productsIncart}
+            }
+            
         },
 
         // delete product in cart
@@ -87,7 +123,7 @@ const checkoutSlice = createSlice({
         },
         [changeQuantityProductThunk.fulfilled.type]: (state, action) => {
             state.productsIncart = {
-                ...state.productsIncart,
+                status: 'idle',
                 data: action.payload,
                 error: null
             }
@@ -98,10 +134,32 @@ const checkoutSlice = createSlice({
                 status: 'rejected',
                 error: action.payload
             }
-        }
+        },
+        // add product to cart
+        [addProductToCartThunk.pending.type]: (state, action) => {
+            state.productsIncart = {
+                ...state.productsIncart,
+                status: 'loading'
+            }
+        },
+        [addProductToCartThunk.fulfilled.type]: (state, action) => {
+            state.productsIncart = {
+                ...state.productsIncart,
+                status: 'idle',
+                error: null,
+                data: action.payload
+            }
+        },
+        [addProductToCartThunk.rejected.type]: (state, action) => {
+            state.productsIncart = {
+                ...state.productsIncart,
+                status: 'rejected',
+                error: action.payload,
+            }
+        },
     }
 })
 
 export default checkoutSlice.reducer;
 
-export const {saveProductsInCart} = checkoutSlice.actions;
+export const {saveProductsInCart, saveUserSessionId} = checkoutSlice.actions;

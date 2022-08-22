@@ -21,7 +21,7 @@ class ProductionApi {
     }
 
     // get products by category
-    getProductsByCategory(category: string, page: string, params?: any) {
+    getProductsByCategory(category: string, page: string = '1', params?: any) {
         const url = `/${category}?page=${page}`;
         return configAxios.get<never, ResponseWithData>(url, {params})
     }

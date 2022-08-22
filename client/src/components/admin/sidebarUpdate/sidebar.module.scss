@@ -1,0 +1,29 @@
+.sidebar-update {
+    padding-right: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-right: 2px solid #dadcde;
+    height: 90%;
+    
+}
+
+.link-list {
+    li {
+        border-radius: 3px;
+        font-size: 1.1rem;
+        cursor: pointer;
+
+        a { 
+            display: block;
+            padding: 8px 0 8px 12px;
+        }
+
+        &.active {
+            background-color:#ebf0fd;
+        }
+
+        &:hover {
+            background-color: #f3f4f5;
+        }
+    }
+}

@@ -11,9 +11,10 @@
     flex: 1 0 100%;
     position: relative;
 
-    img {
+    .img-slide {
+        position: relative;
         width: 100%;
-        height: auto;
+        height: 400px;
     }
 }
 
@@ -38,10 +39,11 @@
     margin: 10px;
 
     &__item {
-        display: flex;
+        position: relative;
         width: 90px;
+        height: 90px;
+        display: flex;
         border: 1px solid #999;
-        height: auto;
         margin-right: 10px;
         cursor: pointer;
 

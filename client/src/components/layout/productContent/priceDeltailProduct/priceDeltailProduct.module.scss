@@ -2,9 +2,9 @@
 @import '~/styles/variable';
 
 .button-wrapper {
-    @include mixins.flex(center, space-between);
+    @include mixins.flex(center, space-evenly);
     width: 100%;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 

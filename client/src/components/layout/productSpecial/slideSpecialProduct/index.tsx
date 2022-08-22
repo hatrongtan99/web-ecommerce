@@ -51,15 +51,16 @@ const SlideSpecialProduct = () => {
   let style = {transform: `translateX(${indexImg * -25}%)`, transition: `${needTransition ? 'all 0.25s ease 0s' : 'none'}`};
 
   return (
-    <SlideShow handleMoveSlide={handleMoveSlide} handleTransitionEnd={handleTransitionEnd} style={style}>
-            {data && data.map((img, index) => {
-                return (
-                    <div className={`col-3`} key={index}>
-                        <ProductItem brandImg={false}/>
-                    </div>
-                )
-            })}
-    </SlideShow>
+    // <SlideShow handleMoveSlide={handleMoveSlide} handleTransitionEnd={handleTransitionEnd} style={style}>
+    //         {data && data.map((img, index) => {
+    //             return (
+    //                 <div className={`col-3`} key={index}>
+    //                     {/* <ProductItem brandImg={false}/> */}
+    //                 </div>
+    //             )
+    //         })}
+    // </SlideShow>
+    <></>
   )
 }
 

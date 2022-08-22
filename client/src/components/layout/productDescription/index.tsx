@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 
 const ProductDescription = () => {
   return (
-    <div className={`row`}>
+    <div className={`row ${cx('product-desc')}`}>
       <div className='col-8'>
         {/* main description */}
         <Description/>
@@ -17,7 +17,8 @@ const ProductDescription = () => {
         {/* rating Box */}
         <RatingBox/>
       </div>
-      <div className={`col-4`}>
+
+      <div className={`col-4 ${cx('sticky')}`}>
         <Catalog/>
       </div>
     </div>

@@ -6,7 +6,7 @@ class OrderApi {
     // add product to cart
     addToCart(params: any) {
         const url = '/add-to-cart';
-        return configAxios.post<never, ResponseWithData>(url, {params})
+        return configAxios.post<never, ResponseWithData>(url, params)
     }
 
     // get products in cart by generation id user
@@ -24,13 +24,13 @@ class OrderApi {
     // update quantity product 
     updateQuantityProduct(userId: string, productId: string, params: {quantity: number}) {
         const url =`/cart/${userId}/${productId}`;
-        return configAxios.patch<never, Response>(url, {params})
+        return configAxios.patch<never, Response>(url, params)
     }
 
     // create order by userId
     createOrderByUserId(userId: string, params: FormSubmitProps) {
         const url = `/checkout/${userId}`
-        return configAxios.post<never, Response>(url, {params})
+        return configAxios.post<never, Response>(url, params)
     }
 }
 

@@ -8,10 +8,10 @@
     min-height: 120px;
     border-bottom: 1px solid #ccc;
 
-    img {
+    .img-product-checkout {
+        position: relative;
         width: 100px;
-        height: auto;
-        object-fit: contain;
+        height: 100px;
     }
 
     .product-info {

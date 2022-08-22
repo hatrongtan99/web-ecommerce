@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import {ChangeEvent, useEffect, useState} from 'react';
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {ToastContainer} from 'react-toastify';
 
@@ -14,6 +14,7 @@ import { AxiosError } from "axios";
 import { Response } from "~/types/index";
 import { notifyError, notifySuccess } from "~/utils/toastify";
 import Spinner from "~/components/component/spinner";
+import Image from "next/image";
 
 const cx = classNames.bind(styles);
 
@@ -88,19 +89,19 @@ const CreateProductForm = () => {
                 }}
                 validationSchema={createProductValidates}
 
-                onSubmit={async (values) => {
+                onSubmit={async (values, {resetForm}) => {
                     const formDataSingleImage = new FormData();
-                    const formDataMultipleImage = new FormData();
+                    const formDataMultipleImages = new FormData();
 
                     if (values.image && values.images.length > 0) {
                         formDataSingleImage.append('image', values.image);
 
                         for (let i = 0; i < values.images.length; i++) {
-                            formDataMultipleImage.append('images', values.images[i])
+                            formDataMultipleImages.append('images', values.images[i])
                         }
                     }
                     try {
-                        const [singleImage, multipleImage] = await Promise.all([adminApi.uploadSingleImage(formDataSingleImage), adminApi.uploadMultipleImages(formDataMultipleImage)])
+                        const [singleImage, multipleImage] = await Promise.all([adminApi.uploadSingleImage(formDataSingleImage), adminApi.uploadMultipleImages(formDataMultipleImages)])
                         if (singleImage.success && multipleImage.success) {
                             const {image, images, ...rest} = values
                             const params = {
@@ -111,6 +112,7 @@ const CreateProductForm = () => {
                                 productBrandId: Number(rest.productBrandId)
                             }
                             const createNewProduct = await adminApi.createProduct(params);
+                            resetForm()
                             notifySuccess(createNewProduct.message)
                         }
                     } catch (error) {
@@ -121,7 +123,7 @@ const CreateProductForm = () => {
                     }
                 }}
             > 
-            {({setFieldValue, errors, touched, isSubmitting}) => (
+            {({setFieldValue, isSubmitting}) => (
                 <Form encType="multipart/form-data">
                     <div className={cx('form-group')}>
                         <Field 
@@ -142,9 +144,9 @@ const CreateProductForm = () => {
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => hanldleSingleImage({e, setFieldValue})}
                             />
                         </div>
-                        {touched.image && errors.image && <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{errors.image as string}</div> }
+                        <ErrorMessage name='image' render={(msg) => <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{msg}</div>}/>
                     </div>
-                    {image && <img src={image} height='auto' width='200'/>}
+                    {image && <Image layout='fill' src={image} height='auto' width='200' alt=''/>}
 
                     <div className={cx('form-group')}>
                         <div className='d-flex'>
@@ -157,10 +159,10 @@ const CreateProductForm = () => {
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleMultipleImage({e, setFieldValue})}
                             />
                         </div>
-                        {touched.images && errors.images && <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{errors.images as string}</div> }
+                        <ErrorMessage name='images' render={(msg) => <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{msg}</div>}/>
                     </div>
                     {images.map((image, index) => (
-                        <img src={image} key={index} height='auto' width='200'/>
+                        <Image layout='fill' src={image} key={index} height='auto' width='200' alt=''/>
                     ))}
 
                     <div className={cx('form-group')}>

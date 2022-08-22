@@ -8,6 +8,11 @@ class Order {
         return await db.execute('SELECT Order_session_ID AS id FROM order_session WHERE User_ID = ?', [userId])
     };
 
+    // get exits product in cart by product id
+    async #getExitsProductInCart(productId, orderSessionId) {
+        return await db.execute('SELECT Cart_item_ID AS cartItemId, quantity FROM cart_item WHERE Product_ID = ? AND Order_session_ID = ?;', [productId, orderSessionId])
+    }
+
     // user checkout/order
     async orderProducts(req) {
         const {userId} = req.params
@@ -29,13 +34,20 @@ class Order {
             const res = await db.execute('INSERT INTO order_session (User_ID) VALUES (?)', [userId]);
             const id = res.insertId;
             const insertToCart = await db.execute('INSERT INTO cart_item (Product_ID, Order_session_ID, Quantity) VALUES (?, ?, ?);', 
-                    [productId, id, quantity ]);
+                [productId, id, quantity ]);
             return insertToCart?.affectedRows
         } else {
             const id = getSession[0].id;
-            const insertToCart = await db.execute('INSERT INTO cart_item (Product_ID, Order_session_ID, Quantity) VALUES (?, ?, ?);', 
+            const exitsProduct = await this.#getExitsProductInCart(productId, id);
+            if (exitsProduct.length == 0) {
+                const insertToCart = await db.execute('INSERT INTO cart_item (Product_ID, Order_session_ID, Quantity) VALUES (?, ?, ?);', 
                     [productId, id, quantity]);
-            return insertToCart?.affectedRows
+                return insertToCart?.affectedRows
+            } else {
+                const newQuantity = exitsProduct[0].quantity + 1
+                const updateQuantity = await db.execute('UPDATE cart_item set quantity = ? WHERE Product_ID = ? AND Order_session_ID = ?;', [newQuantity, productId, id]);
+                return updateQuantity?.affectedRows
+            }
         }
     }
 
@@ -50,7 +62,7 @@ class Order {
             c.Quantity AS quantity, 
             p.Product_name AS productName, 
             p.Product_price AS price,
-            p.Product_thumb AS productThump,
+            p.Product_thumb AS productThumb,
             e.Category_slug AS category,
             p.Product_slug AS slug
                 FROM order_session AS o

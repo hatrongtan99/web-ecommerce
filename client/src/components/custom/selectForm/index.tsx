@@ -1,4 +1,4 @@
-import { FieldProps } from "formik";
+import { ErrorMessage, FieldProps } from "formik";
 import { ReactNode } from "react";
 
 interface SelectFormProps extends FieldProps {
@@ -22,7 +22,7 @@ const SelectForm = ({
             {children}
         </select>
       </div>
-      {touched[field.name] && errors[field.name] && <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{errors[field.name] as string}</div>}
+      <ErrorMessage name={field.name} render={(msg) => <div className='mt-1' style={{color: 'red', fontSize: '0.8rem'}}>{msg}</div>}/>
     </>
   )
 }

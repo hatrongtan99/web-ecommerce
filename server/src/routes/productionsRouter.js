@@ -20,7 +20,7 @@ router.delete('/admin/brands/:idBrand', productionsController.deleteBrand)
 // get multiple products by category
 router.get('/:category', productionsController.getProductsByCategory);
 
-// get product bu category and slug
+// get product by category and slug
 router.get('/:category/:slug', productionsController.getProductByCategoryAndSlug);
 
 // delete product
@@ -35,6 +35,8 @@ router.post('/admin/products/:id/descriptions', productionsController.createProd
 // create product catalog
 router.post('/admin/products/:id/catalog', productionsController.createProductCatalog);
 
+// add multiple images to product
+router.post('/admin/products/:id/images', productionsController.addMultipleImages)
 // update product
 router.patch('/admin/products/:id/update', productionsController.updateProduct);
 
