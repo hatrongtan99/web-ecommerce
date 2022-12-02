@@ -9,3 +9,7 @@ const port = process.env.PORT || 5000;
 server.listen(port, () => {
     console.log('server is runing on port ' + port);
 });
+
+process.on('SIGINT', () => {
+    server.close(() => console.log('server is stopped'));
+});

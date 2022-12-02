@@ -9,11 +9,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // #### V1 ####
-const route = require('../src/v1/routes/index');
+// const routesV1 = require('../src/v1/routes/index');
+// routesV1(app);
 
 // #### V2 ####
+const routesV2 = require('../src/v2/routes/index');
+routesV2(app);
 
-route(app);
+// ##############################
+
 // static file
 app.use('/public', express.static(path.join(__dirname, '../public')));
 
