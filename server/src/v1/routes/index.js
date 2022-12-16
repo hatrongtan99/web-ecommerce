@@ -4,8 +4,8 @@ const imageRouter = require('./imageRouter');
 const orderRouter = require('./orderRouter');
 
 module.exports = function routes(app) {
-    app.use('/api', imageRouter);
-    app.use('/api', userRouter);
-    app.use('/api', orderRouter);
-    app.use('/api', productionsRouter);
+    app.use('/v1/api', imageRouter);
+    app.use('/v1/api', userRouter);
+    app.use('/v1/api', orderRouter);
+    app.use('/v1/api', productionsRouter);
 };

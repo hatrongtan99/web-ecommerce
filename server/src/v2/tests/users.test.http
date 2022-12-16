@@ -1,0 +1,42 @@
+@baseUrl=http://localhost:5000/v2/api/users
+
+### REGISTER
+POST {{baseUrl}}/register
+content-type: application/json
+
+{
+    "fistname": "Ha",
+    "lastname": "Tan",
+    "email": "hatrongtan99@gmail.com",
+    "password": "123456",
+    "avatar": ""
+}
+
+#### LOGIN
+POST {{baseUrl}}/login
+content-type: application/json
+
+{
+    "email": "hatrongtan99@gmail.com",
+    "password": "123456"
+}
+
+### LOGOUT
+GET {{baseUrl}}/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzlhOTU0MGUwN2M0YTgzODE0YjBiNzYiLCJlbWFpbCI6ImhhdHJvbmd0YW45OUBnbWFpbC5jb20iLCJyb2xlIjoiVXNlciIsImlhdCI6MTY3MTA5MjA2MCwiZXhwIjoxNjcxMDk1NjYwfQ.kTklTNb2hkleHjCAZev5mk-B6VESUdsHo3NJpQ4Pj6g
+
+### refresh Token
+GET {{baseUrl}}/refresh-token
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzlhOTU0MGUwN2M0YTgzODE0YjBiNzYiLCJlbWFpbCI6ImhhdHJvbmd0YW45OUBnbWFpbC5jb20iLCJyb2xlIjoiVXNlciIsImlhdCI6MTY3MTA5NjM3OCwiZXhwIjoxNjcxMDk5OTc4fQ.Fchy4PiEfSWt4iI1mww23LW31ijVgjJO0RTpTzVM7sk
+
+
+### GET PROFILE
+GET {{baseUrl}}/639a9540e07c4a83814b0b76
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzlhOTU0MGUwN2M0YTgzODE0YjBiNzYiLCJlbWFpbCI6ImhhdHJvbmd0YW45OUBnbWFpbC5jb20iLCJyb2xlIjoiVXNlciIsImlhdCI6MTY3MTA5NTMxOCwiZXhwIjoxNjcxMDk4OTE4fQ.DJgii6rLcHEz5nu-qmWAqeGJt_t_orab9npq7g64OyQ
+
+### GET ALL USERS
+GET {{baseUrl}}/all-users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzlhOTU0MGUwN2M0YTgzODE0YjBiNzYiLCJlbWFpbCI6ImhhdHJvbmd0YW45OUBnbWFpbC5jb20iLCJyb2xlIjoiVXNlciIsImlhdCI6MTY3MTA5NTMxOCwiZXhwIjoxNjcxMDk4OTE4fQ.DJgii6rLcHEz5nu-qmWAqeGJt_t_orab9npq7g64OyQ
+
+###
+GET {{baseUrl}}/test-token

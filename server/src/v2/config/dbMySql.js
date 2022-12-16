@@ -14,13 +14,17 @@ const execute = async (sql, params) => {
         const [result] = await pool.execute(sql, params);
         return result;
     } catch (error) {
-        console.log(error);
+        console.log('Failed to execute sql: ' + error);
     }
 };
 
 const query = async (sql, params) => {
-    const [result] = await pool.query(sql, params);
-    return result;
+    try {
+        const [result] = await pool.query(sql, params);
+        return result;
+    } catch (error) {
+        console.log('Failed to execute query: ' + error);
+    }
 };
 
 module.exports = { execute, query };
