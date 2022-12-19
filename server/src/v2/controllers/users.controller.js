@@ -1,7 +1,8 @@
 const userService = require('../services/users.service');
 const sendToken = require('../utils/sendToken');
 const cloudinary = require('cloudinary').v2;
-const catchSyncErr = require('../utils/catchSyncErr');
+const JWT = require('jsonwebtoken');
+const ThrowError = require('../utils/throwError');
 
 class Users {
     //@desc: register user
@@ -10,7 +11,7 @@ class Users {
     async register(req, res, next) {
         let { fistname, lastname, email, password, avatar } = req.body;
         if (!fistname || !lastname || !email || !password || !avatar) {
-            throw new Error('User info invalid');
+            return next(new ThrowError('Invalid infomation user!', 400));
         }
 
         const userCloud = await cloudinary.uploader.upload(avatar, {
@@ -31,7 +32,7 @@ class Users {
             password,
             avatar,
         });
-        res.json({ success: true, user });
+        res.status(201).json({ success: true, user });
     }
 
     //@desc: login
@@ -39,12 +40,13 @@ class Users {
     //@access: public
     async login(req, res, next) {
         const { email, password } = req.body;
+
         if (!email || !password) {
-            throw new Error('Please Enter Email & Password');
+            return next(new ThrowError('Please Enter Email & Pasword', 400));
         }
         const user = await userService.findUserByEmail({ email });
         if (!user) {
-            throw new Error('Invalid Email & Password');
+            return next(new ThrowError('Invalid Email & Password', 401));
         }
         const matchPassword = await userService.comparePass({
             user,
@@ -52,9 +54,8 @@ class Users {
         });
 
         if (!matchPassword) {
-            throw new Error('Invalid Email & Password');
+            return next(new ThrowError('Invalid Email & Password', 401));
         }
-
         sendToken(res, user);
     }
 
@@ -63,11 +64,20 @@ class Users {
     //@access: public
     async refreshToken(req, res, next) {
         const { email } = req.user;
-        const user = await userService.findUserByEmail({ email });
-        if (!user) {
-            throw new Error('User not found!');
+        const refreshToken = req.cookies['refreshToken'];
+        const decode = JWT.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET
+        );
+        if (decode.email === email) {
+            const user = await userService.findUserByEmail({ email });
+            if (!user) {
+                return next(new ThrowError('User not found!', 401));
+            }
+            sendToken(res, user);
+        } else {
+            return next(new ThrowError('User not found!', 403));
         }
-        sendToken(res, user);
     }
 
     //@desc: get user profile
@@ -76,22 +86,14 @@ class Users {
     async getUserProfile(req, res, next) {
         const { id } = req.params;
         const profile = await userService.findUserById(id);
-        if (profile) {
-            res.json({ success: true, user: profile });
-        } else {
-            res.json({ success: false, message: 'User not found' });
-        }
+        res.json({ success: true, user: profile });
     }
 
     //@desc: logout
     //@route: [GET]/v2/api/users/logout
     //@access: public
     async logout(req, res, next) {
-        // req.coo
-        res.cookie('refreshToken', null, {
-            expires: new Date(Date.now()),
-            httpOnly: true,
-        });
+        res.clearCookie('refreshToken');
         res.json({ success: true, message: 'Logged Out' });
     }
 

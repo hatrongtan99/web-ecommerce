@@ -1,4 +1,5 @@
 const JWT = require('jsonwebtoken');
+const ThrowError = require('../utils/throwError');
 
 const protectRoute = async (req, res, next) => {
     const authenToken = req.header('Authorization');
@@ -8,7 +9,7 @@ const protectRoute = async (req, res, next) => {
         req.user = user;
         next();
     } else {
-        next(new Error('errr protec route'));
+        next(new ThrowError('Please Login to access this resource.', 401));
     }
 };
 
@@ -16,8 +17,9 @@ const authAdmin = (roleRequire) => {
     return (req, res, next) => {
         if (!roleRequire.includes(req.user.role)) {
             next(
-                new Error(
-                    `Role: ${req.user.role} is not allowed access this resource`
+                new ThrowError(
+                    `Role: ${req.user.role} is not allowed access this resource`,
+                    403
                 )
             );
         }

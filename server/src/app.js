@@ -2,10 +2,17 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const cloudinary = require('cloudinary');
 
 // apply middlewares
-app.use(cors());
+app.use(
+    cors({
+        credentials: true,
+        origin: ['http://localhost:3000', 'http://127.0.0.1:5500'],
+    })
+);
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -13,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/public', express.static(path.join(__dirname, '../public')));
 
 // ################## V1 ###################
-// const routesV1 = require('../src/v1/routes/index');
+// const routesV1 = require('../src/v1/routes/index')
 // routesV1(app);
 
 // handling error

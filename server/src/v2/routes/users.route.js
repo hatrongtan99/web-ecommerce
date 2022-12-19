@@ -38,12 +38,4 @@ router
         catchSyncErr(auth.protectRoute),
         catchSyncErr(usersController.getUserProfile)
     );
-
-//test
-router
-    .route('/test-token')
-    .get(catchSyncErr(auth.protectRoute), (req, res, next) => {
-        res.json({ success: true, user: req.user });
-    });
-
 module.exports = router;
