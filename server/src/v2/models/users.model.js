@@ -37,8 +37,12 @@ const userSchema = new Schema(
 
 // encryption password before save database
 userSchema.pre('save', async function (next) {
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
+    try {
+        this.password = await bcrypt.hash(this.password, 10);
+        next();
+    } catch (error) {
+        next(error);
+    }
 });
 
 // compare password

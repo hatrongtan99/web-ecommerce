@@ -36,5 +36,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzlhOTU0M
 ### GET ALL USERS
 GET {{baseUrl}}/all-users
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzlhOTU0MGUwN2M0YTgzODE0YjBiNzYiLCJlbWFpbCI6ImhhdHJvbmd0YW45OUBnbWFpbC5jb20iLCJyb2xlIjoiVXNlciIsImlhdCI6MTY3MTI1MjY2MCwiZXhwIjoxNjcxMjU2MjYwfQ.U9g81bxcVm8rBXN61hLK7nrz1Lh3LHNkb_QE51giY48
+
 ###
 GET {{baseUrl}}/test-token

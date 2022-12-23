@@ -40,10 +40,16 @@ routesV2(app);
 connectMongoose();
 
 // config cloudinary
+// cloudinary.config({
+//     cloud_name: process.env.CLOUD_NAME,
+//     api_key: process.env.CLOUD_API_KEY,
+//     api_secret: process.env.CLOUD_API_SECRET,
+// });
+
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.CLOUD_API_KEY,
-    api_secret: process.env.CLOUD_API_SECRET,
+    cloud_name: 'dsxrg8nob',
+    api_key: '845522686149698',
+    api_secret: 'fVuqGjltHlu6QFhUGYDFoPl6nzE',
 });
 
 // handle error
