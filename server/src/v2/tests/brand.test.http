@@ -1,0 +1,13 @@
+@baseUrl=http://localhost:5000/v2/api/products
+
+### GET ALL BRAND
+GET {{baseUrl}}/brands
+
+### create brand
+POST {{baseUrl}}/brands
+Content-Type: application/json
+
+{
+    "brand_name": "MILWAUKEE", 
+    "brand_thumb": "x35-milwaukee-logo-1584090720.png" 
+}

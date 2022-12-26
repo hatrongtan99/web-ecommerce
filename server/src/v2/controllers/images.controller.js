@@ -7,7 +7,7 @@ const ThrowError = require('../utils/throwError');
 //@access: Admin
 const uploadImage = (req, res, next) => {
     const upload = imageMiddleware.fields([
-        { name: 'thumbProduct', maxCount: 1 },
+        { name: 'thumb', maxCount: 1 },
         { name: 'images', maxCount: 5 },
     ]);
     upload(req, res, (err) => {
@@ -16,21 +16,19 @@ const uploadImage = (req, res, next) => {
         } else if (err) {
             return next(new ThrowError('Upload failed', 400));
         } else {
-            const { thumbProduct, images } = req.files;
+            const { thumb, images } = req.files;
 
             let listImages = [],
-                thumb = '';
-            if (thumbProduct && thumbProduct[0]) {
-                thumb = thumbProduct[0].originalname;
+                image = '';
+            if (thumb && thumb[0]) {
+                image = thumb[0].originalname;
             }
-
             if (images) {
                 listImages = images.map((image) => image.originalname);
             }
-
             res.json({
                 success: true,
-                thumbProduct: thumb,
+                thumb: image,
                 images: listImages,
             });
         }

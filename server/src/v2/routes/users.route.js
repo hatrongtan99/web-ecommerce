@@ -1,41 +1,29 @@
 const router = require('express').Router();
-const catchSyncErr = require('../utils/catchSyncErr');
 const usersController = require('../controllers/users.controller');
 const auth = require('../middleware/auth');
 
 // register
-router.route('/register').post(catchSyncErr(usersController.register));
+router.route('/register').post(usersController.register);
 
 // login
-router.route('/login').post(catchSyncErr(usersController.login));
+router.route('/login').post(usersController.login);
 
 // refresh token
 router
     .route('/refresh-token')
-    .get(
-        catchSyncErr(auth.protectRoute),
-        catchSyncErr(usersController.refreshToken)
-    );
-
+    .get(auth.protectRoute, usersController.refreshToken);
 // logout
-router
-    .route('/logout')
-    .get(catchSyncErr(auth.protectRoute), catchSyncErr(usersController.logout));
+router.route('/logout').get(auth.protectRoute, usersController.logout);
 
 // get all users
 router
     .route('/all-users')
     .get(
-        catchSyncErr(auth.protectRoute),
-        catchSyncErr(auth.authAdmin(['Admin'])),
-        catchSyncErr(usersController.getAllUsers)
+        auth.protectRoute,
+        auth.authAdmin(['Admin']),
+        usersController.getAllUsers
     );
 
 // get user profile
-router
-    .route('/:id')
-    .get(
-        catchSyncErr(auth.protectRoute),
-        catchSyncErr(usersController.getUserProfile)
-    );
+router.route('/:id').get(auth.protectRoute, usersController.getUserProfile);
 module.exports = router;

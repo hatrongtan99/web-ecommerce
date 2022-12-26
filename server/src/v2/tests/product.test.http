@@ -1,0 +1,62 @@
+@baseUrl=http://localhost:5000/v2/api/products
+
+### CREATE PRODUCT
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "name_product": "Máy khoan vặn vít dùng pin Makita DF488DWE",
+    "brand": "63a9109dc6ddf6444d0041af",
+    "price": 2582000,
+    "images": [
+        "500x-may-khoan-van-vit-dung-pin-18v-makita-df488dwe-1-1639707151.jpg",
+        "500x-may-khoan-van-vit-dung-pin-18v-makita-df488dwe-3-1639707174.jpg",
+        "500x-may-khoan-van-vit-dung-pin-18v-makita-df488dwe-8-1639707518.jpg",
+        "500x-may-khoan-van-vit-dung-pin-18v-makita-df488dwe-1639706758.jpeg"
+    ],
+    "insurance": "6 tháng",
+    "sku": "DF488DWE",
+    "catalog": [
+        {
+            "title": "Điện thế pin",
+            "content": "18V x 1.5Ah"
+        },
+        {
+            "title": "Tốc độ không tải",
+            "content": "Cao 0 - 1400 / Thấp: 0 - 400 vòng/phút"
+        },
+        {
+            "title": "Lực siết tối đa cứng / mềm",
+            "content": "42 / 24 N.m"
+        },
+        {
+            "title": "Lực siết khóa tối đa",
+            "content": "38 N.m"
+        },
+        {
+            "title": "Đường kính khoan gỗ",
+            "content": "36mm"
+        },
+        {
+            "title": "Đường kính khoan thép",
+            "content": "13mm"
+        },
+        {
+            "title": "Kích thước (L X W X H)",
+            "content": "221 x 83 x 240 mm"
+        },
+        {
+            "title": "Độ ồn",
+            "content": "70dB"
+        },
+        {
+            "title": "Trọng lượng",
+            "content": "1.7kg"
+        },
+        {
+            "title": "Phụ kiện",
+            "content": "2 pin 18V, 1 sạc, mũi vít 2 đầu 2-45"
+        }
+
+    ]
+}

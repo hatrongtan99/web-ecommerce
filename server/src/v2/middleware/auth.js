@@ -1,7 +1,8 @@
 const JWT = require('jsonwebtoken');
 const ThrowError = require('../utils/throwError');
+const catchSyncErr = require('../utils/catchSyncErr');
 
-const protectRoute = async (req, res, next) => {
+const protectRoute = catchSyncErr(async (req, res, next) => {
     const authenToken = req.header('Authorization');
     const token = authenToken && authenToken.split(' ')[1];
     if (token) {
@@ -11,10 +12,10 @@ const protectRoute = async (req, res, next) => {
     } else {
         next(new ThrowError('Please Login to access this resource.', 401));
     }
-};
+});
 
 const authAdmin = (roleRequire) => {
-    return (req, res, next) => {
+    return catchSyncErr((req, res, next) => {
         if (!roleRequire.includes(req.user.role)) {
             next(
                 new ThrowError(
@@ -24,7 +25,7 @@ const authAdmin = (roleRequire) => {
             );
         }
         next();
-    };
+    });
 };
 
 module.exports = {
