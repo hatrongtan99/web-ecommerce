@@ -10,13 +10,17 @@ const userSchema = new Schema(
         },
         email: {
             type: String,
-            require: true,
-            unique: true,
+            required: () => (this.provider !== 'email' ? false : true),
         },
+        provider: {
+            required: true,
+            type: String,
+            default: 'email',
+        },
+        facebookId: String,
+        gooleId: String,
         password: {
             type: String,
-            require: true,
-            minLength: [6, 'Password should be greater than 6 characters'],
         },
         role: {
             type: String,
@@ -38,8 +42,10 @@ const userSchema = new Schema(
 // encryption password before save database
 userSchema.pre('save', async function (next) {
     try {
-        this.password = await bcrypt.hash(this.password, 10);
-        next();
+        if (this.password) {
+            this.password = await bcrypt.hash(this.password, 10);
+            next();
+        }
     } catch (error) {
         next(error);
     }
@@ -53,7 +59,12 @@ userSchema.methods.comparePassword = async function (password) {
 // access token
 userSchema.methods.generateAccessToken = async function () {
     return await JWT.sign(
-        { _id: this._id, email: this.email, role: this.role },
+        {
+            id: this._id,
+            userName: this.user_name,
+            email: this.email,
+            role: this.role,
+        },
         process.env.ACCESS_TOKEN_SECRET,
         {
             expiresIn: process.env.JWT_ACCESS_EXPIRE,
@@ -64,7 +75,12 @@ userSchema.methods.generateAccessToken = async function () {
 // refresh token
 userSchema.methods.generateRefreshToken = async function () {
     return await JWT.sign(
-        { _id: this._id, email: this.email, role: this.role },
+        {
+            id: this._id,
+            userName: this.user_name,
+            email: this.email,
+            role: this.role,
+        },
         process.env.REFRESH_TOKEN_SECRET,
         {
             expiresIn: process.env.JWT_REFRESH_EXPIRE,

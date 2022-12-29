@@ -1,22 +1,6 @@
 const { Schema, model, ObjectId } = require('mongoose');
 const slugify = require('slugify');
 
-const brandSchema = new Schema(
-    {
-        brand_name: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        brand_thumb: {
-            type: String,
-            required: true,
-        },
-    },
-    { collection: 'Brands' }
-);
-const Brands = model('Brands', brandSchema);
-
 const productsSchema = new Schema(
     {
         name_product: {
@@ -28,6 +12,12 @@ const productsSchema = new Schema(
             type: ObjectId,
             ref: 'Brands',
         },
+        discount: {
+            type: Number,
+            min: 0,
+            max: 99,
+            default: 0,
+        },
         price: {
             type: Number,
             required: true,
@@ -38,8 +28,8 @@ const productsSchema = new Schema(
         },
         images: [],
         in_stock: {
-            type: Boolean,
-            default: true,
+            type: Number,
+            default: 0,
         },
         insurance: {
             type: String,
@@ -58,10 +48,11 @@ const productsSchema = new Schema(
             type: Boolean,
             default: false,
         },
-        slug: String,
-        reviews: [{ type: ObjectId, ref: 'Reviews' }],
+        slug: { type: String, unique: true },
+        created: { type: Date, default: Date.now() },
+        updated: Date,
     },
-    { collection: 'Products', timestamps: true }
+    { collection: 'Products' }
 );
 
 productsSchema.pre('save', function (next) {
@@ -70,24 +61,6 @@ productsSchema.pre('save', function (next) {
 });
 const Products = model('Products', productsSchema);
 
-// review model;
-const reviewsSchema = new Schema(
-    {
-        user: { type: ObjectId, ref: 'Users' },
-        rating: { type: Number, required: true },
-        content: { type: String },
-    },
-    { collection: 'Reviews' }
-);
-const Reviews = model('Reviews', reviewsSchema);
-
-// description model
-const descriptionSchema = new Schema({}, { collection: 'Descriptions' });
-const Descriptions = model('Descriptions', descriptionSchema);
-
 module.exports = {
     Products,
-    Descriptions,
-    Brands,
-    Reviews,
 };

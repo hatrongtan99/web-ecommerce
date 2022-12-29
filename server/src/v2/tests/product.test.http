@@ -60,3 +60,9 @@ Content-Type: application/json
 
     ]
 }
+
+### GET DETAIL PRODUCT
+GET {{baseUrl}}/:id
+
+### DELETE PRODUCT
+DELETE {{baseUrl}}/63a921209206683db360e17c

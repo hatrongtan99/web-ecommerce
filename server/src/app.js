@@ -36,20 +36,15 @@ app.use('/public', express.static(path.join(__dirname, '../public')));
 const routesV2 = require('../src/v2/routes/index');
 const connectMongoose = require('./v2/config/dbMongoDb');
 const handleError = require('../src/v2/middleware/handleError');
+require('./v2/config/passport')(app);
 routesV2(app);
 connectMongoose();
 
 // config cloudinary
-// cloudinary.config({
-//     cloud_name: process.env.CLOUD_NAME,
-//     api_key: process.env.CLOUD_API_KEY,
-//     api_secret: process.env.CLOUD_API_SECRET,
-// });
-
 cloudinary.config({
-    cloud_name: 'dsxrg8nob',
-    api_key: '845522686149698',
-    api_secret: 'fVuqGjltHlu6QFhUGYDFoPl6nzE',
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
 });
 
 // handle error
