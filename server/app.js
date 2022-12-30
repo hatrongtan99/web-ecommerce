@@ -14,29 +14,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // create server
-const server = http.createServer(app)
+const server = http.createServer(app);
 
 // static files
-app.use('/public', express.static(path.join(__dirname, 'public')))
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // route
-route(app)
+route(app);
 
 //#########################
 //####################
 
 // Handling Errors
 app.use((err, req, res, next) => {
-  // console.log(err);
-  err.statusCode = err.statusCode || 5000;
-  err.message = err.message || "Internal Server Error";
-  res.status(err.statusCode).json({
-    message: err.message,
-  });
+    // console.log(err);
+    err.statusCode = err.statusCode || 5000;
+    err.message = err.message || 'Internal Server Error';
+    res.status(err.statusCode).json({
+        message: err.message,
+    });
 });
 
 const port = process.env.PORT || 5000;
 
 server.listen(port, () => {
-  console.log('server is runing on port ' + port);
-})
+    console.log('server is runing on port ' + port);
+});
