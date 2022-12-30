@@ -174,8 +174,10 @@ class UsersController {
     //@route: [GET]/v2/api/users/logout
     //@access: public
     logout = catchSyncErr((req, res, next) => {
-        res.clearCookie('refreshToken');
-        res.json({ success: true, message: 'Logged Out' });
+        req.logout(() => {
+            res.clearCookie('refreshToken');
+            res.json({ success: true, message: 'Logged Out' });
+        });
     });
 
     //@desc: get all users

@@ -26,6 +26,10 @@ const productsSchema = new Schema(
             type: Number,
             default: 0,
         },
+        totalReviews: {
+            type: Number,
+            default: 0,
+        },
         images: [],
         in_stock: {
             type: Number,
@@ -61,6 +65,4 @@ productsSchema.pre('save', function (next) {
 });
 const Products = model('Products', productsSchema);
 
-module.exports = {
-    Products,
-};
+module.exports = Products;

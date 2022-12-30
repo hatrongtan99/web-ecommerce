@@ -16,12 +16,17 @@ const cartItemSchema = new Schema({
     },
 });
 
-const cartsSchema = new Schema(
+const cartSchema = new Schema(
     {
         products: [cartItemSchema],
         user: {
             type: ObjectId,
             ref: 'Users',
+        },
+        status: {
+            type: String,
+            enum: ['idle', 'processed'],
+            default: 'idle',
         },
         created: {
             type: Date,
@@ -29,13 +34,13 @@ const cartsSchema = new Schema(
         },
         updated: Date,
     },
-    { collection: 'Carts' }
+    { collection: 'Cart' }
 );
 
 const CartItem = model('CartItem', cartItemSchema);
-const Carts = model('Carts', cartsSchema);
+const Cart = model('Cart', cartSchema);
 
 module.exports = {
     CartItem,
-    Carts,
+    Cart,
 };

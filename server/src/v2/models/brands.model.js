@@ -28,10 +28,12 @@ const brandSchema = new Schema(
     },
     { collection: 'Brands' }
 );
-brandSchema.prev('save', function (next) {
+
+brandSchema.pre('save', function (next) {
     this.slug = slugify(this.brand_name, { lower: true });
     next();
 });
+
 const Brands = model('Brands', brandSchema);
 
 module.exports = Brands;

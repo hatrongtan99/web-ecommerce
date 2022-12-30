@@ -1,11 +1,7 @@
 const catchSyncErr = require('../utils/catchSyncErr');
 const ThrowError = require('../utils/throwError');
-const {
-    Products,
-    Brands,
-    Reviews,
-    Descriptions,
-} = require('../models/products.model');
+const Products = require('../models/products.model');
+const Categories = require('../models/categories.model');
 
 class ProductsController {
     //@desc: get all products
@@ -22,8 +18,16 @@ class ProductsController {
     //@route: [POST]/v2/api/products
     //@access: Admin
     createProduct = catchSyncErr(async (req, res, next) => {
-        let { name_product, brand, price, images, insurance, sku, catalog } =
-            req.body;
+        let {
+            name_product,
+            brand,
+            price,
+            images,
+            insurance,
+            sku,
+            catalog,
+            category,
+        } = req.body;
         if (
             !name_product ||
             !brand ||
@@ -31,7 +35,8 @@ class ProductsController {
             !images ||
             !insurance ||
             !sku ||
-            !catalog
+            !catalog ||
+            !category
         ) {
             return next(
                 new ThrowError('Invalid infomation create product!', 400)
@@ -42,6 +47,16 @@ class ProductsController {
         );
         req.body.images = images;
         const newProduct = await Products.create(req.body);
+
+        const pushProductToCategory = category.map((i) => {
+            return {
+                updateOne: {
+                    filter: { _id: i, isActive: true },
+                    update: { $push: { products: newProduct._id } },
+                },
+            };
+        });
+        await Categories.bulkWrite(pushProductToCategory);
         res.json({ success: true, product: newProduct });
     });
 
@@ -52,15 +67,7 @@ class ProductsController {
         const product = await Products.find({
             _id: req.params.id,
             deleted: false,
-        })
-            .populate('brand')
-            .populate({
-                path: 'reviews',
-                populate: {
-                    path: 'user',
-                    select: 'user.avatar user_name email',
-                },
-            });
+        }).populate('brand');
         if (!product) {
             return next(new ThrowError('Product not found!', 400));
         }
@@ -120,28 +127,6 @@ class ProductsController {
         product.reviews.push(newReview._id);
         product = await product.save();
         res.json({ success: true });
-    });
-
-    //@desc: get all brands
-    //@route: [GET]/v2/api/products/brands
-    //@access: public
-    getAllBrands = catchSyncErr(async (req, res, next) => {
-        const brands = await Brands.find();
-        res.json({ success: true, brands });
-    });
-
-    //@desc: create new brand
-    //@route: [POST]/v2/api/products/brands
-    //@access: Admin
-    createNewBrand = catchSyncErr(async (req, res, next) => {
-        let { brand_name, brand_thumb } = req.body;
-        if (!brand_name || !brand_thumb) {
-            return next(new ThrowError('Invalid information!', 400));
-        }
-        brand_thumb =
-            req.headers.host + process.env.FOLDER_ACCESS + brand_thumb;
-        const newBrand = await Brands.create({ brand_name, brand_thumb });
-        res.json({ success: true, result: newBrand });
     });
 }
 

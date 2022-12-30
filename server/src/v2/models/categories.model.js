@@ -1,4 +1,5 @@
 const { Schema, ObjectId, model } = require('mongoose');
+const { default: slugify } = require('slugify');
 
 const categoriesSchema = new Schema(
     {
@@ -8,7 +9,6 @@ const categoriesSchema = new Schema(
         },
         slug: {
             type: String,
-            required: true,
             unique: true,
         },
         image: String,
@@ -28,7 +28,7 @@ const categoriesSchema = new Schema(
 );
 
 categoriesSchema.pre('save', function (next) {
-    this.slug = slugify(this.brand_name, { lower: true });
+    this.slug = slugify(this.name, { lower: true });
     next();
 });
 

@@ -3,13 +3,25 @@ const { Schema, model, ObjectId } = require('mongoose');
 const ordersSchema = new Schema(
     {
         user: { type: ObjectId, ref: 'Users' },
-        carts: { type: ObjectId, ref: 'Carts' },
+        cart: { type: ObjectId, ref: 'Cart' },
         totalPrice: { type: Number, default: 0 },
+        status: {
+            type: String,
+            enum: [
+                'pending',
+                'not processed',
+                'processed',
+                'shipping',
+                'delivered',
+                'cancelled',
+            ],
+            default: 'pending',
+        },
         created: { type: Date, default: Date.now() },
         updated: Date,
     },
-    { collection: 'Orders' }
+    { collection: 'Order' }
 );
-const Orders = model('Orders', ordersSchema);
+const Order = model('Order', ordersSchema);
 
-module.exports = { Orders };
+module.exports = Order;

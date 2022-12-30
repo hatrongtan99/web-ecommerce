@@ -12,16 +12,6 @@ router
         productsController.createProduct
     );
 
-// get all brand / create new brand
-router
-    .route('/brands')
-    .get(productsController.getAllBrands)
-    .post(
-        auth.protectRoute,
-        auth.authAdmin(['Admin']),
-        productsController.createNewBrand
-    );
-
 // get detail product / update product / delete product
 router
     .route('/:id')
