@@ -4,7 +4,7 @@ const googleStrategy = require('passport-google-oauth20').Strategy;
 
 module.exports = async (app) => {
     app.use(passport.initialize());
-    await facebookAuth();
+    // await facebookAuth();
     await gooleAuth();
 };
 

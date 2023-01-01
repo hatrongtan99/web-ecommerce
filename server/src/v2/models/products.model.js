@@ -12,6 +12,7 @@ const productsSchema = new Schema(
             type: ObjectId,
             ref: 'Brands',
         },
+        specialField: [],
         discount: {
             type: Number,
             min: 0,
@@ -22,7 +23,7 @@ const productsSchema = new Schema(
             type: Number,
             required: true,
         },
-        ratings: {
+        rating: {
             type: Number,
             default: 0,
         },
