@@ -62,7 +62,7 @@ Content-Type: application/json
 }
 
 ### GET DETAIL PRODUCT
-GET {{baseUrl}}/:id
+GET {{baseUrl}}/63ad62f177038a0f159d66c7
 
 ### DELETE PRODUCT
 DELETE {{baseUrl}}/63a921209206683db360e17c

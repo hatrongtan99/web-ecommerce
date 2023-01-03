@@ -12,3 +12,8 @@ export interface AuthLogin {
     };
     token: string;
 }
+
+export interface UserLogout {
+    success: boolean;
+    message: string;
+}

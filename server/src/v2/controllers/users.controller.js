@@ -101,7 +101,7 @@ class UsersController {
     });
 
     //@desc: login by goole
-    //@route: [GET]/v2/api/users/goole
+    //@route: [GET]/v2/api/users/google
     //@access: public
     loginByGoogle = catchSyncErr(async (req, res, next) => {
         const profile = req.user;

@@ -4,11 +4,9 @@ const imagesRoute = require('./images.route');
 const brandsRoute = require('./brands.route');
 const cartsRoute = require('./carts.route');
 const categoryRote = require('./category.route');
+const reviewRoute = require('./review.route');
 
 const routes = function (app) {
-    app.get('/', (req, res) => {
-        res.json({ success: true });
-    });
     // users
     app.use('/v2/api/users', usersRoute);
     // products
@@ -21,6 +19,13 @@ const routes = function (app) {
     app.use('/v2/api/cart', cartsRoute);
     // category
     app.use('/v2/api/category', categoryRote);
+    //riview
+    app.use('/v2/api/review', reviewRoute);
+
+    // all
+    app.use('*', (req, res) => {
+        res.status(404).send('Not Found');
+    });
 };
 
 module.exports = routes;

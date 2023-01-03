@@ -27,9 +27,4 @@ router
         productsController.deleteProduct
     );
 
-// create new review
-router
-    .route('/reviews/:id')
-    .post(auth.protectRoute, productsController.createNewReview);
-
 module.exports = router;

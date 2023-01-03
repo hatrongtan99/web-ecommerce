@@ -1,10 +1,10 @@
 import axiosClient from '~api/axiosConfig';
 import { useEffect } from 'react';
+
 const useAxiosPrivate = () => {
     useEffect(() => {
         const axiosClientRequest = axiosClient.interceptors.request.use(
             (config) => {
-                console.log(config);
                 return config;
             },
             (err) => {
@@ -32,3 +32,5 @@ const useAxiosPrivate = () => {
 
     return axiosClient;
 };
+
+export default useAxiosPrivate;
