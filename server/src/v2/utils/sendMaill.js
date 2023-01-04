@@ -17,7 +17,7 @@ const sendmail = async (to, template) => {
         to,
         subject: template.subject,
         text: template.text || '', // plain text body
-        html: template.html, // html body
+        html: template.html || '', // html body
     };
 
     return await transporter.sendMail(options);

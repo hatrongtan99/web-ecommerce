@@ -14,7 +14,4 @@ router
 //get all category
 router.route('/all').get(categoriesController.getAllCategories);
 
-// list products by category
-router.route('/:slug').get(categoriesController.getProductsByCategory);
-
 module.exports = router;

@@ -12,11 +12,14 @@ router
         productsController.createProduct
     );
 
+// get products by categorry
+router.route('/category/:slug').get(productsController.getProductsByCategory);
+
 // get detail product / update product / delete product
 router
     .route('/:id')
     .get(productsController.getDetailsProduct)
-    .patch(
+    .put(
         auth.protectRoute,
         auth.authAdmin(['Admin']),
         productsController.updateProduct

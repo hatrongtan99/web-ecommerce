@@ -9,7 +9,7 @@ class CategoriesController {
     createCategory = catchSyncErr(async (req, res, next) => {
         const { name, image } = req.body;
         if (!name) {
-            return next(new ThrowError('info invalid!', 400));
+            return next(new ThrowError('Info invalid!', 400));
         }
         if (image) {
             req.body.image =
@@ -29,22 +29,6 @@ class CategoriesController {
             success: true,
             lists: await Categories.find({ isActive: true }, '-products'),
         });
-    });
-
-    //@desc: get product by category
-    //@route: [GET]/v2/api/category/:name
-    //@access: public
-    getProductsByCategory = catchSyncErr(async (req, res, next) => {
-        const { slug } = req.params;
-        const lists = await Categories.find({ isActive: true, slug }).populate({
-            path: 'products',
-            select: 'name_product discount price slug',
-            populate: {
-                path: 'brand',
-                select: 'brand_name brand_thumb slug',
-            },
-        });
-        res.json({ success: true, lists });
     });
 }
 

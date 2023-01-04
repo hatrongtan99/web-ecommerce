@@ -17,6 +17,19 @@ const ordersSchema = new Schema(
             ],
             default: 'pending',
         },
+        sex: {
+            type: String,
+            enum: ['male', 'femaile'],
+            default: 'male',
+        },
+        phoneNumber: {
+            type: String,
+            require: true,
+        },
+        address: {
+            type: String,
+            require: true,
+        },
         created: { type: Date, default: Date.now() },
         updated: Date,
     },

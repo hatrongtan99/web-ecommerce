@@ -3,15 +3,52 @@ const ThrowError = require('../utils/throwError');
 const Products = require('../models/products.model');
 const Categories = require('../models/categories.model');
 
+const { search, filter } = require('../utils/queryFeature');
+
+const RESULT_PER_PAGE = 8;
+
 class ProductsController {
     //@desc: get all products
     //@route: [GET]/v2/api/products
     //@access: public
     getAllProducts = catchSyncErr(async (req, res, next) => {
-        const products = await Products.find({})
-            .populate('brands')
-            .select('name_product brand product_thumb price in_stock');
+        const { query, sort } = filter(req.query);
+        const { page = 1 } = req.query;
+        const skip = (page - 1) * RESULT_PER_PAGE;
+        let products = await Products.find({
+            ...search(req.query, 'name_product'),
+            ...query,
+        })
+            .populate({ path: 'brand', select: 'brand_name brand_thumb slug' })
+            .select('name_product brand discount price images in_stock slug')
+            .sort(sort ? { price: sort } : {})
+            .limit(RESULT_PER_PAGE)
+            .skip(skip);
         res.json({ success: true, products });
+    });
+
+    //@desc: get products by category
+    //@route: [GET]/v2/api/products/category/:slug
+    //@access: public
+    getProductsByCategory = catchSyncErr(async (req, res, next) => {
+        const { slug } = req.params;
+        const { page = 1 } = req.query;
+        const { sort, query } = filter(req.query);
+
+        let products = await Categories.find({ slug }).populate({
+            path: 'products',
+            match: { deleted: false, brand: '63ad49f65e3955c38de82b2d' },
+            select: 'name_product discount price images in_stock slug',
+            options: { sort: sort ? { price: sort } : {} },
+            populate: {
+                path: 'brand',
+                match: {
+                    isActive: true,
+                },
+                select: 'brand_thumb brand_name slug',
+            },
+        });
+        res.json({ success: true, data: products });
     });
 
     //@desc: create product
@@ -27,6 +64,7 @@ class ProductsController {
             sku,
             catalog,
             category,
+            in_stock,
         } = req.body;
         if (
             !name_product ||
@@ -36,7 +74,8 @@ class ProductsController {
             !insurance ||
             !sku ||
             !catalog ||
-            !category
+            !category ||
+            !in_stock
         ) {
             return next(
                 new ThrowError('Invalid infomation create product!', 400)
@@ -75,9 +114,19 @@ class ProductsController {
     });
 
     //@desc: update product
-    //@route: [PATCH]/v2/api/products/:id
+    //@route: [PUT]/v2/api/products/:id
     //@access: Admin
-    updateProduct = catchSyncErr(async (req, res, next) => {});
+    updateProduct = catchSyncErr(async (req, res, next) => {
+        const { id } = req.params;
+        const product = await Products.findOneAndUpdate({ _id: id }, req.body, {
+            upsert: false,
+            new: true,
+        });
+        if (!product) {
+            return next(new ThrowError('Product not found!', 400));
+        }
+        res.json({ success: true, product });
+    });
 
     //@desc: delete product
     //@route: [DELETE]/v2/api/products/:id

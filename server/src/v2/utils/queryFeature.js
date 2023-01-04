@@ -4,27 +4,14 @@ class QueryFeature {
         this.queryStr = queryStr;
     }
 
-    search() {
-        const key = this.queryStr._q
-            ? {
-                  name_product: {
-                      $regex: this.queryStr._q,
-                      $options: 'i',
-                  },
-              }
-            : {};
-        this.instanceQuery = this.instanceQuery.find(key);
-        return this;
-    }
-
     filter() {
         const coppyQueryStr = { ...this.queryStr };
         const removeFeild = ['page', '_q', 'limit'];
         removeFeild.forEach((key) => delete coppyQueryStr[key]);
-        const sort = removeFeild.sort;
-        delete removeFeild.sort;
-        let query = JSON.stringify(removeFeild);
-        query.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
+        const sort = coppyQueryStr.sort;
+        delete coppyQueryStr.sort;
+        let query = JSON.stringify(coppyQueryStr);
+        query = query.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
 
         if (sort) {
             this.instanceQuery = this.instanceQuery
@@ -38,3 +25,32 @@ class QueryFeature {
 
     paginations() {}
 }
+
+const search = (queryStr, fieldName) => {
+    const key = queryStr._q
+        ? {
+              [fieldName]: {
+                  $regex: queryStr._q,
+                  $options: 'i',
+              },
+          }
+        : {};
+    return key;
+};
+
+const filter = (queryStr) => {
+    const coppyQueryStr = { ...queryStr };
+    const removeFeild = ['page', '_q', 'limit'];
+    removeFeild.forEach((key) => delete coppyQueryStr[key]);
+    let sort = coppyQueryStr.sort;
+    delete coppyQueryStr.sort;
+    let query = JSON.stringify(coppyQueryStr);
+    query = query.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
+
+    return { sort: sort == 'asc' ? 1 : -1, query: JSON.parse(query) };
+};
+
+module.exports = {
+    search,
+    filter,
+};
