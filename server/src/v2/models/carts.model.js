@@ -1,20 +1,23 @@
 const { Schema, ObjectId, model } = require('mongoose');
 
-const cartItemSchema = new Schema({
-    product: {
-        type: ObjectId,
-        ref: 'Products',
+const cartItemSchema = new Schema(
+    {
+        product: {
+            type: ObjectId,
+            ref: 'Products',
+        },
+        quantity: Number,
+        perchasePrice: {
+            type: Number,
+            default: 0,
+        },
+        totalPrice: {
+            type: Number,
+            default: 0,
+        },
     },
-    quantity: Number,
-    perchasePrice: {
-        type: Number,
-        default: 0,
-    },
-    totalPrice: {
-        type: Number,
-        default: 0,
-    },
-});
+    { collection: 'CartItems' }
+);
 
 const cartSchema = new Schema(
     {

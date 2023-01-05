@@ -8,14 +8,28 @@ class CartController {
     //@route: [GET]/v2/api/cart/
     //@access: auth
     getCartUser = catchSyncErr(async (req, res, next) => {
-        const cart = await Cart.findOneAndUpdate(
+        let cart = await Cart.findOneAndUpdate(
             {
                 user: req.user.id,
                 status: 'idle',
             },
             {},
             { upsert: true, new: true }
-        );
+        ).populate({
+            path: 'products.product',
+            select: {
+                name_product: 1,
+                discount: 1,
+                price: 1,
+                images: { $slice: 1 },
+                slug: 1,
+                in_stock: 1,
+            },
+        });
+
+        updatePriceInCart(cart);
+
+        cart = await cart.save();
         return res.json({
             success: true,
             cart,
@@ -37,12 +51,22 @@ class CartController {
             { user, status: 'idle' },
             {},
             { upsert: true, new: true }
-        );
+        ).populate({
+            path: 'products.product',
+            select: {
+                name_product: 1,
+                discount: 1,
+                price: 1,
+                images: { $slice: 1 },
+                slug: 1,
+                in_stock: 1,
+            },
+        });
 
         let existProductIncart = cart.products.find(
-            (item) => item.product == product
+            (item) => item.product._id == product
         );
-        
+
         if (existProductIncart) {
             existProductIncart.quantity =
                 existProductIncart.quantity + quantity;
@@ -54,13 +78,12 @@ class CartController {
                 product,
                 quantity,
             });
-
             cart.products.push(cartItem);
         }
 
-        cart = await cart.save();
+        await cart.save();
 
-        res.json({ success: true, cart });
+        this.getCartUser(req, res, next);
     });
 
     //@desc: delete product in cart
@@ -79,5 +102,16 @@ class CartController {
         res.json({ success: true, cart });
     });
 }
+
+const updatePriceInCart = (cart) => {
+    if (cart.products.length) {
+        cart.products.forEach((cartItem) => {
+            cartItem.perchasePrice = cartItem.product.price;
+            cartItem.totalPrice =
+                cartItem.quantity * cartItem.product.price -
+                cartItem.product.price * cartItem.product.discount;
+        });
+    }
+};
 
 module.exports = new CartController();

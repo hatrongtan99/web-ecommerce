@@ -1,30 +1,4 @@
-class QueryFeature {
-    constructor(instanceQuery, queryStr) {
-        this.instanceQuery = instanceQuery;
-        this.queryStr = queryStr;
-    }
-
-    filter() {
-        const coppyQueryStr = { ...this.queryStr };
-        const removeFeild = ['page', '_q', 'limit'];
-        removeFeild.forEach((key) => delete coppyQueryStr[key]);
-        const sort = coppyQueryStr.sort;
-        delete coppyQueryStr.sort;
-        let query = JSON.stringify(coppyQueryStr);
-        query = query.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
-
-        if (sort) {
-            this.instanceQuery = this.instanceQuery
-                .find(JSON.parse(query))
-                .sort({ price: sort == 'asc' ? 1 : -1 });
-        } else {
-            this.instanceQuery = this.instanceQuery.find(JSON.parse(query));
-        }
-        return this;
-    }
-
-    paginations() {}
-}
+const { filter: keyFilter } = require('../config/key');
 
 const search = (queryStr, fieldName) => {
     const key = queryStr._q
@@ -39,15 +13,54 @@ const search = (queryStr, fieldName) => {
 };
 
 const filter = (queryStr) => {
-    const coppyQueryStr = { ...queryStr };
-    const removeFeild = ['page', '_q', 'limit'];
-    removeFeild.forEach((key) => delete coppyQueryStr[key]);
-    let sort = coppyQueryStr.sort;
-    delete coppyQueryStr.sort;
-    let query = JSON.stringify(coppyQueryStr);
-    query = query.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
+    let sort = queryStr.sort;
+    let query = {};
+    if (queryStr.price) {
+        query.$or = queryStr.price
+            .split(',')
+            .map((i) => ({ price: keyFilter.price[i] }));
+    }
 
-    return { sort: sort == 'asc' ? 1 : -1, query: JSON.parse(query) };
+    if (queryStr.type) {
+        queryFilter(queryStr, 'specialField', query, 'type');
+    }
+
+    if (queryStr.powerType) {
+        queryFilter(queryStr, 'specialField', query, 'powerType');
+    }
+
+    if (queryStr.wattage) {
+        queryFilter(queryStr, 'specialField', query, 'wattage');
+    }
+
+    if (queryStr.battery) {
+        queryFilter(queryStr, 'specialField', query, 'battery');
+    }
+
+    if (sort) {
+        sort = sort == 'asc' ? 1 : sort == 'desc' ? -1 : 0;
+    }
+
+    return { sort, query };
+};
+
+const queryFilter = (queryStr, field, query, type) => {
+    const idType = queryStr[type].split(',');
+    const obj = {
+        [field]: {
+            $in: idType.map((id) => {
+                const item = keyFilter.filter.specialField[type].find(
+                    (item) => item.id == id
+                );
+                if (item) {
+                    return {
+                        [item.filter]: item.title,
+                    };
+                }
+            }),
+        },
+    };
+    query.$and ? query.$and.push(obj) : (query.$and = [obj]);
 };
 
 module.exports = {

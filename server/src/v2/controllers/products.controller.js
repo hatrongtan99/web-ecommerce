@@ -2,10 +2,11 @@ const catchSyncErr = require('../utils/catchSyncErr');
 const ThrowError = require('../utils/throwError');
 const Products = require('../models/products.model');
 const Categories = require('../models/categories.model');
+const { limit } = require('../config/key');
 
 const { search, filter } = require('../utils/queryFeature');
 
-const RESULT_PER_PAGE = 8;
+const RESULT_PER_PAGE = limit;
 
 class ProductsController {
     //@desc: get all products
@@ -24,6 +25,7 @@ class ProductsController {
             .sort(sort ? { price: sort } : {})
             .limit(RESULT_PER_PAGE)
             .skip(skip);
+
         res.json({ success: true, products });
     });
 
@@ -32,22 +34,26 @@ class ProductsController {
     //@access: public
     getProductsByCategory = catchSyncErr(async (req, res, next) => {
         const { slug } = req.params;
-        const { page = 1 } = req.query;
         const { sort, query } = filter(req.query);
+        const { page = 1 } = req.query;
+        const skip = (page - 1) * RESULT_PER_PAGE;
 
-        let products = await Categories.find({ slug }).populate({
-            path: 'products',
-            match: { deleted: false, brand: '63ad49f65e3955c38de82b2d' },
-            select: 'name_product discount price images in_stock slug',
-            options: { sort: sort ? { price: sort } : {} },
-            populate: {
-                path: 'brand',
-                match: {
-                    isActive: true,
+        let products = await Categories.find({ slug })
+            .populate({
+                path: 'products',
+                match: { deleted: false, ...query },
+                select: 'name_product discount price images in_stock slug',
+                options: { sort: sort ? { price: sort } : {} },
+                populate: {
+                    path: 'brand',
+                    match: {
+                        isActive: true,
+                    },
+                    select: 'brand_thumb brand_name slug',
                 },
-                select: 'brand_thumb brand_name slug',
-            },
-        });
+            })
+            .limit(RESULT_PER_PAGE)
+            .skip(skip);
         res.json({ success: true, data: products });
     });
 

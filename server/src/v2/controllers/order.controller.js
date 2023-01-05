@@ -1,7 +1,7 @@
 const Order = require('../models/order.model');
 const { Cart } = require('../models/carts.model');
 const catchSyncErr = require('../utils/catchSyncErr');
-
+const { limit } = require('../config/key');
 const sendmail = require('../utils/sendMaill');
 const {
     notiUserOrder,
@@ -9,6 +9,8 @@ const {
 } = require('../utils/tempalteMaill');
 const ThrowError = require('../utils/throwError');
 const { maill } = require('../config/key');
+
+const RESULT_PER_PAGE = limit;
 
 class OrderController {
     //@desc: create new user order
@@ -66,18 +68,25 @@ class OrderController {
     //@route: [GET]/v2/api/order/me
     //@access: auth
     getOrderByUser = catchSyncErr(async (req, res, next) => {
+        const { page = 1 } = req.query;
         const idUser = req.user.id;
-        const order = await Order.findOne({ user: idUser }).populate({
-            path: 'cart',
-            select: 'status products',
-        });
+        const skip = (page - 1) * RESULT_PER_PAGE;
+        const order = await Order.findOne({ user: idUser })
+            .populate({
+                path: 'cart',
+                populate: {
+                    path: 'products.product',
+                },
+            })
+            .limit(RESULT_PER_PAGE)
+            .skip(skip);
         res.json({ success: true, order });
     });
 
-    //@desc: get order by user
+    //@desc: get detail order by user
     //@route: [GET]/v2/api/order/me/:id
     //@access: auth
-    getDetailOrder = catchSyncErr(async (req, res, next) => {
+    getDetailOrderByUser = catchSyncErr(async (req, res, next) => {
         const idUser = req.user.id;
 
         const order = await Order.findOne({
@@ -86,6 +95,22 @@ class OrderController {
         }).populate({
             path: 'cart',
             select: 'status products',
+            populate: {
+                path: 'products.product',
+                select: {
+                    name_product: 1,
+                    images: { $slice: 1 },
+                    slug: 1,
+                },
+                populate: {
+                    path: 'brand',
+                    select: {
+                        brand_name: 1,
+                        brand_thumb: 1,
+                        slug: 1,
+                    },
+                },
+            },
         });
         res.json({ success: true, order });
     });
@@ -94,8 +119,35 @@ class OrderController {
     //@route: [GET]/v2/api/order/all
     //@access: admin
     getOrderByAdmin = catchSyncErr(async (req, res, next) => {
+        const { page = 1 } = req.query;
+        const skip = (page - 1) * RESULT_PER_PAGE;
         const orders = await Order.find({})
-            .populate({ path: 'user' })
+            .populate({
+                path: 'user',
+                select: {
+                    avatar: 1,
+                    email: 1,
+                    user_name: 1,
+                },
+            })
+            .limit(RESULT_PER_PAGE)
+            .skip(skip);
+        res.json({ success: true, orders });
+    });
+
+    //@desc: get detail order by admin
+    //@route: [GET]/v2/api/order/admin/:id
+    //@access: admin
+    getDetailOrderByAdmin = catchSyncErr(async (req, res, next) => {
+        const orders = await Order.find({})
+            .populate({
+                path: 'user',
+                select: {
+                    avatar: 1,
+                    email: 1,
+                    user_name: 1,
+                },
+            })
             .populate({ path: 'cart' });
         res.json({ success: true, orders });
     });
