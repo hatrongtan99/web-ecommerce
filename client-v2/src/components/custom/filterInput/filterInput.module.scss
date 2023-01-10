@@ -1,0 +1,40 @@
+@use '~/styles/mixins';
+
+.filter-input {
+    @include mixins.flex(flex-start, flex-start);
+    width: 100%;
+    font-size: 0.9rem;
+    color: #337abe;
+    padding: 2px 0 4px 20px;
+    position: relative;
+    cursor: pointer;
+
+    span {
+        margin-left: 0.2rem;
+        &:hover {
+            color: #333;
+        }
+    }
+
+    &__icon {
+        position: relative;
+    }
+
+    &__checked {
+        display: none;
+        position: absolute;
+        top: 14px;
+        transform: translateY(-50%);
+        left: 20px;
+        z-index: 1;
+    }
+
+    &.active &__checked {
+        display: inline-block;
+        color: #ff0000;
+    }
+
+    &.active span {
+        color: #ff0000;
+    }
+}

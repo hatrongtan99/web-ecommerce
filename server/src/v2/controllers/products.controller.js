@@ -38,11 +38,17 @@ class ProductsController {
         const { page = 1 } = req.query;
         const skip = (page - 1) * RESULT_PER_PAGE;
 
-        let products = await Categories.find({ slug })
+        let products = await Categories.findOne({ slug })
             .populate({
                 path: 'products',
                 match: { deleted: false, ...query },
-                select: 'name_product discount price images in_stock slug',
+                select: {
+                    name_product: 1,
+                    discount: 1,
+                    price: 1,
+                    images: { $slice: 1 },
+                    slug: 1,
+                },
                 options: { sort: sort ? { price: sort } : {} },
                 populate: {
                     path: 'brand',

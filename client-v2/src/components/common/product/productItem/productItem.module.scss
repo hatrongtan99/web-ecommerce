@@ -1,0 +1,66 @@
+@use '~/styles/mixins' as mixins;
+
+.product__item {
+    position: relative;
+    padding: 10px 15px;
+    cursor: pointer;
+    border: 1px solid #f3f3f3;
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+
+    a {
+        padding-top: 5px;
+        color: #333;
+        font-size: 1rem;
+        text-decoration: none;
+        line-height: 1.2rem;
+    }
+
+    &__thumb {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    h6 {
+        margin-bottom: 8px;
+    }
+
+    &__brand {
+        height: 30px;
+        width: auto;
+    }
+
+    &__price {
+        @include mixins.flex(center, flex-start);
+        color: #d0021b;
+    }
+
+    &__old__price {
+        color: #333;
+        margin-left: 10px;
+        font-size: 0.8rem;
+        text-decoration: line-through;
+    }
+}
+
+.tag-discount {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #fbda00;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    padding: 1px 6px 1px 4px;
+
+    span {
+        position: absolute;
+        display: inline-block;
+        border-width: 13px;
+        border-style: solid;
+        border-color: transparent #fbda00 transparent transparent;
+        top: 0;
+        left: -26px;
+    }
+}

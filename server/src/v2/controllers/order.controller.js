@@ -60,7 +60,11 @@ class OrderController {
             )
         );
         //send mail to admin to noti order
-        await sendmail(maill.emailAdmin, notiUserOrderForAdmin());
+        await sendmail(
+            maill.emailAdmin,
+            notiUserOrderForAdmin(cartUser.user.user_name),
+            `http://${req.headers.host}/v2/api/order/admin/${order._id}`
+        );
         res.json({ success: true, order });
     });
 

@@ -1,0 +1,10 @@
+@use '~/styles/mixins';
+.wrapper {
+    @include mixins.flex(center, flex-start);
+    padding: 10px 0;
+}
+
+.name-detail {
+    font-size: 1.4rem;
+    font-weight: 400;
+}

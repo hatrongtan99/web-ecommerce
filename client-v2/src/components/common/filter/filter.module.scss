@@ -1,0 +1,25 @@
+@use '~styles/mixins' as mixin;
+
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    background-color: #fff;
+
+    h4 {
+        margin: 14px 0 6px 6px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .filter-group {
+        border-top: 1px solid #999;
+    }
+
+    .input-group {
+        @include mixin.flex(flex-start, space-between);
+        flex-wrap: wrap;
+        width: 100%;
+    }
+}

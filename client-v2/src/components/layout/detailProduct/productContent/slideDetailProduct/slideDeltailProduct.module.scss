@@ -1,0 +1,52 @@
+@use '~/styles/mixins';
+@import '~/styles/variable';
+
+.slide-wraper {
+    width: 100%;
+    border: 1px solid #999;
+};
+
+.slide-item {
+    display: flex;
+    flex: 1 0 100%;
+    position: relative;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.magnify-lens {
+    position: absolute;
+    height: 40%;
+    width: 40%;
+}
+
+.magnify {
+    position: absolute;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    cursor: zoom-in;
+}
+
+.img-list {
+    @include mixins.flex(center, flex-start);
+    margin: 10px;
+
+    &__item {
+        display: flex;
+        width: 90px;
+        border: 1px solid #999;
+        height: auto;
+        margin-right: 10px;
+        cursor: pointer;
+
+        &.active {
+            border: 1px solid $primary-color;
+        }
+    }
+};

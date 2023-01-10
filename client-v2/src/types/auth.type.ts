@@ -9,6 +9,7 @@ export interface AuthLogin {
         user_name: string;
         createAt: string;
         email: string;
+        role: string;
     };
     token: string;
 }

@@ -1,0 +1,19 @@
+@use '~/styles/mixins' as mixins;
+
+.sort-wrapper {
+    @include mixins.flex(center, flex-end);
+    padding: 4px 8px 4px 0;
+    font-size: 0.9rem;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+
+    h6 {
+        font-weight: 400;
+    }
+}
+
+.sort-item {
+    @include mixins.flex(center, center);
+    margin-right: 14px;
+}

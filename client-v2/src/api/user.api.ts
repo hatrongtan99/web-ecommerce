@@ -1,17 +1,19 @@
 import { AxiosInstance } from 'axios';
-import axiosClient from './axiosConfig';
 import { UserInfoRegister, UserLogin, UserProfile } from '~types/user.type';
 import { AuthLogin, UserLogout } from '~types/auth.type';
 
-export const userRegister = (user: UserInfoRegister) => {
+export const userRegister = (
+    axiosClient: AxiosInstance,
+    user: UserInfoRegister
+) => {
     return axiosClient.post<never, AuthLogin>('/users//register', user);
 };
 
-export const userLoginLocal = (user: UserLogin) => {
+export const userLoginLocal = (axiosClient: AxiosInstance, user: UserLogin) => {
     return axiosClient.post<never, AuthLogin>('/users/login', user);
 };
 
-export const userLoginByGoogle = () => {
+export const userLoginByGoogle = (axiosClient: AxiosInstance) => {
     return axiosClient.get('/users/google');
 };
 

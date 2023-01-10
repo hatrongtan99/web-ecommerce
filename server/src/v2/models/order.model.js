@@ -30,6 +30,9 @@ const ordersSchema = new Schema(
             type: String,
             require: true,
         },
+        note: {
+            type: String,
+        },
         created: { type: Date, default: Date.now() },
         updated: Date,
     },

@@ -14,6 +14,28 @@ export interface Catalog {
     content: string;
 }
 
+export interface ProductByCategory {
+    created: string;
+    image: string;
+    isActive: boolean;
+    name: string;
+    products: {
+        _id: string;
+        name_product: string;
+        discount: number;
+        price: number;
+        brand: {
+            brand_name: string;
+            brand_thumb: string;
+            slug: string;
+            _id: string;
+        };
+        images: string;
+    }[];
+    slug: string;
+    _id: string;
+}
+
 export interface ProductDetails {
     success: boolean;
     product: {
