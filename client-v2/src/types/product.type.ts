@@ -37,8 +37,6 @@ export interface ProductByCategory {
 }
 
 export interface ProductDetails {
-    success: boolean;
-    product: {
         specialField: any[];
         rating: number;
         _id: string;
@@ -55,6 +53,7 @@ export interface ProductDetails {
         price: number;
         ratings: number;
         totalReviews: number;
+        sold: number;
         images: string[];
         in_stock: number;
         insurance: string;
@@ -63,5 +62,4 @@ export interface ProductDetails {
         deleted: boolean;
         created: string;
         slug: string;
-    };
 }

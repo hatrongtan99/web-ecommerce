@@ -1,9 +1,8 @@
+@use "~styles/mixins" as mixin;
 @import '~styles/variable';
 
 .custom-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include mixin.flex(center, center);
     border: none;
     outline: none;
     padding: 8px 4px;
@@ -63,6 +62,16 @@
 
         &:hover {
             color: #333;
+        }
+    }
+
+    &.text {
+        background-color: inherit;
+        border: none;
+        color: $primary-color;
+
+        &:hover {
+            color: $secondary-color;
         }
     }
 

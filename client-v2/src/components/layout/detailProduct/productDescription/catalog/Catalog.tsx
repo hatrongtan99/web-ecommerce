@@ -1,34 +1,23 @@
-import classNames from 'classnames/bind';
+import classNames from "classnames/bind";
+import { Catalog } from "~types/product.type";
 
-import styles from './catalog.module.scss';
+import styles from "./catalog.module.scss";
 const cx = classNames.bind(styles);
 
-const Catalog = () => {
-    return (
-        <div className={cx('catalog')}>
-            <h3 className={cx('catalog__title')}>THÔNG SỐ KỸ THUẬT</h3>
-            <ul className={cx('catalog__list')}>
-                <li className={cx('catalog__item')}>
-                    <p>Mô-men xoắn, tối đa (cứng/mềm):</p>
-                    <span>28 / 11 Nm</span>
-                </li>
-
-                <li className={cx('catalog__item')}>
-                    <p>Mô-men xoắn, tối đa (cứng/mềm):</p>
-                    <span>28 / 11 Nm</span>
-                </li>
-                <li className={cx('catalog__item')}>
-                    <p>Mô-men xoắn, tối đa (cứng/mềm):</p>
-                    <span>28 / 11 Nm</span>
-                </li>
-
-                <li className={cx('catalog__item')}>
-                    <p>Mô-men xoắn, tối đa (cứng/mềm):</p>
-                    <span>28 / 11 Nm</span>
-                </li>
-            </ul>
-        </div>
-    );
+const Catalog = ({ catalog }: { catalog: Catalog[] }) => {
+  return (
+    <div className={cx("catalog")}>
+      <h3 className={cx("catalog__title")}>THÔNG SỐ KỸ THUẬT</h3>
+      <ul className={cx("catalog__list")}>
+        {catalog.map((item, index) => (
+          <li className={cx("catalog__item")} key={index}>
+            <p>{item.title}:</p>
+            <span>{item.content}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default Catalog;

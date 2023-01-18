@@ -1,42 +1,47 @@
-import classNames from 'classnames/bind';
-import { FaCartPlus } from 'react-icons/fa';
+import classNames from "classnames/bind";
+import { FaCartPlus } from "react-icons/fa";
 
-import styles from './priceDeltailProduct.module.scss';
+import styles from "./priceDeltailProduct.module.scss";
 const cx = classNames.bind(styles);
 
-import PriceBox from './priceBox/PriceBox';
-import Button from '~components/custom/button/Button';
-import ContactBox from './contactBox/ContactBox';
-import Link from 'next/link';
+import PriceBox from "./priceBox/PriceBox";
+import Button from "~components/custom/button/Button";
+import ContactBox from "./contactBox/ContactBox";
+import Link from "next/link";
+import { ProductDetails } from "~types/product.type";
 
-const PriceDeltailProduct = () => {
-    return (
-        <>
-            <PriceBox />
+const PriceDeltailProduct = ({ product }: { product: ProductDetails }) => {
+  const handleAddCart = async () => {};
 
-            {/* buton */}
-            <div className={cx('button-wrapper')}>
-                <Button
-                    href="/"
-                    size="md"
-                    variant="primary-border"
-                    leftIcon={<FaCartPlus />}
-                >
-                    <p className={cx('button-title')}>Thêm Vào Giỏ</p>
-                </Button>
+  const handleContact = () => {};
 
-                <Button href="/" size="md" as={Link}>
-                    <p className={cx('button-title')}>Mua Ngay</p>
-                </Button>
+  return (
+    <>
+      <PriceBox product={product} />
 
-                <Button size="md" variant="secondary">
-                    <p className={cx('button-title')}>Cần Tư Vấn</p>
-                </Button>
-            </div>
+      {/* buton */}
+      <div className={cx("button-wrapper")}>
+        <Button
+          size="md"
+          variant="primary-border"
+          leftIcon={<FaCartPlus />}
+          onClick={handleAddCart}
+        >
+          <p className={cx("button-title")}>Thêm Vào Giỏ</p>
+        </Button>
 
-            <ContactBox />
-        </>
-    );
+        <Button href="/" size="md" as={Link}>
+          <p className={cx("button-title")}>Mua Ngay</p>
+        </Button>
+
+        <Button size="md" variant="secondary" onClick={handleContact}>
+          <p className={cx("button-title")}>Cần Tư Vấn</p>
+        </Button>
+      </div>
+
+      <ContactBox />
+    </>
+  );
 };
 
 export default PriceDeltailProduct;
