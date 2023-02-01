@@ -5,14 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllBrand } from "~api/brand.api";
 import FilterInput from "~components/custom/filterInput/FilterInput";
 import useSetActiveFilterLayout from "~hook/useSetActiveFilterLayout";
-import axiosClient from "~api/axiosConfig";
 
 const cx = classNames.bind(styles);
 
 const FilterByBrand = () => {
-  const { data, isSuccess } = useQuery(["brands"], () =>
-    getAllBrand(axiosClient)
-  );
+  const { data, isSuccess } = useQuery(["brands"], () => getAllBrand());
   const { active, handleClick } = useSetActiveFilterLayout();
 
   return (

@@ -2,8 +2,7 @@ import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 
-import axiosClient from "~api/axiosConfig";
-import { getDetailsProduct, getProductByCategory } from "~api/product.api";
+import { getDetailsProduct } from "~api/product.api";
 import Breadcrumb from "~components/common/breabcrumb/Breabcrum";
 import TitleDeltailProduct from "~components/common/product/titleDeltalProduct/TitleDeltailProduct";
 import Spinner from "~components/common/spiner/Spiner";
@@ -18,7 +17,7 @@ const ProductDetail = () => {
   const { slug } = router.query;
 
   const { data, isLoading } = useQuery(["detail-product", slug], () =>
-    getDetailsProduct(axiosClient, slug as string)
+    getDetailsProduct(slug as string)
   );
 
   return (
@@ -61,7 +60,7 @@ const ProductDetail = () => {
                 }}
               />
 
-              <Comment />
+              <Comment id={data?.product._id!} />
             </div>
           </div>
         </>
@@ -89,7 +88,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(["detail-product", slug], () =>
-    getDetailsProduct(axiosClient, slug as string)
+    getDetailsProduct(slug as string)
   );
 
   return {

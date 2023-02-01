@@ -30,7 +30,7 @@ const FormLoginUi = () => {
   const handleLoginLocal = async (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await userLoginLocal(axiosClient, user);
+      const res = await userLoginLocal(user);
       if (res.success) {
         setAuth(res);
         setStorage("token", res.token, "sessionStorage");

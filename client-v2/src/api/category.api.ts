@@ -1,5 +1,5 @@
-import { AxiosInstance } from 'axios';
+import axiosClient from "./axiosConfig";
 
-export const getFilter = (axiosClient: AxiosInstance) => {
-    return axiosClient.get('/category/filter');
+export const getFilter = () => {
+  return axiosClient.get("/category/filter");
 };

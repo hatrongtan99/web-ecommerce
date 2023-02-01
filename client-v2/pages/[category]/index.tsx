@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 
 import FilterLayout from "~components/common/filter/FilterLayout";
 import { getAllBrand } from "~api/brand.api";
-import axiosClient from "~api/axiosConfig";
 import ProductList from "~components/layout/productList/ProductList";
 import Breadcrumb from "~components/common/breabcrumb/Breabcrum";
 import ProductSpecial from "~components/layout/productSpecial/ProductSpecial";
@@ -19,7 +18,7 @@ const Category = () => {
   const { data, isLoading } = useQuery(
     ["list-product-by-category", category, router.query],
     () =>
-      getProductByCategory(axiosClient, category as string, {
+      getProductByCategory(category as string, {
         ...router.query,
       }),
     { refetchOnWindowFocus: false }
@@ -56,15 +55,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
   const { category } = context.params!;
 
-  await queryClient.prefetchQuery(["brands"], () => getAllBrand(axiosClient));
+  await queryClient.prefetchQuery(["brands"], () => getAllBrand());
 
   await queryClient.prefetchQuery(
     ["list-product-by-category", category, context.query],
-    () => getProductByCategory(axiosClient, category as string)
+    () => getProductByCategory(category as string)
   );
 
   await queryClient.prefetchQuery(["list-product-special"], () =>
-    getProductByCategory(axiosClient, category as string, {
+    getProductByCategory(category as string, {
       page: 1,
       limit: 8,
     })

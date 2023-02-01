@@ -5,16 +5,13 @@ import {
   ProductByCategory,
   ProductDetails,
 } from "~types/product.type";
+import axiosClient from "./axiosConfig";
 
-export const getAllProducts = (axiosClient: AxiosInstance, params?: any) => {
+export const getAllProducts = (params?: any) => {
   return axiosClient.get("/products", params);
 };
 
-export const getProductByCategory = (
-  axiosClient: AxiosInstance,
-  slug: string,
-  params?: any
-) => {
+export const getProductByCategory = (slug: string, params?: any) => {
   return axiosClient.get<never, { success: boolean; data: ProductByCategory }>(
     `/products/category/${slug}`,
     {
@@ -30,8 +27,8 @@ export const createProduct = (
   return axiosPrivate.post("/products", product);
 };
 
-export const getDetailsProduct = (aixosClient: AxiosInstance, slug: string) => {
-  return aixosClient.get<never, { success: boolean; product: ProductDetails }>(
+export const getDetailsProduct = (slug: string) => {
+  return axiosClient.get<never, { success: boolean; product: ProductDetails }>(
     `/products/${slug}`
   );
 };

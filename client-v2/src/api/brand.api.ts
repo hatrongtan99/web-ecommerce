@@ -1,15 +1,16 @@
-import { AxiosInstance, AxiosResponse } from 'axios';
-import { Brands, CreateBrand } from '~types/brand.type';
+import { AxiosInstance } from "axios";
+import { Brands, CreateBrand } from "~types/brand.type";
+import axiosClient from "./axiosConfig";
 
-export const getAllBrand = (axiosClient: AxiosInstance) => {
-    return axiosClient.get<never, { success: boolean; brands: Brands[] }>(
-        '/brands'
-    );
+export const getAllBrand = () => {
+  return axiosClient.get<never, { success: boolean; brands: Brands[] }>(
+    "/brands"
+  );
 };
 
 export const createNewBrand = (
-    axiosPrivate: AxiosInstance,
-    newBrand: CreateBrand
+  axiosPrivate: AxiosInstance,
+  newBrand: CreateBrand
 ) => {
-    return axiosPrivate.post('/brands', newBrand);
+  return axiosPrivate.post("/brands", newBrand);
 };

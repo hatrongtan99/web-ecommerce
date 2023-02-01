@@ -1,52 +1,59 @@
 import CommentBox from "./CommentBox";
 import classNames from "classnames/bind";
+import { useQuery } from "@tanstack/react-query";
 
 import styles from "./comment.module.scss";
+import { getCommentProduct } from "~api/comment.api";
 const cx = classNames.bind(styles);
 
-const Comment = () => {
+const Comment = ({ id }: { id: string }) => {
+  const { data, isSuccess } = useQuery(["comment-list", id], () =>
+    getCommentProduct(id, { page: 1, pageSize: 1 })
+  );
+
+  const dFormat = (d: Date) => {
+    return d.toLocaleDateString("en-GB") + " " + d.toLocaleTimeString("en-GB");
+  };
+
   return (
     <>
-      <CommentBox />
+      <CommentBox id={id} />
 
       {/* comment item */}
-      <div className="mb-4">
-        <>
-          <div className={cx("comment-item")}>
-            <div className={cx("comment-item__avatar")}>
-              <span>ql</span>
-            </div>
-            <div className={cx("comment-item__body")}>
-              <div className={cx("name")}>
-                <p>Quang linh</p>
-                &nbsp;-&nbsp;
-                <span>11/10/2020 21:08</span>
-                <span className={cx("reply-btn")}>Trả lời</span>
+      {isSuccess ? (
+        <div className="mb-4">
+          {data.comments.map((comment) => (
+            <>
+              <div className={cx("comment-item")}>
+                <div className={cx("comment-item__avatar")}>
+                  <span>{comment.email.slice(0, 2)}</span>
+                </div>
+                <div className={cx("comment-item__body")}>
+                  <div className={cx("name")}>
+                    <p>{comment.name}</p>
+                    &nbsp;-&nbsp;
+                    <span>{dFormat(new Date(comment.created))}</span>
+                    <span className={cx("reply-btn")}>Trả lời</span>
+                  </div>
+
+                  <div className={cx("content")}>{comment.content}</div>
+                </div>
               </div>
 
-              <div className={cx("content")}>
-                Em muốn lấy sỉ các máy này về bán hàng onl được không anh.
-                <br />A tư vấn giúp e nhé 0393457xxxx
-              </div>
-            </div>
-          </div>
-
-          <div className={cx("comment-reply")}>
-            <div className={cx("name")}>
-              <p>Quang linh</p>
-              &nbsp;-&nbsp;
-              <span>11/10/2020 21:08</span>
-            </div>
-            <div className={cx("content")}>
-              Chào anh Linh,
-              <br />
-              Anh Linh đang quan tới sản phẩm Máy khoan Total TH308268 cùng với
-              các chính sách sỉ, Anh vui lòng để ý điện thoại, nhân viên tại
-              Maydochuyendung sẽ gọi điện báo giá và tư vấn cho anh ạ.
-            </div>
-          </div>
-        </>
-      </div>
+              {comment.reply.map((rep: any) => (
+                <div className={cx("comment-reply")}>
+                  <div className={cx("name")}>
+                    <p>{rep.name}</p>
+                    &nbsp;-&nbsp;
+                    <span>{dFormat(new Date(rep.created))}</span>
+                  </div>
+                  <div className={cx("content")}>{rep.content}</div>
+                </div>
+              ))}
+            </>
+          ))}
+        </div>
+      ) : null}
     </>
   );
 };

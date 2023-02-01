@@ -28,6 +28,14 @@ const Header = () => {
     }
   };
 
+  const handleAuth = (type: "login" | "register") => {
+    if (type == "register") {
+      router.push("/auth/register");
+    } else {
+      router.push("/auth/login");
+    }
+  };
+
   useEffect(() => {
     (async function () {
       setIsLoadUser(true);
@@ -75,13 +83,11 @@ const Header = () => {
           </Button>
         </div>
         <div className={`col-2 ${cx("header__user")}`}>
-          {isLoadUser ? (
-            <>...</>
-          ) : !auth?.token ? (
+          {isLoadUser ? null : !auth?.token ? (
             <div className={cx("header__user__auth")}>
-              <p>Đăng ký</p>
+              <p onClick={() => handleAuth("register")}>Đăng ký</p>
               <span></span>
-              <p>Đăng nhập</p>
+              <p onClick={() => handleAuth("login")}>Đăng nhập</p>
             </div>
           ) : (
             <div className={cx("header__user__info")}>userinfo</div>

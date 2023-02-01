@@ -6,7 +6,6 @@ import { getProductByCategory } from "~api/product.api";
 import ProductItem from "~components/common/product/productItem/ProductItem";
 import SlideShow from "~components/common/product/slideShow/SlideShow";
 import styles from "./productsRelatedSlide.module.scss";
-import axiosClient from "~api/axiosConfig";
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +17,7 @@ interface ProductsRelatedSlideProps {
 const ProductsRelatedSlide = ({ title, relate }: ProductsRelatedSlideProps) => {
   // fetch produt relate
   const { data, isSuccess } = useQuery(["product-relate", relate?.id], () =>
-    getProductByCategory(axiosClient, relate?.category?.slug, {
+    getProductByCategory(relate?.category?.slug, {
       // exc: relate?.id,
     })
   );

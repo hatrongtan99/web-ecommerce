@@ -6,7 +6,6 @@ import styles from "./productSpecial.module.scss";
 import SlideSpecialProduct from "./slideSpecialProduct/SlideSpecialProduct";
 import { useQuery } from "@tanstack/react-query";
 import { getProductByCategory } from "~api/product.api";
-import axiosClient from "~api/axiosConfig";
 
 const cx = classNames.bind(styles);
 
@@ -20,7 +19,7 @@ const ProductSpecial = ({
 
   const { category } = router.query!;
   const { data, isSuccess } = useQuery(["list-product-special"], () =>
-    getProductByCategory(axiosClient, category as string, {
+    getProductByCategory(category as string, {
       page: 1,
       limit: 8,
     })
