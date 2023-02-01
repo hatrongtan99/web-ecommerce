@@ -1,74 +1,71 @@
-import classNames from 'classnames/bind';
-import { MouseEvent, useState } from 'react';
-import ProductItem from '~components/common/product/productItem/ProductItem';
-import SlideShow from '~components/common/product/slideShow/SlideShow';
+import classNames from "classnames/bind";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-import styles from './productsRelatedSlide.module.scss';
+import { getProductByCategory } from "~api/product.api";
+import ProductItem from "~components/common/product/productItem/ProductItem";
+import SlideShow from "~components/common/product/slideShow/SlideShow";
+import styles from "./productsRelatedSlide.module.scss";
+import axiosClient from "~api/axiosConfig";
+
 const cx = classNames.bind(styles);
 
 interface ProductsRelatedSlideProps {
-    title: string;
+  title: string;
+  relate: any;
 }
 
-const ProductsRelatedSlide = ({ title }: ProductsRelatedSlideProps) => {
-    const [indexImg, setIndexImg] = useState<number>(4);
-    const [needTransition, setNeedTransition] = useState(true);
-    const [isMove, setIsMove] = useState(false);
+const ProductsRelatedSlide = ({ title, relate }: ProductsRelatedSlideProps) => {
+  // fetch produt relate
+  const { data, isSuccess } = useQuery(["product-relate", relate?.id], () =>
+    getProductByCategory(axiosClient, relate?.category?.slug, {
+      // exc: relate?.id,
+    })
+  );
 
-    const handleMoveSlide = (value: string) => {
-        if (isMove) return;
-        if (value == 'next') {
-            setIndexImg(indexImg + 1);
-            setNeedTransition(true);
-        } else if (value == 'prev') {
-            setIndexImg(indexImg - 1);
-            setNeedTransition(true);
-        }
-        setIsMove(true);
-    };
+  const [indexImg, setIndexImg] = useState<number>(0);
+  const [isMove, setIsMove] = useState(false);
 
-    const handleTransitionEnd = () => {
-        // if (indexImg == data.length - 5) {
-        //     setNeedTransition(false)
-        //     setIndexImg(3);
-        // } else if (indexImg == 3) {
-        //     setNeedTransition(false)
-        //     setIndexImg(data.length - 5);
-        // }
-        // setIsMove(false)
-    };
+  const handleMoveSlide = (value: string) => {
+    if (isMove) return;
+    if (
+      (indexImg == 0 && value == "prev") ||
+      (indexImg == data?.data.products.length! - 1 && value == "next")
+    )
+      return;
+    if (value == "next") {
+      setIndexImg(indexImg + 1);
+    } else if (value == "prev") {
+      setIndexImg(indexImg - 1);
+    }
+    setIsMove(true);
+  };
 
-    let style = {
-        transform: `translateX(${indexImg * -25}%)`,
-        transition: `${needTransition ? 'all 0.25s ease 0s' : 'none'}`,
-    };
+  const handleTransitionEnd = () => {
+    setIsMove(false);
+  };
 
-    return (
-        <div className={cx('product-related')}>
-            <h3 className={cx('title')}>{title}</h3>
-            <SlideShow
-                handleMoveSlide={handleMoveSlide}
-                handleTransitionEnd={handleTransitionEnd}
-                style={style}
-            >
-                <div className={`col-3`}>
-                    <ProductItem brandImg={false} />
-                </div>
+  let style = {
+    transform: `translateX(${indexImg * -25}%)`,
+    transition: `all 0.25s ease 0s`,
+  };
 
-                <div className={`col-3`}>
-                    <ProductItem brandImg={false} />
-                </div>
-
-                <div className={`col-3`}>
-                    <ProductItem brandImg={false} />
-                </div>
-
-                <div className={`col-3`}>
-                    <ProductItem brandImg={false} />
-                </div>
-            </SlideShow>
-        </div>
-    );
+  return isSuccess ? (
+    <div className={cx("product-related")}>
+      <h3 className={cx("title")}>{title}</h3>
+      <SlideShow
+        handleMoveSlide={handleMoveSlide}
+        handleTransitionEnd={handleTransitionEnd}
+        style={style}
+      >
+        {data?.data.products.map((product) => (
+          <div className={`col-3`}>
+            <ProductItem product={product} brandImg={true} />
+          </div>
+        ))}
+      </SlideShow>
+    </div>
+  ) : null;
 };
 
 export default ProductsRelatedSlide;

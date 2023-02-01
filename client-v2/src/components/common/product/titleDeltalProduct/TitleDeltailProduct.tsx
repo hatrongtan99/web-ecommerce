@@ -13,7 +13,7 @@ const TitleDeltailProduct = ({ product }: { product: ProductDetails }) => {
       <StarEvaluate
         detail={{
           sold: product.sold,
-          totalReviews: product.totalReviews,
+          totalFeedback: product.totalFeedback,
           rating: product.rating,
         }}
       />

@@ -1,6 +1,8 @@
 import classNames from "classnames/bind";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
 import styles from "./productItem.module.scss";
 
 const cx = classNames.bind(styles);
@@ -11,11 +13,13 @@ interface ProductItemProps {
 }
 
 const ProductItem = ({ brandImg, product }: ProductItemProps) => {
+  const router = useRouter();
   const newPrice = product.price - (product.price * product.discount) / 100;
   const image = product.images[0] ?? product.images;
+
   return (
     <div className={cx("product__item")}>
-      <Link href="/" legacyBehavior>
+      <Link href={`/${router.query.category}/${product.slug}`} legacyBehavior>
         <a>
           <Image
             alt={`${product.name_product}`}
@@ -30,9 +34,12 @@ const ProductItem = ({ brandImg, product }: ProductItemProps) => {
       {brandImg ? (
         <Link href="/" legacyBehavior>
           <a>
-            <img
+            <Image
+              alt={`brands`}
               className={cx("product__item__brand")}
-              src="https://maydochuyendung.com/img/uploads/cache_image/x35-milwaukee-logo-1584090720.png"
+              src={product.brand.brand_thumb}
+              height={30}
+              width={60}
             />
           </a>
         </Link>

@@ -11,36 +11,41 @@ interface FilterInputProps {
   title?: string;
   image?: string;
   active: boolean;
-  handleclick?: (e: MouseEvent<HTMLElement>) => void;
+  handleClick?: (e: MouseEvent<HTMLElement>) => void;
 }
 
 const FilterInput = ({
   title,
   image,
   active,
-  handleclick,
+  handleClick,
   ...props
 }: FilterInputProps) => {
   return (
     <div
       className={cx("filter-input", { active })}
       {...props}
-      onClick={handleclick}
+      onClick={handleClick}
     >
-      <div>
-        <BsCheckLg className={cx("filter-input__checked")} />
-        <GrCheckbox className={cx("filter-input__unchecked")} />
-        {title ? <span>{title}</span> : null}
+      <div className="d-flex justify-content-center align-items-center">
+        <div>
+          <BsCheckLg
+            className={cx("filter-input__checked", { image_brand: !!image })}
+          />
+          <GrCheckbox className={cx("filter-input__unchecked")} />
+          {title ? <span>{title}</span> : null}
+        </div>
+
+        {image ? (
+          <Image
+            src={image}
+            alt="Picture of the brand"
+            style={{ marginTop: "5px" }}
+            width={60}
+            height={30}
+          />
+        ) : null}
       </div>
-      {image ? (
-        <Image
-          src={image}
-          alt="Picture of the brand"
-          style={{ marginTop: "5px" }}
-          width={30}
-          height={30}
-        />
-      ) : null}
     </div>
   );
 };

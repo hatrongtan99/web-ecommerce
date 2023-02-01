@@ -56,7 +56,7 @@ const listGroups = [
 
 const Footer = () => {
   return (
-    <footer id="footer">
+    <footer id={cx("footer")}>
       <section className={`container ${cx("footer-wrapper")}`}>
         <div className="row">
           <div className="col-3">

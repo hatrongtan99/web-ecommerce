@@ -36,8 +36,8 @@ const FormSelectProductCategory = ({
                 Chọn loại hàng
             </option>
             {categories.length > 0 &&
-                categories.map((category) => (
-                    <option
+                categories.map((category, index) => (
+                    <option key={index}
                     // key={category.categoryId}
                     // value={category.categoryId}
                     >

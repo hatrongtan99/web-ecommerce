@@ -8,6 +8,7 @@ const RequireAuth = ({
 }: {
   children: ReactNode;
   authValid: string[];
+  publicPage?: boolean;
 }) => {
   const router = useRouter();
 
@@ -15,14 +16,15 @@ const RequireAuth = ({
 
   useEffect(() => {
     if (!auth?.success || !auth.token) {
-      setRedirect(router.route);
-      router.push("/");
+      setRedirect({ pathname: router.pathname, query: router.query });
+      router.push("/auth/login");
     }
-  }, [auth, router]);
+  }, [auth, router, setRedirect]);
 
   if (auth?.success && authValid.includes(auth.user.role)) {
     return <>{children}</>;
   }
+
   if (auth?.success) {
     return <h2>you can't access this resource</h2>;
   }

@@ -102,7 +102,7 @@ const SlideDetailProduct = ({ images }: { images: string[] }) => {
         >
           {images.map((img, index) => {
             return (
-              <div className={cx("slide-item")} key={img}>
+              <div className={cx("slide-item")} key={index}>
                 <img src={img} />
                 <div
                   className={cx("magnify-lens")}

@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
+import "react-toastify/dist/ReactToastify.css";
 import "~styles/globals.css";
 import "~styles/index.scss";
 
@@ -12,8 +13,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NextPage } from "next";
 import type { AppProps } from "next/app";
 
+// context
 import AuthProvider from "~context/AuthProvider";
 
+// layout
 import MainLayout from "~components/common/mainLayout/MainLayout";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {

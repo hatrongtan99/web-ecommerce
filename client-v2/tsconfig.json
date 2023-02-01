@@ -26,6 +26,6 @@
             "~data/*": ["src/data/*"]
         }
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/[category]"],
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/[category]", "pages/[slug]", "pages/[slug]"],
     "exclude": ["node_modules"]
 }

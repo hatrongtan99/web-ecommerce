@@ -2,6 +2,7 @@ const catchSyncErr = require("../utils/catchSyncErr");
 const ThrowError = require("../utils/throwError");
 const Products = require("../models/products.model");
 const Categories = require("../models/categories.model");
+const Description = require("../models/descProduct.model");
 const { limit } = require("../config/key");
 
 const { search, filter } = require("../utils/queryFeature");
@@ -35,7 +36,13 @@ class ProductsController {
   getProductsByCategory = catchSyncErr(async (req, res, next) => {
     const { slug } = req.params;
     const { sort, query } = filter(req.query);
-    const { page = 1 } = req.query;
+    const { page = 1, exc } = req.query;
+    if (exc) {
+      const excId = exc.split(",");
+      query._id = {
+        $nin: [...excId],
+      };
+    }
     const skip = (page - 1) * RESULT_PER_PAGE;
 
     let products = await Categories.findOne({ slug })
@@ -117,7 +124,10 @@ class ProductsController {
     const product = await Products.findOne({
       slug: req.params.slug,
       deleted: false,
-    }).populate("brand");
+    })
+      .populate("brand")
+      .populate({ path: "desc", select: "-product -__v" })
+      .populate({ path: "categories", select: "name slug -_id" });
     if (!product) {
       return next(new ThrowError("Product not found!", 400));
     }
@@ -153,6 +163,40 @@ class ProductsController {
       return next(new ThrowError("Product not found!", 400));
     }
     res.json({ success: true, message: "Delete product successfully!" });
+  });
+
+  //@desc: create new desc
+  //@route: [POST]/v2/api/products/desc/:id
+  //@access: Admin
+  description = catchSyncErr(async (req, res, next) => {
+    const { id } = req.params;
+    const newDesc = await Description.findOneAndUpdate(
+      { product: id },
+      req.body,
+      { new: true, upsert: true }
+    );
+
+    await Products.findOneAndUpdate(
+      { _id: id },
+      { $set: { desc: newDesc.id } }
+    );
+
+    res.json({ success: true, message: "Update desc successfully" });
+  });
+
+  //@desc: delete desc
+  //@route: [DELETE]/v2/api/products/desc/:id
+  //@access: Admin
+  deleteDesc = catchSyncErr(async (req, res, next) => {
+    const { id } = req.params;
+    await Products.findOneAndUpdate({ _id: id }, { desc: null });
+
+    await Description.findOneAndDelete({ product: id });
+
+    res.json({
+      success: true,
+      message: `Delete description product id ${id} successfully`,
+    });
   });
 }
 

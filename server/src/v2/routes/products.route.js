@@ -15,6 +15,20 @@ router
 // get products by categorry
 router.route("/category/:slug").get(productsController.getProductsByCategory);
 
+// desc product
+router
+  .route("/desc/:id")
+  .post(
+    auth.protectRoute,
+    auth.authAdmin(["Admin"]),
+    productsController.description
+  )
+  .delete(
+    auth.protectRoute,
+    auth.authAdmin(["Admin"]),
+    productsController.deleteDesc
+  );
+
 // get detail product
 router.route("/:slug").get(productsController.getDetailsProduct);
 

@@ -3,39 +3,69 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 
 import axiosClient from "~api/axiosConfig";
-import { getDetailsProduct } from "~api/product.api";
-import Breadcrumb from "~components/common/breabcrumb";
+import { getDetailsProduct, getProductByCategory } from "~api/product.api";
+import Breadcrumb from "~components/common/breabcrumb/Breabcrum";
 import TitleDeltailProduct from "~components/common/product/titleDeltalProduct/TitleDeltailProduct";
 import Spinner from "~components/common/spiner/Spiner";
 import ProductContent from "~components/layout/detailProduct/productContent/ProductContent";
-import ProductDescription from "~components/layout/detailProduct/productDescription";
+import ProductDescription from "~components/layout/detailProduct/productDescription/ProductDescription";
+import ProductsRelatedSlide from "~components/layout/productsRelatedSlide/ProductsRelatedSlide";
+import Comment from "~components/layout/comment/Comment";
+import Rating from "~components/layout/rating/Rating";
 
 const ProductDetail = () => {
   const router = useRouter();
   const { slug } = router.query;
+
   const { data, isLoading } = useQuery(["detail-product", slug], () =>
     getDetailsProduct(axiosClient, slug as string)
   );
+
   return (
     <main className="main-content">
-      <div className="container">
-        <Breadcrumb />
-
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <Breadcrumb
+            listPath={[
+              {
+                name: data?.product.categories[0]?.name!,
+                path: data?.product.categories[0]?.slug!,
+              },
+              {
+                name: data?.product.name_product!,
+                path: data?.product.slug!,
+              },
+            ]}
+          />
+          <div className="container">
             <TitleDeltailProduct product={data?.product!} />
 
             <ProductContent product={data?.product!} />
 
             <ProductDescription
-              description={""}
+              description={data?.product.desc}
               catalog={data?.product.catalog!}
             />
-          </>
-        )}
-      </div>
+
+            <div className="col-8">
+              <Rating />
+
+              <ProductsRelatedSlide
+                title="Sản phẩm liên quan"
+                relate={{
+                  id: data?.product._id,
+                  relate: data?.product.specialField,
+                  category: data?.product.categories[0],
+                }}
+              />
+
+              <Comment />
+            </div>
+          </div>
+        </>
+      )}
     </main>
   );
 };
@@ -55,8 +85,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const { slug } = context.params!;
+  const { category, slug } = context.params!;
   const queryClient = new QueryClient();
+
   await queryClient.prefetchQuery(["detail-product", slug], () =>
     getDetailsProduct(axiosClient, slug as string)
   );

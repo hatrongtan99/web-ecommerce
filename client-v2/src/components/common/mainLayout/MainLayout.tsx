@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { ReactNode } from "react";
+import Navbar from "../navbar/Navbar";
 import Footer from "./Footer";
 import Header from "./Header";
 
@@ -16,6 +17,7 @@ const MainLayout = ({ children, titlePage }: MainLayoutProps) => {
       </Head>
 
       <Header />
+      <Navbar />
       {children}
       <Footer />
     </>

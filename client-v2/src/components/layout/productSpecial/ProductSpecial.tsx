@@ -1,28 +1,42 @@
-import { memo } from 'react';
-import classNames from 'classnames/bind';
+import { memo } from "react";
+import classNames from "classnames/bind";
+import { useRouter } from "next/router";
 
-import styles from './productSpecial.module.scss';
-import SlideSpecialProduct from './slideSpecialProduct/SlideSpecialProduct';
+import styles from "./productSpecial.module.scss";
+import SlideSpecialProduct from "./slideSpecialProduct/SlideSpecialProduct";
+import { useQuery } from "@tanstack/react-query";
+import { getProductByCategory } from "~api/product.api";
+import axiosClient from "~api/axiosConfig";
 
 const cx = classNames.bind(styles);
 
 interface ProductSpecialProps {
-    title?: string;
+  title?: string;
 }
 const ProductSpecial = ({
-    title = 'Máy Khoan Nổi Bật',
+  title = "Máy Khoan Nổi Bật",
 }: ProductSpecialProps) => {
-    return (
-        <div className={cx('special-wrapper')}>
-            <div className={cx('special__title')}>
-                <h2>{title}</h2>
-                <span></span>
-            </div>
-            <div className={cx('special__slice')}>
-                <SlideSpecialProduct data />
-            </div>
-        </div>
-    );
+  const router = useRouter();
+
+  const { category } = router.query!;
+  const { data, isSuccess } = useQuery(["list-product-special"], () =>
+    getProductByCategory(axiosClient, category as string, {
+      page: 1,
+      limit: 8,
+    })
+  );
+
+  return isSuccess ? (
+    <div className={cx("special-wrapper")}>
+      <div className={cx("special__title")}>
+        <h2>{title}</h2>
+        <span></span>
+      </div>
+      <div className={cx("special__slice")}>
+        <SlideSpecialProduct data={data.data.products} />
+      </div>
+    </div>
+  ) : null;
 };
 
 export default memo(ProductSpecial);

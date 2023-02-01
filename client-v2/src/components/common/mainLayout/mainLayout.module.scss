@@ -1,84 +1,143 @@
-@use '~styles/mixins' as mixins;
-@import '~styles/variable';
+@use "~styles/mixins" as mixins;
+@import "~styles/variable";
 
 // header
 .header-wrapper {
-    @include mixins.flex(center, center);
-    height: $header-height;
-    width: 100%;
-    background-color: #fff;
+  @include mixins.flex(center, center);
+  height: $header-height;
+  width: 100%;
+  background-color: #f16144;
 }
+
 .header {
-    @include mixins.flex(center, space-between);
-    width: 100%;
+  @include mixins.flex(center, space-between);
+  width: 100%;
 
-    // search
-    &__search {
-        .form__search {
-            position: relative;
-            display: flex;
-            background: rgba(22, 24, 35, 0.06);
-            border-radius: 999px;
-            overflow: hidden;
-            border: 1px solid transparent;
+  // search
+  &__search {
+    .form__search {
+      position: relative;
+      display: flex;
+      border-radius: 999px;
+      background-color: #fff;
 
-            input,
-            button {
-                background-color: transparent;
-                color: #666;
-                height: $header-search-height;
-            }
+      input,
+      button {
+        background-color: transparent;
+        color: $text-color;
+        height: $header-search-height;
+      }
 
-            input {
-                flex: 1;
-                padding-left: 18px;
-            }
+      input {
+        flex: 1;
+        padding-left: 18px;
+      }
 
-            button {
-                padding: 0 16px 0 14px;
-            }
+      button {
+        padding: 0 16px 0 14px;
+      }
 
-            button:hover {
-                background-color: rgba(22, 24, 35, 0.03);
-            }
+      button:hover {
+        background-color: rgba(22, 24, 35, 0.03);
+      }
 
-            &::before {
-                content: '';
-                position: absolute;
-                width: 1px;
-                height: calc($header-search-height - 16px);
-                background-color: rgba(22, 24, 35, 0.12);
-                right: 46px;
-                top: 50%;
-                transform: translateY(-50%);
-            }
+      &::before {
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: calc($header-search-height - 16px);
+        background-color: rgba(22, 24, 35, 0.12);
+        right: 46px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
 
-            &:focus-within {
-                border-color: rgb(197, 198, 201);
-            }
-        }
+      &:focus-within {
+        border-color: rgb(197, 198, 201);
+      }
     }
+  }
+
+  &__cart {
+    cursor: pointer;
+    padding: 5px;
+    width: auto;
+    position: relative;
+    border-radius: 50%;
+
+    &:hover {
+      svg {
+        transform: scale(1.2);
+        transition: all 0.3s ease;
+      }
+    }
+
+    &__count {
+      @include mixins.flex(center, center);
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      top: 0;
+      left: 20px;
+      background-color: #fff;
+      border-radius: 50%;
+      color: #fd3620;
+
+      span {
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__product-review {
+    margin: 0 20px;
+  }
+
+  &__user {
+    text-align: end;
+    margin-right: 10px;
+
+    &__auth {
+      @include mixins.flex(center, flex-end);
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 2px;
+      cursor: pointer;
+      span {
+        height: calc($header-height - 34px);
+        width: 1px;
+        background-color: #fff;
+        margin: 0 8px;
+      }
+
+      p {
+        &:hover {
+          color: rgb(210, 210, 210);
+        }
+      }
+    }
+  }
 }
 
 //footer
 #footer {
-    border-top: 3px solid #ddd;
+  border-top: 3px solid #ddd;
 }
 
 .footer-wrapper {
-    margin-top: 2rem;
+  margin-top: 2rem;
 
-    .title-group {
-        font-size: 0.9rem;
-        font-weight: bold;
-        text-decoration: underline;
-    }
+  .title-group {
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-decoration: underline;
+  }
 
-    .list-group {
-        li {
-            font-size: 0.9rem;
-            font-weight: 400;
-            padding-top: 10px;
-        }
+  .list-group {
+    li {
+      font-size: 0.9rem;
+      font-weight: 400;
+      padding-top: 10px;
     }
+  }
 }

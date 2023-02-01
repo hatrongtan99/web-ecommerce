@@ -1,13 +1,14 @@
-const mongoose = require('mongoose');
-const url = 'mongodb://127.0.0.1:27017/web-ecommerce';
+const mongoose = require("mongoose");
+const { mongoose: mongoosekey } = require("./key");
+const url = mongoosekey.url;
 
 const connMongoose = function () {
-    mongoose
-        .connect(url)
-        .then((conn) => {
-            console.log('Connect to Mongoose successfully.');
-        })
-        .catch((err) => console.log(err));
+  mongoose
+    .connect(url)
+    .then((conn) => {
+      console.log("Connect to Mongoose successfully.");
+    })
+    .catch((err) => console.log(err));
 };
 
 module.exports = connMongoose;

@@ -27,7 +27,7 @@ const productsSchema = new Schema(
       type: Number,
       default: 0,
     },
-    totalReviews: {
+    totalFeedback: {
       type: Number,
       default: 0,
     },
@@ -53,11 +53,22 @@ const productsSchema = new Schema(
         content: { type: String, required: true },
       },
     ],
+    desc: {
+      type: ObjectId,
+      ref: "Description",
+      default: null,
+    },
     deleted: {
       type: Boolean,
       default: false,
     },
     slug: { type: String, unique: true },
+    categories: [
+      {
+        type: ObjectId,
+        ref: "Categories",
+      },
+    ],
     created: { type: Date, default: Date.now() },
     updated: Date,
   },
