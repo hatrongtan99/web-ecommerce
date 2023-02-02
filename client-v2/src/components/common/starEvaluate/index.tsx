@@ -6,11 +6,11 @@ import styles from "./starEvaluate.module.scss";
 const cx = classNames.bind(styles);
 
 const StarEvaluate = ({ detail }: { detail: any }) => {
-  const { rating, sold, totalReviews } = detail;
+  const { rating, sold, totalFeedback } = detail;
   return (
     <div className={cx("star-wrapper")}>
       <div className={cx("rating")}>
-        <p>{rating}</p>
+        <p>{rating.toFixed(2)}</p>
       </div>
       <div className={cx("star")}>
         {new Array(5).fill(0).map((star, index) => (
@@ -25,7 +25,7 @@ const StarEvaluate = ({ detail }: { detail: any }) => {
       <span className={cx("separate")}></span>
 
       <div className={cx("rating")}>
-        <p>{totalReviews}</p>
+        <p>{totalFeedback}</p>
         <span>&nbsp; đánh giá</span>
       </div>
 

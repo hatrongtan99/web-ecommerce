@@ -4,7 +4,6 @@ const imagesRoute = require("./images.route");
 const brandsRoute = require("./brands.route");
 const cartsRoute = require("./carts.route");
 const categoryRote = require("./category.route");
-const reviewRoute = require("./review.route");
 const orderRoute = require("./order.route");
 const commentRoute = require("./comment.route");
 const feedbackRoute = require("./feedbacks.route");
@@ -22,8 +21,6 @@ const routes = function (app) {
   app.use("/v2/api/cart", cartsRoute);
   // category
   app.use("/v2/api/category", categoryRote);
-  // review
-  app.use("/v2/api/review", reviewRoute);
   // order
   app.use("/v2/api/order", orderRoute);
   //comment

@@ -23,9 +23,9 @@ class CommentsController {
 
     return res.json({
       success: true,
-      comments: listCmt[0].comments,
+      comments: listCmt[0]?.comments,
       meta: {
-        count: listCmt[0].count,
+        count: listCmt[0]?.count,
         totals,
         page: +page,
       },
