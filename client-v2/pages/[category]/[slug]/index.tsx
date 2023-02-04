@@ -49,7 +49,7 @@ const ProductDetail = () => {
             />
 
             <div className="col-8">
-              <Rating />
+              <Rating id={data?.product._id!} />
 
               <ProductsRelatedSlide
                 title="Sản phẩm liên quan"
@@ -79,7 +79,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         },
       },
     ],
-    fallback: false,
+    fallback: "blocking",
   };
 };
 

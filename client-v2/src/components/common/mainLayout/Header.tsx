@@ -2,29 +2,32 @@ import classNames from "classnames/bind";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 
 import { AuthContext } from "~context/AuthProvider";
 import styles from "./mainLayout.module.scss";
 import SearchInput from "./SearchInput";
 import Button from "~components/custom/button/Button";
-import useAxiosPrivate from "~hook/useAxiosPrivate";
 import { loginSuccess } from "~api/user.api";
+import useAxiosPrivate from "~hook/useAxiosPrivate";
+import { useQuery } from "@tanstack/react-query";
+import { getCartUser } from "~api/cart.api";
 
 const cx = classNames.bind(styles);
 
 const Header = () => {
-  const axiosPrivate = useAxiosPrivate();
   const router = useRouter();
+  const axiosPrivate = useAxiosPrivate();
   const { auth, setRedirect, redirect, setAuth } = useContext(AuthContext);
-  const [isLoadUser, setIsLoadUser] = useState(true);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleClickCartIcon = () => {
     if (!auth || !auth.token) {
       setRedirect({ pathname: router.pathname, query: router.query });
       router.push("/auth/login");
     } else {
-      router.push(redirect);
+      router.push(`/checkout/${auth.user._id}`);
     }
   };
 
@@ -37,19 +40,31 @@ const Header = () => {
   };
 
   useEffect(() => {
+    if (auth && auth.token) {
+      setIsLoading(false);
+      return;
+    }
     (async function () {
-      setIsLoadUser(true);
       try {
         const res = await loginSuccess(axiosPrivate);
-        if (res.success) {
-          setAuth(res);
+        if (res.data?.success && res.data?.token) {
+          setAuth(res.data);
         }
       } catch (error) {
         console.log(error);
       }
-      setIsLoadUser(false);
+      setIsLoading(false);
     })();
-  }, [axiosPrivate]);
+  }, [auth]);
+
+  // cart user
+  const { data: cartUser, isSuccess } = useQuery(
+    ["cart-user", auth?.user._id],
+    () => getCartUser(axiosPrivate)
+  );
+
+  const item =
+    isSuccess && cartUser.data.cart ? cartUser.data.cart.products.length : 0;
 
   return (
     <header className={`container-fluid ${cx("header-wrapper")}`}>
@@ -69,7 +84,7 @@ const Header = () => {
           <BsFillCartCheckFill size={24} color="#fff" />
 
           <div className={cx("header__cart__count")}>
-            <span>2</span>
+            <span>{item}</span>
           </div>
         </div>
 
@@ -82,15 +97,16 @@ const Header = () => {
             Sản phẩm đã xem
           </Button>
         </div>
+
         <div className={`col-2 ${cx("header__user")}`}>
-          {isLoadUser ? null : !auth?.token ? (
+          {isLoading ? null : auth && auth.token ? (
+            <div className={cx("header__user__info")}>userinfo</div>
+          ) : (
             <div className={cx("header__user__auth")}>
               <p onClick={() => handleAuth("register")}>Đăng ký</p>
               <span></span>
               <p onClick={() => handleAuth("login")}>Đăng nhập</p>
             </div>
-          ) : (
-            <div className={cx("header__user__info")}>userinfo</div>
           )}
         </div>
       </div>

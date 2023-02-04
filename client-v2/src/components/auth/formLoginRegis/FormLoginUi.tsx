@@ -10,16 +10,16 @@ import { AuthContext } from "~context/AuthProvider";
 import google from "../../../../public/image/google.png";
 import styles from "./formLayout.module.scss";
 import { userLoginByGoogle, userLoginLocal } from "~api/user.api";
-import axiosClient from "~api/axiosConfig";
 import Button from "~components/custom/button/Button";
-import { setStorage } from "~utils/storage";
+import useAxiosPrivate from "~hook/useAxiosPrivate";
 
 const cx = classNames.bind(styles);
 
 const FormLoginUi = () => {
   const router = useRouter();
-  const { setAuth, persirt, setPersirt, redirect, auth } =
-    useContext(AuthContext);
+  const axiosPrivate = useAxiosPrivate();
+
+  const { setAuth, persirt, setPersirt, redirect } = useContext(AuthContext);
 
   const hanldeLoginSocial = async (type: "google" | "facebook") => {
     if (type == "google") {
@@ -30,11 +30,10 @@ const FormLoginUi = () => {
   const handleLoginLocal = async (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await userLoginLocal(user);
+      const res = await userLoginLocal(axiosPrivate, user);
       if (res.success) {
         setAuth(res);
-        setStorage("token", res.token, "sessionStorage");
-        router.push("/may-khoan-pin");
+        router.push(redirect);
       }
     } catch (error: any) {
       notify("error", error.response?.data?.message);

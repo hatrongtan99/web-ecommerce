@@ -1,26 +1,20 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useContext } from "react";
+import { refreshToken } from "~api/user.api";
 import { AuthContext } from "~context/AuthProvider";
-import { getStorage } from "~utils/storage";
+import { axiosPrivate } from "~api/axiosConfig";
 
 const useAxiosPrivate = () => {
-  const axiosClient = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BASE_URL_SERVER,
-    headers: {
-      "content-type": "application/json",
-    },
-    withCredentials: true,
-  });
-  const { auth } = useContext(AuthContext);
+  const { auth, persirt, setAuth } = useContext(AuthContext);
 
   useEffect(() => {
-    const token =
-      auth?.token ??
-      JSON.parse(getStorage("token", "sessionStorage") as string);
-    const axiosClientRequest = axiosClient.interceptors.request.use(
+    const token = auth?.token;
+    const axiosPrivateRequest = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers!["Authorization"]) {
-          config.headers!["Authorization"] = `Bearer ${token}`;
+          if (token) {
+            config.headers!["Authorization"] = `Bearer ${token}`;
+          }
         }
         return config;
       },
@@ -29,25 +23,37 @@ const useAxiosPrivate = () => {
       }
     );
 
-    const axiosClientResponse = axiosClient.interceptors.response.use(
+    const axiosPrivateResponse = axiosPrivate.interceptors.response.use(
       (response) => {
-        if (response && response.data) {
-          return response.data;
-        }
         return response;
       },
-      (err) => {
-        return Promise.reject(err);
+      async (err: AxiosError) => {
+        const prevRequest = err?.config!;
+        if (err.response?.status === 403) {
+          if (prevRequest.url !== "/users/refresh-token") {
+            try {
+              const res = await refreshToken(axiosPrivate);
+              if (res.data?.success && res.data?.token) {
+                setAuth(res.data);
+                return axiosPrivate(prevRequest);
+              }
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        } else {
+          return Promise.reject(err);
+        }
       }
     );
 
     return () => {
-      axiosClient.interceptors.request.eject(axiosClientRequest);
-      axiosClient.interceptors.response.eject(axiosClientResponse);
+      axiosPrivate.interceptors.request.eject(axiosPrivateRequest);
+      axiosPrivate.interceptors.response.eject(axiosPrivateResponse);
     };
-  }, [auth]);
+  }, [axiosPrivate, auth]);
 
-  return axiosClient;
+  return axiosPrivate;
 };
 
 export default useAxiosPrivate;

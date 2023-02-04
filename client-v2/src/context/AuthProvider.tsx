@@ -7,7 +7,7 @@ import {
   SetStateAction,
   useEffect,
 } from "react";
-import { getStorage, setStorage } from "~utils/storage";
+import { setStorage } from "~utils/storage";
 import { ParsedUrlQuery } from "querystring";
 
 interface AuthContextProps {

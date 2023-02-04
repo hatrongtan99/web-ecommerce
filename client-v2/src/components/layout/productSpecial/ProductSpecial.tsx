@@ -18,6 +18,7 @@ const ProductSpecial = ({
   const router = useRouter();
 
   const { category } = router.query!;
+
   const { data, isSuccess } = useQuery(["list-product-special"], () =>
     getProductByCategory(category as string, {
       page: 1,

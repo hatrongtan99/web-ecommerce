@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-const pageLienHe = () => {
+const PageLienHe = () => {
   const router = useRouter();
   useEffect(() => {
     router.push("/");
@@ -9,4 +9,4 @@ const pageLienHe = () => {
   return <div>lien he</div>;
 };
 
-export default pageLienHe;
+export default PageLienHe;

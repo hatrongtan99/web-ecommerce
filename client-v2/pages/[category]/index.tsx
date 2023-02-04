@@ -9,44 +9,39 @@ import Breadcrumb from "~components/common/breabcrumb/Breabcrum";
 import ProductSpecial from "~components/layout/productSpecial/ProductSpecial";
 import SortProduct from "~components/common/product/sortProducts/SortProduct";
 import { getProductByCategory } from "~api/product.api";
-import Spinner from "~components/common/spiner/Spiner";
 
 const Category = () => {
   const router = useRouter();
   const { category } = router.query;
 
-  const { data, isLoading } = useQuery(
+  const { data, isSuccess } = useQuery(
     ["list-product-by-category", category, router.query],
-    () =>
-      getProductByCategory(category as string, {
-        ...router.query,
-      }),
+    () => getProductByCategory(category as string, router.query),
     { refetchOnWindowFocus: false }
   );
 
   return (
     <main className="main-content">
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          <Breadcrumb
-            listPath={[{ name: data?.data.name!, path: data?.data.slug! }]}
-          />
-          <div className="container">
-            <div className="row">
-              <div className="col-3">
-                <FilterLayout />
-              </div>
-              <div className="col-9">
-                <ProductSpecial />
-                <SortProduct />
-                <ProductList data={data?.data.products} />
-              </div>
-            </div>
+      <Breadcrumb
+        listPath={[
+          {
+            name: data?.data.name! ?? "",
+            path: data?.data.slug! ?? "",
+          },
+        ]}
+      />
+      <div className="container">
+        <div className="row">
+          <div className="col-3">
+            <FilterLayout />
           </div>
-        </>
-      )}
+          <div className="col-9">
+            <ProductSpecial />
+            <SortProduct />
+            {isSuccess ? <ProductList data={data?.data.products} /> : null}
+          </div>
+        </div>
+      </div>
     </main>
   );
 };
@@ -59,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   await queryClient.prefetchQuery(
     ["list-product-by-category", category, context.query],
-    () => getProductByCategory(category as string)
+    () => getProductByCategory(category as string, context.query)
   );
 
   await queryClient.prefetchQuery(["list-product-special"], () =>

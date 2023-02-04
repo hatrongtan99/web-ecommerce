@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 
 const FilterByBrand = () => {
   const { data, isSuccess } = useQuery(["brands"], () => getAllBrand());
-  const { active, handleClick } = useSetActiveFilterLayout();
+  const { active, handleClick } = useSetActiveFilterLayout("brand");
 
   return (
     <div className={cx("filter-group")}>

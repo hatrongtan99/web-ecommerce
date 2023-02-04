@@ -19,9 +19,10 @@ const FilterSpecialField = ({
   data,
   queryField,
 }: FilterSpecialFieldProps) => {
-  const { active, handleClick } = useSetActiveFilterLayout();
+  const { active, handleClick } = useSetActiveFilterLayout(queryField);
   const router = useRouter();
   usepushQueryUrl(queryField, active, router);
+
   return (
     <div className={cx("filter-group")}>
       <h4>{title}</h4>

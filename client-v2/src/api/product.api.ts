@@ -1,4 +1,4 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosResponse } from "axios";
 import { CommonResponse } from "~types/index.type";
 import {
   CreateProduct,
@@ -8,16 +8,18 @@ import {
 import axiosClient from "./axiosConfig";
 
 export const getAllProducts = (params?: any) => {
-  return axiosClient.get("/products", params);
+  return axiosClient.get("/products", params).then((data) => data.data);
 };
 
 export const getProductByCategory = (slug: string, params?: any) => {
-  return axiosClient.get<never, { success: boolean; data: ProductByCategory }>(
-    `/products/category/${slug}`,
-    {
-      params,
-    }
-  );
+  return axiosClient
+    .get<never, AxiosResponse<{ success: boolean; data: ProductByCategory }>>(
+      `/products/category/${slug}`,
+      {
+        params,
+      }
+    )
+    .then((data) => data.data);
 };
 
 export const createProduct = (
@@ -28,13 +30,17 @@ export const createProduct = (
 };
 
 export const getDetailsProduct = (slug: string) => {
-  return axiosClient.get<never, { success: boolean; product: ProductDetails }>(
-    `/products/${slug}`
-  );
+  return axiosClient
+    .get<never, AxiosResponse<{ success: boolean; product: ProductDetails }>>(
+      `/products/${slug}`
+    )
+    .then((data) => data.data);
 };
 
 export const updateProduct = (axiosPrivate: AxiosInstance) => {};
 
 export const deleteProduct = (axiosPrivate: AxiosInstance, id: string) => {
-  return axiosPrivate.delete<never, CommonResponse>(`/products/${id}`);
+  return axiosPrivate.delete<never, AxiosResponse<CommonResponse>>(
+    `/products/${id}`
+  );
 };

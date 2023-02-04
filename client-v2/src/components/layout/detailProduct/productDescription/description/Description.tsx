@@ -17,7 +17,7 @@ const Description = ({ desc }: { desc: any }) => {
   useEffect(() => {
     if (divRef !== null) {
       const x = divRef.current?.getBoundingClientRect();
-      if (x?.height && x.height <= 500) {
+      if (x && x.height <= 500) {
         setShowBtn(false);
       }
     }
@@ -25,7 +25,7 @@ const Description = ({ desc }: { desc: any }) => {
 
   return (
     <div className={cx("description", { full: showFull })}>
-      <div dangerouslySetInnerHTML={{ __html: desc.desc }} ref={divRef} />
+      <div dangerouslySetInnerHTML={{ __html: desc?.desc }} ref={divRef} />
       {showBtn && (
         <>
           <div className={cx("overlay", { hiden: !showFull == false })}>

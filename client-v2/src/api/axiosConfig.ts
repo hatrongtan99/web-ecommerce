@@ -5,18 +5,14 @@ const axiosClient = axios.create({
   headers: {
     "content-type": "application/json",
   },
-  withCredentials: true,
 });
 
-axiosClient.interceptors.response.use(
-  (response) => {
-    if (response && response.data) {
-      return response.data;
-    }
+export const axiosPrivate = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL_SERVER,
+  headers: {
+    "content-type": "application/json",
   },
-  (err) => {
-    return Promise.reject(err);
-  }
-);
+  withCredentials: true,
+});
 
 export default axiosClient;

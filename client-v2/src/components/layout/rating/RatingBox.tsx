@@ -6,8 +6,10 @@ import styles from "./rating.module.scss";
 
 const cx = classNames.bind(styles);
 
-const RatingBox = () => {
-  const rating = 4;
+const RatingBox = ({ data }: { data: any }) => {
+  const { detail, avg } = data;
+  const totalSum = detail.reduce((acc: any, curr: any) => acc + curr.sum, 0);
+
   return (
     <div className={cx("rating")}>
       <div className={cx("rating__header")}>
@@ -17,87 +19,55 @@ const RatingBox = () => {
 
       <div className={cx("rating__box")}>
         <div className={cx("rating__box__result")}>
-          <p>{rating.toFixed(1)}</p>
+          <p>
+            {avg?.toLocaleString("en-US", {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            }) ?? 0}
+          </p>
           <div className={cx("rating__box__star")}>
             {new Array(5).fill(0).map((star, index) => (
               <AiTwotoneStar
                 size={25}
-                color={index + 1 <= rating ? "#f4c91f" : "#ddd"}
+                color={index + 1 <= avg ? "#f4c91f" : "#ddd"}
                 key={index}
               />
             ))}
           </div>
-          <span>1 đánh giá</span>
+          <span>{totalSum} đánh giá</span>
         </div>
 
-        <div className={`row ${cx("rating__products")}`}>
-          <div className="col-6">
-            <div className={cx("rating__products__item")}>
-              <div className={cx("info-left")}>
-                5 <AiTwotoneStar size={18} color="#f4c91f" />
+        <div className={`col-12 row ${cx("rating__products")}`}>
+          {[5, 2, 4, 1, 3].map((num) => {
+            const item = detail.find((i: any) => i.star === num);
+            let degre: string;
+            if (totalSum == 0 || !item) {
+              degre = "0 %";
+            } else {
+              degre =
+                (((item?.sum ?? 0) / totalSum) * 100).toLocaleString("en-US", {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                }) + "%";
+            }
+            return (
+              <div className="col-6" key={num}>
+                <div className={cx("rating__products__item")}>
+                  <div className={cx("info-left")}>
+                    {item?.star ?? num}{" "}
+                    <AiTwotoneStar size={18} color="#f4c91f" />
+                  </div>
+                  <div className={cx("rating-process")}>
+                    <span style={{ width: degre }}></span>
+                  </div>
+                  <div className={cx("info-right")}>
+                    <p>{degre}</p>
+                    <span>{item?.sum ?? 0} đánh giá</span>
+                  </div>
+                </div>
               </div>
-              <div className={cx("rating-process")}>
-                <span></span>
-              </div>
-              <div className={cx("info-right")}>
-                <p>100%</p>
-                <span>1 đánh giá</span>
-              </div>
-            </div>
-
-            <div className={cx("rating__products__item")}>
-              <div className={cx("info-left")}>
-                4 <AiTwotoneStar size={18} color="#f4c91f" />
-              </div>
-              <div className={cx("rating-process")}>
-                <span></span>
-              </div>
-              <div className={cx("info-right")}>
-                <p>0%</p>
-                <span>0 đánh giá</span>
-              </div>
-            </div>
-
-            <div className={cx("rating__products__item")}>
-              <div className={cx("info-left")}>
-                3 <AiTwotoneStar size={18} color="#f4c91f" />
-              </div>
-              <div className={cx("rating-process")}>
-                <span></span>
-              </div>
-              <div className={cx("info-right")}>
-                <p>0%</p>
-                <span>0 đánh giá</span>
-              </div>
-            </div>
-          </div>
-          <div className="col-6">
-            <div className={cx("rating__products__item")}>
-              <div className={cx("info-left")}>
-                2 <AiTwotoneStar size={18} color="#f4c91f" />
-              </div>
-              <div className={cx("rating-process")}>
-                <span></span>
-              </div>
-              <div className={cx("info-right")}>
-                <p>0%</p>
-                <span>0 đánh giá</span>
-              </div>
-            </div>
-
-            <div className={cx("rating__products__item")}>
-              <div className={cx("info-left")}>
-                1 <AiTwotoneStar size={18} color="#f4c91f" />
-              </div>
-              <div className={cx("rating-process")}>
-                <span></span>
-              </div>
-              <div className={cx("info-right")}>
-                <p>0%</p>
-                <span>0 đánh giá</span>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>

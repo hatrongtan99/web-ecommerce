@@ -1,39 +1,49 @@
 import classNames from "classnames/bind";
-import RatingBox from "./RatingBox";
-
-import styles from "./rating.module.scss";
 import { AiFillStar } from "react-icons/ai";
+import { useQuery } from "@tanstack/react-query";
+
+import RatingBox from "./RatingBox";
+import styles from "./rating.module.scss";
+import { getFeedback } from "~api/feedback.api";
 const cx = classNames.bind(styles);
 
-const Rating = () => {
-  return (
-    <>
-      <RatingBox />
-      <div className="mb-4">
-        <div className={cx("rating-comment")}>
-          <div className={cx("name")}>
-            <p>Castiel</p>
-            &nbsp;-&nbsp;
-            <span>13:38 19/09/2019</span>
-          </div>
+const Rating = ({ id }: { id: string }) => {
+  const { data, isSuccess } = useQuery(["list-feedbacks", id], () =>
+    getFeedback(id)
+  );
 
-          <div className={cx("body")}>
-            {new Array(5).fill(0).map((star, index) => (
-              <AiFillStar
-                key={index}
-                size={20}
-                color={index + 1 <= 5 ? "#f4c91f" : "#ddd"}
-              />
-            ))}
-            <p>
-              Hàng mình mới mua, đánh giá tổng quan ban đầu chất lượng và mẫu mã
-              tốt, sẽ dùng và đánh giá cho anh em.
-            </p>
+  const dFormat = (d: Date) => {
+    return d.toLocaleDateString("en-GB") + " " + d.toLocaleTimeString("en-GB");
+  };
+
+  return isSuccess ? (
+    <>
+      <RatingBox data={data?.meta} />
+
+      <div className="mb-4">
+        {data?.feedbacks?.map((feedback) => (
+          <div className={cx("rating-comment")} key={feedback._id}>
+            <div className={cx("name")}>
+              <p>{feedback.user}</p>
+              &nbsp;-&nbsp;
+              <span>{dFormat(new Date(feedback.created))}</span>
+            </div>
+
+            <div className={cx("body")}>
+              {new Array(5).fill(0).map((star, index) => (
+                <AiFillStar
+                  key={index}
+                  size={20}
+                  color={index + 1 <= feedback.rating ? "#f4c91f" : "#ddd"}
+                />
+              ))}
+              <p>{feedback.content}</p>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </>
-  );
+  ) : null;
 };
 
 export default Rating;

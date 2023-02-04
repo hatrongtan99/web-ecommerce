@@ -57,8 +57,8 @@ const ProductsRelatedSlide = ({ title, relate }: ProductsRelatedSlideProps) => {
         handleTransitionEnd={handleTransitionEnd}
         style={style}
       >
-        {data?.data.products.map((product) => (
-          <div className={`col-3`}>
+        {data?.data?.products.map((product) => (
+          <div className={`col-3`} key={product._id}>
             <ProductItem product={product} brandImg={true} />
           </div>
         ))}

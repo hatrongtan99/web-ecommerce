@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-const pageGioiThieu = () => {
+const PageGioiThieu = () => {
   const router = useRouter();
   useEffect(() => {
     router.push("/");
@@ -9,4 +9,4 @@ const pageGioiThieu = () => {
   return <div>giới thiệu công ty</div>;
 };
 
-export default pageGioiThieu;
+export default PageGioiThieu;

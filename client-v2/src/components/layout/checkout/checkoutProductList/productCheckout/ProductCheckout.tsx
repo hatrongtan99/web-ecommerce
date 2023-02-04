@@ -32,7 +32,7 @@ const ProductCheckout = ({ productItem }: ProductCheckoutProps) => {
       addProductToCart(axiosPrivate, params),
     {
       onSuccess: () => {
-        return queryClient.invalidateQueries(["cart-user", userId as string]);
+        return queryClient.invalidateQueries(["cart-user", userId]);
       },
     }
   );

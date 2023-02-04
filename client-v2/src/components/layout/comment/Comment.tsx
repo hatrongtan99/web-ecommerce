@@ -22,8 +22,8 @@ const Comment = ({ id }: { id: string }) => {
       {/* comment item */}
       {isSuccess ? (
         <div className="mb-4">
-          {data.comments.map((comment) => (
-            <>
+          {data?.comments?.map((comment) => (
+            <div key={comment._id}>
               <div className={cx("comment-item")}>
                 <div className={cx("comment-item__avatar")}>
                   <span>{comment.email.slice(0, 2)}</span>
@@ -40,8 +40,8 @@ const Comment = ({ id }: { id: string }) => {
                 </div>
               </div>
 
-              {comment.reply.map((rep: any) => (
-                <div className={cx("comment-reply")}>
+              {comment.reply.map((rep: any, index) => (
+                <div className={cx("comment-reply")} key={index}>
                   <div className={cx("name")}>
                     <p>{rep.name}</p>
                     &nbsp;-&nbsp;
@@ -50,7 +50,7 @@ const Comment = ({ id }: { id: string }) => {
                   <div className={cx("content")}>{rep.content}</div>
                 </div>
               ))}
-            </>
+            </div>
           ))}
         </div>
       ) : null}

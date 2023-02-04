@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import { FaCartPlus } from "react-icons/fa";
 import Link from "next/link";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { useRouter } from "next/router";
 
@@ -20,13 +20,19 @@ import notify from "~utils/toastify";
 
 const PriceDeltailProduct = ({ product }: { product: ProductDetails }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { auth, setRedirect } = useContext(AuthContext);
 
   const axiosPrivate = useAxiosPrivate();
 
   const mutation = useMutation(
     (params: { product: string; quantity: number }) =>
-      addProductToCart(axiosPrivate, params)
+      addProductToCart(axiosPrivate, params),
+    {
+      onSuccess: () => {
+        return queryClient.invalidateQueries(["cart-user", auth?.user._id]);
+      },
+    }
   );
 
   // set redirect and push login page
