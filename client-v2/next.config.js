@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     domains: ["maydochuyendung.com", "www.google.com", "localhost"],
   },
+  sassOptions: {
+    includePaths: [path.join(__dirname, "styles")],
+  },
 };
 
 module.exports = nextConfig;
