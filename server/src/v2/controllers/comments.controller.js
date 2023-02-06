@@ -15,9 +15,6 @@ class CommentsController {
     }).countDocuments();
 
     const listCmt = await Comments.find({ product: { $regex: `^${id}_` } })
-      .sort({
-        "comments.commentId": 1,
-      })
       .limit(pageSize)
       .skip((page - 1) * pageSize);
 
@@ -37,8 +34,8 @@ class CommentsController {
   //@access: public
   newComment = catchSyncErr(async (req, res, next) => {
     const { id } = req.params;
-    const { commentId, name, email, content } = req.body;
-    if (!commentId || !name || !email || !content) {
+    const { user, email, content } = req.body;
+    if (!user || !email || !content) {
       return next(new ThrowError("invalid comment!", 400));
     }
 
@@ -49,7 +46,7 @@ class CommentsController {
       },
       {
         $push: {
-          comments: { commentId, name, email, content },
+          comments: { user, email, content },
         },
         $inc: { count: 1 },
         $setOnInsert: {

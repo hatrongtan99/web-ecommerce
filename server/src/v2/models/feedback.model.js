@@ -12,19 +12,23 @@ const FeedbackSchema = new Schema(
     },
     feedbacks: [
       {
-        feedbackId: {
-          type: Number,
-          required: true,
-        },
         user: {
-          type: ObjectId,
-          ref: "Users",
+          type: String,
+          required: true,
         },
         rating: {
           type: Number,
           required: true,
         },
         content: { type: String, default: "" },
+        phoneNumber: {
+          type: String,
+          required: true,
+        },
+        email: {
+          type: String,
+          required: true,
+        },
         created: { type: Date, default: Date.now() },
         updated: Date,
       },

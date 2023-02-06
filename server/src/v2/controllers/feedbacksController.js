@@ -1,7 +1,10 @@
 const Feedbacks = require("../models/feedback.model");
 const Products = require("../models/products.model");
+const Order = require("../models/order.model");
+
 const catchSyncErr = require("../utils/catchSyncErr");
 const ThrowError = require("../utils/throwError");
+const { default: mongoose } = require("mongoose");
 
 class FeedbacksController {
   //@desc: get feedback
@@ -23,10 +26,14 @@ class FeedbacksController {
 
     const detail = await Feedbacks.aggregate([
       {
-        $match: { product: { $regex: `^${id}_` } },
+        $match: {
+          product: { $regex: `^${id}_` },
+        },
       },
       {
-        $unwind: "$feedbacks",
+        $unwind: {
+          path: "$feedbacks",
+        },
       },
       {
         $group: {
@@ -41,7 +48,14 @@ class FeedbacksController {
           sum: 1,
         },
       },
+      {
+        $sort: {
+          star: -1,
+        },
+      },
     ]);
+
+    const avg = await getAvg(id);
 
     return res.json({
       success: true,
@@ -51,6 +65,7 @@ class FeedbacksController {
         page: +page,
         totals,
         detail: detail,
+        avg: avg[0]?.avg,
       },
     });
   });
@@ -60,10 +75,52 @@ class FeedbacksController {
   //@access: public
   newFeedback = catchSyncErr(async (req, res, next) => {
     const { id } = req.params;
-    const { feedbackId, user, rating, content } = req.body;
+    const { user, rating, phoneNumber, email } = req.body;
 
-    if (!feedbackId || !rating || !content) {
+    if (!rating || !user || !phoneNumber || !email) {
       return next(new ThrowError("invalid feedback!", 400));
+    }
+
+    const existOrder = await Order.aggregate([
+      {
+        $lookup: {
+          from: "Users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $match: {
+          "user.email": email,
+        },
+      },
+      {
+        $lookup: {
+          from: "Cart",
+          localField: "cart",
+          foreignField: "_id",
+          as: "cart",
+        },
+      },
+      {
+        $unwind: "$cart",
+      },
+      {
+        $unwind: "$cart.products",
+      },
+      {
+        $match: {
+          "cart.products.product": mongoose.Types.ObjectId(id),
+        },
+      },
+    ]);
+
+    if (!existOrder.length) {
+      return next(
+        new ThrowError("Khách hàng chưa từng mua sản phẩm này.", 400)
+      );
     }
 
     await Feedbacks.findOneAndUpdate(
@@ -72,7 +129,7 @@ class FeedbacksController {
         count: { $lt: 10 },
       },
       {
-        $push: { feedbacks: { feedbackId, user, rating, content } },
+        $push: { feedbacks: { ...req.body } },
         $inc: { count: 1 },
         $setOnInsert: {
           product: `${id}_${new Date().getTime()}`,
@@ -83,25 +140,14 @@ class FeedbacksController {
       }
     );
 
-    const avg = await Feedbacks.aggregate([
-      { $match: { product: { $regex: `^${id}_` } } },
-      {
-        $unwind: "$feedbacks",
-      },
-      {
-        $group: {
-          _id: null,
-          avg: { $avg: "$feedbacks.rating" },
-        },
-      },
-    ]);
+    const avg = await getAvg(id);
 
     await Products.findOneAndUpdate(
       { _id: id, deleted: false },
       {
         $inc: { totalFeedback: 1 },
         $set: {
-          rating: avg[0].avg,
+          rating: avg[0]?.avg,
         },
       }
     );
@@ -112,5 +158,20 @@ class FeedbacksController {
     });
   });
 }
+
+const getAvg = async (id) => {
+  return await Feedbacks.aggregate([
+    { $match: { product: { $regex: `^${id}_` } } },
+    {
+      $unwind: "$feedbacks",
+    },
+    {
+      $group: {
+        _id: null,
+        avg: { $avg: "$feedbacks.rating" },
+      },
+    },
+  ]);
+};
 
 module.exports = new FeedbacksController();

@@ -71,13 +71,13 @@ class UsersController {
   loginSuccess = catchSyncErr(async (req, res, next) => {
     if (req.user) {
       const { id } = req.user;
-      const user = await Users.findOne({ _id: id }).select(
-        "avatar user_name email provider facebookId googleId role"
-      );
+      const user = await Users.findOne({ _id: id });
+
+      const { password, ...rest } = user._doc;
 
       res.json({
         success: true,
-        user,
+        user: { ...rest },
         token: await user.generateAccessToken(),
       });
     } else {
@@ -157,7 +157,7 @@ class UsersController {
   //@route: [GET]/v2/api/users/refreshToken
   //@access: public
   refreshToken = catchSyncErr(async (req, res, next) => {
-    const refreshToken = req.cookies["refreshToken"];
+    const refreshToken = req.signedCookies["refreshToken"];
     if (!refreshToken) {
       return next(new ThrowError("Invalid refresh token: " + refreshToken));
     }
@@ -191,6 +191,7 @@ class UsersController {
   logout = catchSyncErr((req, res, next) => {
     req.logout(() => {
       res.clearCookie("refreshToken");
+      res.clearCookie("accessToken");
       res.json({ success: true, message: "Logged Out" });
     });
   });

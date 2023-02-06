@@ -12,8 +12,7 @@ const CommentsScehma = new Schema(
     },
     comments: [
       {
-        commentId: { type: Number, required: true },
-        name: {
+        user: {
           type: String,
           default: "",
         },
@@ -26,8 +25,7 @@ const CommentsScehma = new Schema(
         },
         reply: [
           {
-            commentId: { type: Number, required: true },
-            name: {
+            user: {
               type: String,
               default: "",
             },
