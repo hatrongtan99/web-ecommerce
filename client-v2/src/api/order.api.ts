@@ -7,6 +7,6 @@ export const createOrder = (
 ) => {
   return axiosPrivate.post<
     never,
-    AxiosResponse<{ success: boolean; order: Order }>
+    AxiosResponse<{ success: boolean; message: string }>
   >("/order/add", orderForm);
 };

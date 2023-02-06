@@ -49,7 +49,10 @@ const ProductDetail = () => {
             />
 
             <div className="col-8">
-              <Rating id={data?.product._id!} />
+              <Rating
+                id={data?.product._id!}
+                productName={data?.product.name_product!}
+              />
 
               <ProductsRelatedSlide
                 title="Sản phẩm liên quan"

@@ -30,7 +30,7 @@ const Comment = ({ id }: { id: string }) => {
                 </div>
                 <div className={cx("comment-item__body")}>
                   <div className={cx("name")}>
-                    <p>{comment.name}</p>
+                    <p>{comment.user}</p>
                     &nbsp;-&nbsp;
                     <span>{dFormat(new Date(comment.created))}</span>
                     <span className={cx("reply-btn")}>Trả lời</span>

@@ -1,9 +1,9 @@
 export interface ListFeedback {
   feedbacks: {
-    feedbackId: number;
     user: string;
     rating: number;
     content: string;
+    phoneNumber: string;
     created: string;
     _id: string;
   }[];

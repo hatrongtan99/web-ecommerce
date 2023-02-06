@@ -11,10 +11,12 @@ const StarEvaluate = ({ detail }: { detail: any }) => {
     <div className={cx("star-wrapper")}>
       <div className={cx("rating")}>
         <p>
-          {rating.toLocaleString("en-US", {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-          })}
+          {rating !== 0
+            ? rating.toLocaleString("en-US", {
+                minimumFractionDigits: 1,
+                maximumFractionDigits: 1,
+              })
+            : 0}
         </p>
       </div>
       <div className={cx("star")}>
@@ -23,6 +25,7 @@ const StarEvaluate = ({ detail }: { detail: any }) => {
             key={index}
             size={20}
             color={index + 1 <= rating ? "#f4c91f" : "#ddd"}
+            style={{ stroke: "#f6ab27", strokeWidth: "10" }}
           />
         ))}
       </div>

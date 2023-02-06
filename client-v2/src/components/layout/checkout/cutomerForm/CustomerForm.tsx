@@ -32,8 +32,8 @@ const CustomerForm = () => {
   // submit form to create order
   const handleSubmitForm = async (value: CreateOrderForm) => {
     try {
-      await createOrder(axiosPrivate, value);
-      notify("success", "Đặt hàng thành công, vui lòng check email.");
+      const res = await createOrder(axiosPrivate, value);
+      notify("success", res.data.message);
     } catch (error: any) {
       notify("error", error.response?.data?.message);
     }

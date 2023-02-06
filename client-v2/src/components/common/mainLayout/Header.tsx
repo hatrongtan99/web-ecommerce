@@ -60,7 +60,10 @@ const Header = () => {
   // cart user
   const { data: cartUser, isSuccess } = useQuery(
     ["cart-user", auth?.user._id],
-    () => getCartUser(axiosPrivate)
+    () => getCartUser(axiosPrivate),
+    {
+      refetchOnWindowFocus: false,
+    }
   );
 
   const item =
@@ -69,7 +72,11 @@ const Header = () => {
   return (
     <header className={`container-fluid ${cx("header-wrapper")}`}>
       <div className={`${cx("header")}`}>
-        <div className={`col-3 ${cx("header__logo")}`}>logo</div>
+        <div className={`col-3 ${cx("header__logo")}`}>
+          <h2 onClick={() => router.push("/", undefined, { shallow: false })}>
+            dienmaykimkhi
+          </h2>
+        </div>
 
         {/* search */}
         <div className={`col-3 ${cx("header__search")}`}>

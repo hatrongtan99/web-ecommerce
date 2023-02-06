@@ -13,6 +13,18 @@
   @include mixins.flex(center, space-between);
   width: 100%;
 
+  &__logo {
+    h2 {
+      display: inline-block;
+      cursor: pointer;
+      padding: 5px;
+      margin-left: 40px;
+      font-size: 1.6rem;
+      color: #fff;
+      text-shadow: 4px 0px 8px rgba(0, 0, 0, 0.6);
+    }
+  }
+
   // search
   &__search {
     .form__search {

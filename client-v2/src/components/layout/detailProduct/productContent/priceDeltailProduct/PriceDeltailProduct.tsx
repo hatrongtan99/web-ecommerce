@@ -15,8 +15,6 @@ import ContactBox from "./contactBox/ContactBox";
 import { ProductDetails } from "~types/product.type";
 import { addProductToCart } from "~api/cart.api";
 import useAxiosPrivate from "~hook/useAxiosPrivate";
-import { ToastContainer } from "react-toastify";
-import notify from "~utils/toastify";
 
 const PriceDeltailProduct = ({ product }: { product: ProductDetails }) => {
   const router = useRouter();
@@ -58,10 +56,6 @@ const PriceDeltailProduct = ({ product }: { product: ProductDetails }) => {
     }
   };
 
-  const handleContact = () => {
-    notify("success", "tương tác");
-  };
-
   return (
     <>
       <PriceBox product={product} />
@@ -81,14 +75,16 @@ const PriceDeltailProduct = ({ product }: { product: ProductDetails }) => {
           <p className={cx("button-title")}>Mua Ngay</p>
         </Button>
 
-        <Button size="md" variant="secondary" onClick={handleContact}>
+        <Button
+          size="md"
+          variant="secondary"
+          onClick={() => alert("Tương tác")}
+        >
           <p className={cx("button-title")}>Cần Tư Vấn</p>
         </Button>
       </div>
 
       <ContactBox />
-
-      <ToastContainer />
     </>
   );
 };

@@ -28,12 +28,13 @@ export const getServerSideProps: GetServerSideProps = async (
       baseURL: process.env.NEXT_PUBLIC_BASE_URL_SERVER,
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${ck.accessToken}`,
       },
-      withCredentials: true,
     });
 
-    loginSuccess(instant).then((refresh) => {
-      if (refresh.data?.success && refresh.data.token) {
+    try {
+      const redirect = await loginSuccess(instant);
+      if (redirect.data?.success && redirect.data.token) {
         return {
           redirect: {
             permanent: false,
@@ -41,8 +42,9 @@ export const getServerSideProps: GetServerSideProps = async (
           },
         };
       }
-    });
+    } catch (error) {}
   }
+
   return {
     props: {},
   };

@@ -5,9 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import RatingBox from "./RatingBox";
 import styles from "./rating.module.scss";
 import { getFeedback } from "~api/feedback.api";
+import Button from "~components/custom/button/Button";
+import EvaluateModal from "./evaluateModal/EvaluateModal";
 const cx = classNames.bind(styles);
 
-const Rating = ({ id }: { id: string }) => {
+const Rating = ({ id, productName }: { id: string; productName: string }) => {
   const { data, isSuccess } = useQuery(["list-feedbacks", id], () =>
     getFeedback(id)
   );
@@ -16,8 +18,19 @@ const Rating = ({ id }: { id: string }) => {
     return d.toLocaleDateString("en-GB") + " " + d.toLocaleTimeString("en-GB");
   };
 
+  const hanldeOpenModal = () => {
+    document.querySelector("#modal-evalu")?.classList.toggle(cx("togle-modal"));
+  };
+
   return isSuccess ? (
     <>
+      <div className={cx("rating__header")}>
+        <h3>Đánh giá sản phẩm</h3>
+        <Button size="sm" onClick={hanldeOpenModal}>
+          Đánh Giá Ngay
+        </Button>
+      </div>
+
       <RatingBox data={data?.meta} />
 
       <div className="mb-4">
@@ -42,6 +55,7 @@ const Rating = ({ id }: { id: string }) => {
           </div>
         ))}
       </div>
+      <EvaluateModal title={`Đánh giá ${productName}`} id={id} />
     </>
   ) : null;
 };
