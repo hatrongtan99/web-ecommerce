@@ -15,5 +15,5 @@ export const getCommentProduct = (id: string, params?: any) => {
 };
 
 export const newComment = (id: string, comment: NewComment) => {
-  return axiosClient.post(`/commnet/${id}`, comment).then((data) => data.data);
+  return axiosClient.post(`/comment/${id}`, comment).then((data) => data.data);
 };

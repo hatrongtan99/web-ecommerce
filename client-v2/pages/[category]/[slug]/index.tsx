@@ -11,6 +11,7 @@ import ProductDescription from "~components/layout/detailProduct/productDescript
 import ProductsRelatedSlide from "~components/layout/productsRelatedSlide/ProductsRelatedSlide";
 import Comment from "~components/layout/comment/Comment";
 import Rating from "~components/layout/rating/Rating";
+import { ToastContainer } from "react-toastify";
 
 const ProductDetail = () => {
   const router = useRouter();
@@ -68,6 +69,7 @@ const ProductDetail = () => {
           </div>
         </>
       )}
+      <ToastContainer />
     </main>
   );
 };

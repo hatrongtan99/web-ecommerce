@@ -1,7 +1,6 @@
 export interface CommentList {
   comments: {
     user: string;
-    phoneNumber: string;
     email: string;
     content: string;
     created: string;
@@ -17,7 +16,6 @@ export interface CommentList {
 
 export interface NewComment {
   user: string;
-  phoneNumber: string;
   email: string;
   content: string;
 }
