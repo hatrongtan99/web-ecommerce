@@ -109,6 +109,21 @@
     text-align: end;
     margin-right: 10px;
 
+    &__info {
+      @include mixins.flex(center, flex-end);
+      p {
+        padding: 2px;
+        cursor: pointer;
+
+        &:last-child {
+          &:hover {
+            background-color: #e7e7e7;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+
     &__auth {
       @include mixins.flex(center, flex-end);
       color: #fff;

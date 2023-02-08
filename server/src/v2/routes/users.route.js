@@ -2,37 +2,42 @@ const router = require("express").Router();
 const usersController = require("../controllers/users.controller");
 const auth = require("../middleware/auth");
 const passport = require("passport");
+const ThrowError = require("../utils/throwError");
 
 router.route("/facebook").get(
   passport.authenticate("facebook", {
-    session: false,
+    session: true,
   })
 );
 
 router.route("/google").get(
   passport.authenticate("google", {
-    session: false,
+    session: true,
   })
 );
 
 // login by facebook
 router.route("/facebook/callback").get(
   passport.authenticate("facebook", {
-    failureRedirect: "/login",
-    session: false,
-  }),
-  usersController.loginByFacebook
+    failureRedirect: process.env.URL_CLIENT + "/auth/login",
+    successRedirect: process.env.URL_CLIENT + "/auth/success",
+  })
 );
 
 // login by goole
 router.route("/google/callback").get(
   passport.authenticate("google", {
-    failureRedirect: "/login",
-    session: false,
-    successRedirect: "http://localhost:3000",
-  }),
-  usersController.loginByGoogle
+    failureRedirect: process.env.URL_CLIENT + "/auth/login",
+    successRedirect: process.env.URL_CLIENT + "/auth/success",
+  })
 );
+
+router.route("/social-login/success").get((req, res, next) => {
+  if (!req.user) {
+    return next(new ThrowError("Please login first!", 401));
+  }
+  next();
+}, usersController.loginSocialSuccess);
 
 // register
 router.route("/register").post(usersController.register);

@@ -3,16 +3,27 @@ const app = express();
 const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const cookieSession = require("express-session");
 const cloudinary = require("cloudinary");
 
 // apply middlewares
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: ["http://localhost:3000", "http://dienmaykimkhi.com"],
   })
 );
+
 app.use(cookieParser(process.env.ACCESS_TOKEN_SECRET));
+app.use(
+  cookieSession({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+    name: "session",
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

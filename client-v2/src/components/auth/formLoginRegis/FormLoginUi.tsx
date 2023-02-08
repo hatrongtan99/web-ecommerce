@@ -9,28 +9,53 @@ import notify from "~utils/toastify";
 import { AuthContext } from "~context/AuthProvider";
 import google from "../../../../public/image/google.png";
 import styles from "./formLayout.module.scss";
-import { userLoginByGoogle, userLoginLocal } from "~api/user.api";
+import { loginSocialSuccess, userLoginLocal } from "~api/user.api";
 import Button from "~components/custom/button/Button";
-import useAxiosPrivate from "~hook/useAxiosPrivate";
+import { AuthLogin } from "~types/auth.type";
+import { AxiosResponse } from "axios";
 
 const cx = classNames.bind(styles);
 
 const FormLoginUi = () => {
   const router = useRouter();
-  const axiosPrivate = useAxiosPrivate();
 
   const { setAuth, persirt, setPersirt, redirect } = useContext(AuthContext);
 
   const hanldeLoginSocial = async (type: "google" | "facebook") => {
-    if (type == "google") {
-      window.open("http://localhost:5000/v2/api/users/google", "_self");
+    let newWindow: Window | null = null;
+    let timeId: NodeJS.Timeout | null;
+
+    newWindow = window.open(
+      `${process.env.NEXT_PUBLIC_BASE_URL_SERVER}/users/${type}`,
+      "_blank",
+      "width=500, height=600"
+    );
+
+    if (newWindow) {
+      timeId = setInterval(() => {
+        if (newWindow?.closed) {
+          loginSocialSuccess()
+            .then((data: AxiosResponse<AuthLogin>) => {
+              if (data.data.success && data.data.token) {
+                setAuth(data.data);
+                router.push(redirect);
+              }
+            })
+            .catch((error) => {
+              notify("error", error.response?.data?.message);
+            });
+          if (timeId) {
+            clearInterval(timeId);
+          }
+        }
+      }, 500);
     }
   };
 
   const handleLoginLocal = async (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await userLoginLocal(axiosPrivate, user);
+      const res = await userLoginLocal(user);
       if (res.success) {
         setAuth(res);
         router.push(redirect);

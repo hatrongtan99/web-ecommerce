@@ -85,72 +85,11 @@ class UsersController {
     }
   });
 
-  //@desc: login by facebook
-  //@route: [POST]/v2/api/users/facebook
-  //@access: public
-  loginByFacebook = catchSyncErr(async (req, res, next) => {
-    const profile = req.user;
-    let user = await Users.findOne({
-      facebookId: profile.id,
-    });
-    if (user) {
-      return sendToken(res, user);
-    }
-
-    const userCloud = await cloudinary.uploader.upload(
-      profile.photos[0]?.value,
-      {
-        folder: "avatars",
-      }
-    );
-
-    const avatar = {
-      public_id: userCloud.public_id,
-      url: userCloud.secure_url,
-    };
-    const newUser = new Users({
-      user_name: profile.displayName,
-      email: profile.emails ? profile.emails[0].value : null,
-      provider: "facebook",
-      facebookId: profile.id,
-      password: null,
-      avatar,
-    });
-    user = await newUser.save();
-    return sendToken(res, user);
-  });
-
   //@desc: login by goole
   //@route: [GET]/v2/api/users/google
   //@access: public
-  loginByGoogle = catchSyncErr(async (req, res, next) => {
-    const profile = req.user;
-    let user = await Users.findOne({
-      gooleId: profile.id,
-    });
-    if (user) {
-      return sendToken(res, user);
-    }
-    const userCloud = await cloudinary.uploader.upload(
-      profile.photos[0].value,
-      { folder: "avatars" }
-    );
-
-    const avatar = {
-      public_id: userCloud.public_id,
-      url: userCloud.secure_url,
-    };
-    const newUser = new Users({
-      user_name: profile.displayName,
-      email: profile.emails ? profile.emails[0].value : null,
-      provider: "google",
-      gooleId: profile.id,
-      password: null,
-      avatar,
-    });
-
-    user = await newUser.save();
-    return sendToken(res, user);
+  loginSocialSuccess = catchSyncErr(async (req, res, next) => {
+    return sendToken(res, req.user);
   });
 
   //@desc: refresh token
@@ -189,7 +128,10 @@ class UsersController {
   //@route: [GET]/v2/api/users/logout
   //@access: public
   logout = catchSyncErr((req, res, next) => {
-    req.logout(() => {
+    req.logout((err) => {
+      if (err) {
+        return next(err);
+      }
       res.clearCookie("refreshToken");
       res.clearCookie("accessToken");
       res.json({ success: true, message: "Logged Out" });

@@ -1,10 +1,17 @@
 const JWT = require("jsonwebtoken");
 const ThrowError = require("../utils/throwError");
 const catchSyncErr = require("../utils/catchSyncErr");
+const cookieParser = require("cookie-parser");
 
 const protectRoute = catchSyncErr(async (req, res, next) => {
   const authenToken =
-    req.header("Authorization") || "Bearer " + req.signedCookies.accessToken;
+    req.header("Authorization") ||
+    "Bearer " +
+      (req.signedCookies.accessToken ??
+        cookieParser.signedCookie(
+          req.header("Signed-access-cookie"),
+          process.env.ACCESS_TOKEN_SECRET
+        ));
 
   const token = authenToken && authenToken.split(" ")[1];
   if (token) {

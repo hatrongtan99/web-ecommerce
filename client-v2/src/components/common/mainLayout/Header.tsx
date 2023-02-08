@@ -12,13 +12,14 @@ import { loginSuccess } from "~api/user.api";
 import useAxiosPrivate from "~hook/useAxiosPrivate";
 import { useQuery } from "@tanstack/react-query";
 import { getCartUser } from "~api/cart.api";
+import { logout } from "~api/user.api";
 
 const cx = classNames.bind(styles);
 
 const Header = () => {
   const router = useRouter();
   const axiosPrivate = useAxiosPrivate();
-  const { auth, setRedirect, redirect, setAuth } = useContext(AuthContext);
+  const { auth, setRedirect, setAuth } = useContext(AuthContext);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,12 +32,20 @@ const Header = () => {
     }
   };
 
-  const handleAuth = (type: "login" | "register") => {
+  const handleRedirect = (type: "login" | "register") => {
     if (type == "register") {
       router.push("/auth/register");
     } else {
       router.push("/auth/login");
     }
+  };
+
+  const handleLogout = async () => {
+    logout(axiosPrivate).then((data) => {
+      if (data.data.success) {
+        setAuth(null);
+      }
+    });
   };
 
   useEffect(() => {
@@ -63,6 +72,7 @@ const Header = () => {
     () => getCartUser(axiosPrivate),
     {
       refetchOnWindowFocus: false,
+      enabled: auth !== null,
     }
   );
 
@@ -107,12 +117,14 @@ const Header = () => {
 
         <div className={`col-2 ${cx("header__user")}`}>
           {isLoading ? null : auth && auth.token ? (
-            <div className={cx("header__user__info")}>userinfo</div>
+            <div className={cx("header__user__info")}>
+              <p>userInfo</p>-<p onClick={handleLogout}>logout</p>
+            </div>
           ) : (
             <div className={cx("header__user__auth")}>
-              <p onClick={() => handleAuth("register")}>Đăng ký</p>
+              <p onClick={() => handleRedirect("register")}>Đăng ký</p>
               <span></span>
-              <p onClick={() => handleAuth("login")}>Đăng nhập</p>
+              <p onClick={() => handleRedirect("login")}>Đăng nhập</p>
             </div>
           )}
         </div>

@@ -1,8 +1,10 @@
+const path = require("path");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["maydochuyendung.com", "www.google.com", "localhost"],
+    domains: ["api.dienmaykimkhi.com", "dienmaykimkhi.com", "localhost"],
   },
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],

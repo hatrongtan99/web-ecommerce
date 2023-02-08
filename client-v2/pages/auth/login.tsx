@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (
       baseURL: process.env.NEXT_PUBLIC_BASE_URL_SERVER,
       headers: {
         "content-type": "application/json",
-        Authorization: `Bearer ${ck.accessToken}`,
+        "Signed-access-cookie": ck.accessToken,
       },
     });
 
@@ -42,7 +42,9 @@ export const getServerSideProps: GetServerSideProps = async (
           },
         };
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return {
