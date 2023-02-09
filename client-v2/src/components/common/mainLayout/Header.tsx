@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, MutableRefObject } from "react";
 
 import styles from "./mainLayout.module.scss";
 import SearchInput from "./SearchInput";
@@ -14,6 +14,8 @@ import { getCartUser } from "~api/cart.api";
 import { logout } from "~api/user.api";
 import PropoverCart from "./PropoverCart";
 import useAuth from "~hook/useAuth";
+import Image from "next/image";
+import Link from "next/link";
 
 const cx = classNames.bind(styles);
 
@@ -81,13 +83,18 @@ const Header = () => {
     isSuccess && cartUser.data.cart ? cartUser.data.cart.products.length : 0;
 
   // icon cart
-  const hanldeMouseMoveIcon = (event: "onMove" | "onLeave") => {
-    const popover = document.querySelector("#popover-cart");
-    if (popover) {
-      if (event == "onMove") {
-        popover.classList.add(cx("pop__show"));
+  const refPopuser = useRef<HTMLDivElement | null>(null);
+  const refPopCart = useRef<HTMLDivElement | null>(null);
+
+  const hanldeMouseMoveIcon = (
+    event: "onMove" | "onLeave",
+    ref: MutableRefObject<HTMLDivElement | null>
+  ) => {
+    if (ref && ref.current) {
+      if (event === "onMove") {
+        ref.current.classList.add(cx("pop__show"));
       } else {
-        popover.classList.remove(cx("pop__show"));
+        ref.current.classList.remove(cx("pop__show"));
       }
     }
   };
@@ -109,8 +116,8 @@ const Header = () => {
         {/* cart */}
         <div
           className={`col-2 ${cx("header__cart")}`}
-          onMouseMove={() => hanldeMouseMoveIcon("onMove")}
-          onMouseLeave={() => hanldeMouseMoveIcon("onLeave")}
+          onMouseMove={() => hanldeMouseMoveIcon("onMove", refPopCart)}
+          onMouseLeave={() => hanldeMouseMoveIcon("onLeave", refPopCart)}
         >
           <BsFillCartCheckFill
             size={24}
@@ -122,7 +129,7 @@ const Header = () => {
             <span>{item}</span>
           </div>
 
-          <PropoverCart data={cartUser?.data.cart} />
+          <PropoverCart data={cartUser?.data.cart} ref={refPopCart} />
         </div>
 
         <div className={`col-2 ${cx("header__product-review")}`}>
@@ -137,8 +144,32 @@ const Header = () => {
 
         <div className={`col-2 ${cx("header__user")}`}>
           {isLoading ? null : auth && auth.token ? (
-            <div className={cx("header__user__info")}>
-              <p>userInfo</p>-<p onClick={handleLogout}>logout</p>
+            <div className="d-flex">
+              <div
+                className={cx("header__user__info")}
+                onMouseMove={() => hanldeMouseMoveIcon("onMove", refPopuser)}
+                onMouseLeave={() => hanldeMouseMoveIcon("onLeave", refPopuser)}
+              >
+                <div
+                  className={cx("user-box")}
+                  onClick={() => router.push("/users/profile")}
+                >
+                  <div className={cx("avatar")}>
+                    <Image
+                      alt="avatar"
+                      src={auth.user.avatar.url}
+                      width={24}
+                      height={24}
+                    />
+                  </div>
+                  <p>{auth.user.user_name}</p>
+                </div>
+                <div className={cx("pop-user")} ref={refPopuser}>
+                  <Link href={"/users/profile"}>Tài Khoản của tôi</Link>
+                  <Link href={"/users/puchases"}>Đơn Hàng</Link>
+                  <p onClick={handleLogout}>Đăng xuất</p>
+                </div>
+              </div>
             </div>
           ) : (
             <div className={cx("header__user__auth")}>

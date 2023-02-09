@@ -1,4 +1,5 @@
 const Order = require("../models/order.model");
+const Products = require("../models/products.model");
 const { Cart } = require("../models/carts.model");
 const catchSyncErr = require("../utils/catchSyncErr");
 const { limit } = require("../config/key");
@@ -9,6 +10,7 @@ const {
 } = require("../utils/tempalteMaill");
 const ThrowError = require("../utils/throwError");
 const { maill } = require("../config/key");
+const { default: mongoose } = require("mongoose");
 
 const RESULT_PER_PAGE = limit;
 
@@ -60,19 +62,19 @@ class OrderController {
     });
 
     // // send mail to user comfim order
-    // await sendmail(
-    //     cartUser.user.email,
-    //     notiUserOrder(
-    //         cartUser.user.user_name,
-    //         `http://${req.headers.host}/v2/api/order/me/${order._id}`
-    //     )
-    // );
-    // //send mail to admin to noti order
-    // await sendmail(
-    //     maill.emailAdmin,
-    //     notiUserOrderForAdmin(cartUser.user.user_name),
-    //     `http://${req.headers.host}/v2/api/order/admin/${order._id}`
-    // );
+    await sendmail(
+      cartUser.user.email,
+      notiUserOrder(
+        cartUser.user.user_name,
+        `${process.env.URL_CLIENT}/users/puchases/${order._id}`
+      )
+    );
+    //send mail to admin to noti order
+    await sendmail(
+      maill.emailAdmin,
+      notiUserOrderForAdmin(cartUser.user.user_name),
+      `${process.env.URL_CLIENT}/admin/orders/${order._id}`
+    );
     res.json({
       success: true,
       message:
@@ -181,15 +183,49 @@ class OrderController {
       "cancelled",
     ].includes(status);
 
-    let order;
-
     if (role == "User") {
       isInvalid = ["cancelled"].includes(status);
     }
     if (!isInvalid) {
       return next(new ThrowError("Can't update this resouce!", 401));
     }
-    order = await Order.findOneAndUpdate(
+
+    if (status === "delivered") {
+      const listProductSold = await Order.aggregate([
+        {
+          $match: {
+            _id: mongoose.Types.ObjectId(id),
+            user: role === "User" ? idUser : { $exists: true },
+          },
+        },
+        {
+          $lookup: {
+            from: "Cart",
+            localField: "cart",
+            foreignField: "_id",
+            as: "cart",
+          },
+        },
+        {
+          $unwind: "$cart",
+        },
+        {
+          $unwind: "$cart.products",
+        },
+        {
+          $group: {
+            _id: "$cart.products.product",
+            quantity: {
+              $sum: "$cart.products.quantity",
+            },
+          },
+        },
+      ]);
+
+      await updateProduct(listProductSold);
+    }
+
+    const order = await Order.findOneAndUpdate(
       { _id: id, user: role === "User" ? idUser : { $exists: true } },
       {
         $set: {
@@ -206,5 +242,22 @@ class OrderController {
     });
   });
 }
+
+const updateProduct = async (list) => {
+  const update = list.map((i) => {
+    return {
+      updateOne: {
+        filter: {
+          _id: i._id,
+          isActive: true,
+        },
+        update: {
+          $inc: { sold: i.quantity, in_stock: -i.quantity },
+        },
+      },
+    };
+  });
+  await Products.bulkWrite(update);
+};
 
 module.exports = new OrderController();

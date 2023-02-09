@@ -64,16 +64,16 @@ const ProductCheckout = ({ productItem }: ProductCheckoutProps) => {
 
   return (
     <div className={cx("product-checkout")}>
-      <Link href={`/${productItem.product.slug}`} legacyBehavior>
-        <a>
-          <Image src={img} alt="image product" width={300} height={300} />
-        </a>
+      <Link
+        href={`/${productItem.product.categories[0].slug}/${productItem.product.slug}`}
+      >
+        <Image src={img} alt="image product" width={300} height={300} />
       </Link>
       <div className={cx("product-info")}>
-        <Link href={`/${productItem.product.slug}`} legacyBehavior>
-          <a>
-            <h3>{productItem.product.name_product}</h3>
-          </a>
+        <Link
+          href={`/${productItem.product.categories[0].slug}/${productItem.product.slug}`}
+        >
+          <h3>{productItem.product.name_product}</h3>
         </Link>
 
         <div className={cx("product-info__price")}>

@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import Image from "next/image";
+import { forwardRef } from "react";
 import { useRouter } from "next/router";
 
 import { CartUser } from "~types/cart.type";
@@ -9,11 +10,19 @@ import useAuth from "~hook/useAuth";
 
 const cx = classNames.bind(styles);
 
-const PropoverCart = ({ data }: { data: CartUser | undefined }) => {
+const PropoverCart = (
+  {
+    data,
+  }: {
+    data: CartUser | undefined;
+    ref: any;
+  },
+  ref: any
+) => {
   const router = useRouter();
   const { auth } = useAuth();
   return (
-    <div className={cx("pop")} id="popover-cart">
+    <div className={cx("pop")} id="popover-cart" ref={ref}>
       <div className={cx("pop__header")}>
         {!data ? (
           <p>Vui lòng đăng nhập để xem chi tiết</p>
@@ -33,6 +42,7 @@ const PropoverCart = ({ data }: { data: CartUser | undefined }) => {
                 `/${product.product.categories[0].slug}/${product.product.slug}`
               )
             }
+            key={product.product._id}
           >
             <div className="d-flex" style={{ width: "85%" }}>
               <Image
@@ -65,4 +75,4 @@ const PropoverCart = ({ data }: { data: CartUser | undefined }) => {
   );
 };
 
-export default PropoverCart;
+export default forwardRef(PropoverCart);

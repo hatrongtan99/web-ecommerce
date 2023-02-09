@@ -110,15 +110,80 @@
     margin-right: 10px;
 
     &__info {
-      @include mixins.flex(center, flex-end);
-      p {
-        padding: 2px;
+      display: flex;
+      position: relative;
+      margin-left: auto;
+      .user-box {
+        @include mixins.flex(center, unset);
+        padding: 6px 6px;
         cursor: pointer;
+        margin-left: auto;
+      }
 
-        &:last-child {
+      .avatar {
+        @include mixins.flex(center, center);
+        background-color: #e7e7e7;
+      }
+
+      p {
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-left: 6px;
+
+        &:hover {
+          color: #e7e7e7;
+        }
+      }
+
+      .pop-user {
+        display: none;
+        position: absolute;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 150px;
+        height: auto;
+        background-color: #fff;
+        z-index: 2;
+        top: 100%;
+        right: 10px;
+        border-radius: 4px;
+        padding: 10px 0;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px,
+          rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+        &.pop__show {
+          display: flex;
+        }
+
+        &::after {
+          content: "";
+          position: absolute;
+          border-top: 8px solid #fff;
+          border-right: 8px solid #fff;
+          border-bottom: 8px solid transparent;
+          border-left: 8px solid transparent;
+          transform: rotate(-45deg);
+          top: -8px;
+          right: 14px;
+          border-radius: 2px;
+          z-index: 1;
+        }
+
+        a,
+        p {
+          display: block;
+          width: 100%;
+          text-align: start;
+          padding: 3px 0 3px 6px;
+          font-weight: 400;
+          font-size: 1rem;
+          color: #666;
+          cursor: pointer;
+          margin: 0;
           &:hover {
-            background-color: #e7e7e7;
-            border-radius: 5px;
+            color: $secondary-color;
+            background-color: #f7f7f7;
           }
         }
       }
@@ -234,7 +299,7 @@
         border-bottom: 1px solid #e7e7e7;
       }
       &:hover {
-        background-color: #e7e7e7;
+        background-color: #f7f7f7;
       }
       p {
         white-space: nowrap;
