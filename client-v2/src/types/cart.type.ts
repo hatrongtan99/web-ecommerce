@@ -15,6 +15,7 @@ export interface ProductInCart {
     images: string | string[];
     in_stock: number;
     slug: string;
+    categories: { _id: string; name: string; slug: string }[];
   };
   quantity: number;
   perchasePrice: number;

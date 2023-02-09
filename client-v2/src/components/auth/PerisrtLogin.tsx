@@ -1,13 +1,13 @@
-import { ReactNode, useState, useEffect, useContext } from "react";
+import { ReactNode, useState, useEffect } from "react";
 
-import { AuthContext } from "~context/AuthProvider";
 import Spinner from "~components/common/spiner/Spiner";
 import { loginSuccess } from "~api/user.api";
 import useAxiosPrivate from "~hook/useAxiosPrivate";
+import useAuth from "~hook/useAuth";
 
 const PerisrtLogin = ({ children }: { children: ReactNode }) => {
   const axiosPrivate = useAxiosPrivate();
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

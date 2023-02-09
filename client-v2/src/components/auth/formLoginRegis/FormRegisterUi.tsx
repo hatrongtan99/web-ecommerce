@@ -1,7 +1,6 @@
-import { useState, useContext, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { useRouter } from "next/router";
 
-import { AuthContext } from "~context/AuthProvider";
 import classNames from "classnames/bind";
 import styles from "./formLayout.module.scss";
 import Button from "~components/custom/button/Button";

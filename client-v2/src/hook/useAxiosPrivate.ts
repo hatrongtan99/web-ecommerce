@@ -1,11 +1,11 @@
 import axios, { AxiosError } from "axios";
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { refreshToken } from "~api/user.api";
-import { AuthContext } from "~context/AuthProvider";
 import { axiosPrivate } from "~api/axiosConfig";
+import useAuth from "./useAuth";
 
 const useAxiosPrivate = () => {
-  const { auth, persirt, setAuth } = useContext(AuthContext);
+  const { auth, persirt, setAuth } = useAuth();
 
   useEffect(() => {
     const token = auth?.token;

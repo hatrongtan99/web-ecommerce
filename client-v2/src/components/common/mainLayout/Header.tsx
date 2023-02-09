@@ -2,9 +2,8 @@ import classNames from "classnames/bind";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { useRouter } from "next/router";
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-import { AuthContext } from "~context/AuthProvider";
 import styles from "./mainLayout.module.scss";
 import SearchInput from "./SearchInput";
 import Button from "~components/custom/button/Button";
@@ -13,13 +12,15 @@ import useAxiosPrivate from "~hook/useAxiosPrivate";
 import { useQuery } from "@tanstack/react-query";
 import { getCartUser } from "~api/cart.api";
 import { logout } from "~api/user.api";
+import PropoverCart from "./PropoverCart";
+import useAuth from "~hook/useAuth";
 
 const cx = classNames.bind(styles);
 
 const Header = () => {
   const router = useRouter();
   const axiosPrivate = useAxiosPrivate();
-  const { auth, setRedirect, setAuth } = useContext(AuthContext);
+  const { auth, setRedirect, setAuth } = useAuth();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -79,6 +80,18 @@ const Header = () => {
   const item =
     isSuccess && cartUser.data.cart ? cartUser.data.cart.products.length : 0;
 
+  // icon cart
+  const hanldeMouseMoveIcon = (event: "onMove" | "onLeave") => {
+    const popover = document.querySelector("#popover-cart");
+    if (popover) {
+      if (event == "onMove") {
+        popover.classList.add(cx("pop__show"));
+      } else {
+        popover.classList.remove(cx("pop__show"));
+      }
+    }
+  };
+
   return (
     <header className={`container-fluid ${cx("header-wrapper")}`}>
       <div className={`${cx("header")}`}>
@@ -96,13 +109,20 @@ const Header = () => {
         {/* cart */}
         <div
           className={`col-2 ${cx("header__cart")}`}
-          onClick={handleClickCartIcon}
+          onMouseMove={() => hanldeMouseMoveIcon("onMove")}
+          onMouseLeave={() => hanldeMouseMoveIcon("onLeave")}
         >
-          <BsFillCartCheckFill size={24} color="#fff" />
+          <BsFillCartCheckFill
+            size={24}
+            color="#fff"
+            onClick={handleClickCartIcon}
+          />
 
           <div className={cx("header__cart__count")}>
             <span>{item}</span>
           </div>
+
+          <PropoverCart data={cartUser?.data.cart} />
         </div>
 
         <div className={`col-2 ${cx("header__product-review")}`}>

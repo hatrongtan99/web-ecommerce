@@ -24,6 +24,14 @@ class CartController {
         images: { $slice: 1 },
         slug: 1,
         in_stock: 1,
+        categories: { $slice: 1 },
+      },
+      populate: {
+        path: "categories",
+        select: {
+          name: 1,
+          slug: 1,
+        },
       },
     });
 

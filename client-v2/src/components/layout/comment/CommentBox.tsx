@@ -31,16 +31,16 @@ const CommentBox = ({ id }: { id: string }) => {
 
   const handleSubmitNewComment = (e: MouseEvent) => {
     e.preventDefault();
-    // mutation
-    //   .mutateAsync(comment)
-    //   .then(() => {
-    //     setComment({
-    //       content: "",
-    //       email: "",
-    //       user: "",
-    //     });
-    //   })
-    //   .catch((err) => {});
+    mutation
+      .mutateAsync(comment)
+      .then(() => {
+        setComment({
+          content: "",
+          email: "",
+          user: "",
+        });
+      })
+      .catch((err) => {});
   };
 
   return (

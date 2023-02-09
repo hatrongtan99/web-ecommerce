@@ -1,6 +1,6 @@
-import { useContext, ReactNode, useEffect } from "react";
-import { AuthContext } from "~context/AuthProvider";
+import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/router";
+import useAuth from "~hook/useAuth";
 
 const RequireAuth = ({
   children,
@@ -12,7 +12,7 @@ const RequireAuth = ({
 }) => {
   const router = useRouter();
 
-  const { auth, setRedirect } = useContext(AuthContext);
+  const { auth, setRedirect } = useAuth();
 
   useEffect(() => {
     if (!auth?.success || !auth.token) {

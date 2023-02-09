@@ -1,25 +1,25 @@
 import classNames from "classnames/bind";
-import { useState, useContext, ChangeEvent, MouseEvent } from "react";
+import { useState, ChangeEvent, MouseEvent } from "react";
 import { ToastContainer } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 import notify from "~utils/toastify";
-import { AuthContext } from "~context/AuthProvider";
 import google from "../../../../public/image/google.png";
 import styles from "./formLayout.module.scss";
 import { loginSocialSuccess, userLoginLocal } from "~api/user.api";
 import Button from "~components/custom/button/Button";
 import { AuthLogin } from "~types/auth.type";
 import { AxiosResponse } from "axios";
+import useAuth from "~hook/useAuth";
 
 const cx = classNames.bind(styles);
 
 const FormLoginUi = () => {
   const router = useRouter();
 
-  const { setAuth, persirt, setPersirt, redirect } = useContext(AuthContext);
+  const { setAuth, persirt, setPersirt, redirect } = useAuth();
 
   const hanldeLoginSocial = async (type: "google" | "facebook") => {
     let newWindow: Window | null = null;
