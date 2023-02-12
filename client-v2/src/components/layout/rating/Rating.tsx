@@ -7,16 +7,13 @@ import styles from "./rating.module.scss";
 import { getFeedback } from "~api/feedback.api";
 import Button from "~components/custom/button/Button";
 import EvaluateModal from "./evaluateModal/EvaluateModal";
+import { dFormat } from "~utils/format";
 const cx = classNames.bind(styles);
 
 const Rating = ({ id, productName }: { id: string; productName: string }) => {
   const { data, isSuccess } = useQuery(["list-feedbacks", id], () =>
     getFeedback(id)
   );
-
-  const dFormat = (d: Date) => {
-    return d.toLocaleDateString("en-GB") + " " + d.toLocaleTimeString("en-GB");
-  };
 
   const hanldeOpenModal = () => {
     document.querySelector("#modal-evalu")?.classList.toggle(cx("togle-modal"));

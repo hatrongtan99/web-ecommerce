@@ -1,6 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/router";
 import useAuth from "~hook/useAuth";
+import Link from "next/link";
 
 const RequireAuth = ({
   children,
@@ -8,7 +9,6 @@ const RequireAuth = ({
 }: {
   children: ReactNode;
   authValid: string[];
-  publicPage?: boolean;
 }) => {
   const router = useRouter();
 
@@ -21,12 +21,19 @@ const RequireAuth = ({
     }
   }, [auth, router, setRedirect]);
 
-  if (auth?.success && authValid.includes(auth.user.role)) {
+  if (auth?.token && authValid.includes(auth.user.role)) {
     return <>{children}</>;
   }
 
-  if (auth?.success) {
-    return <h2>you can't access this resource</h2>;
+  if (auth?.token) {
+    return (
+      <h2 style={{ fontSize: "2rem", textAlign: "center" }}>
+        you can't access this resource.
+        <Link href={"/"}>
+          <p style={{ fontSize: "1rem" }}>Click here to back home</p>
+        </Link>
+      </h2>
+    );
   }
 
   return null;

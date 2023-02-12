@@ -4,16 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 
 import styles from "./comment.module.scss";
 import { getCommentProduct } from "~api/comment.api";
+import { dFormat } from "~utils/format";
 const cx = classNames.bind(styles);
 
 const Comment = ({ id }: { id: string }) => {
   const { data, isSuccess } = useQuery(["comment-list", id], () =>
     getCommentProduct(id, { page: 1, pageSize: 1 })
   );
-
-  const dFormat = (d: Date) => {
-    return d.toLocaleDateString("en-GB") + " " + d.toLocaleTimeString("en-GB");
-  };
 
   return (
     <>

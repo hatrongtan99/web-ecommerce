@@ -1,4 +1,3 @@
-const e = require("express");
 const { CartItem, Cart } = require("../models/carts.model");
 const catchSyncErr = require("../utils/catchSyncErr");
 const ThrowError = require("../utils/throwError");

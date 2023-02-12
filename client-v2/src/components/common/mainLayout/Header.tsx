@@ -44,11 +44,13 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
-    logout(axiosPrivate).then((data) => {
-      if (data.data.success) {
-        setAuth(null);
-      }
-    });
+    logout(axiosPrivate)
+      .then((data) => {
+        if (data.data.success) {
+          setAuth(null);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -166,7 +168,7 @@ const Header = () => {
                 </div>
                 <div className={cx("pop-user")} ref={refPopuser}>
                   <Link href={"/users/profile"}>Tài Khoản của tôi</Link>
-                  <Link href={"/users/puchases"}>Đơn Hàng</Link>
+                  <Link href={"/users/puchase"}>Đơn Hàng</Link>
                   <p onClick={handleLogout}>Đăng xuất</p>
                 </div>
               </div>

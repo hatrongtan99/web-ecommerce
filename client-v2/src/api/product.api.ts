@@ -7,11 +7,11 @@ import {
 } from "~types/product.type";
 import axiosClient from "./axiosConfig";
 
-export const getAllProducts = (params?: any) => {
+export const getAllProducts = async (params?: any) => {
   return axiosClient.get("/products", params).then((data) => data.data);
 };
 
-export const getProductByCategory = (slug: string, params?: any) => {
+export const getProductByCategory = async (slug: string, params?: any) => {
   return axiosClient
     .get<never, AxiosResponse<{ success: boolean; data: ProductByCategory }>>(
       `/products/category/${slug}`,
@@ -29,7 +29,7 @@ export const createProduct = (
   return axiosPrivate.post("/products", product);
 };
 
-export const getDetailsProduct = (slug: string) => {
+export const getDetailsProduct = async (slug: string) => {
   return axiosClient
     .get<never, AxiosResponse<{ success: boolean; product: ProductDetails }>>(
       `/products/${slug}`

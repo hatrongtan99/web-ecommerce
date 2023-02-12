@@ -5,17 +5,12 @@ const auth = require("../middleware/auth");
 //get all order user
 router.route("/me").get(auth.protectRoute, orderController.getOrderByUser);
 
-//get detail order user
-router
-  .route("/me/:id")
-  .get(auth.protectRoute, orderController.getDetailOrderByUser);
-
 // create new order
 router.route("/add").post(auth.protectRoute, orderController.createNewOrder);
 
 // get all order by admin
 router
-  .route("/all")
+  .route("/admin/all")
   .get(
     auth.protectRoute,
     auth.authAdmin(["Admin"]),

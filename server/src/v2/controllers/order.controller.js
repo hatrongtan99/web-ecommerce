@@ -66,7 +66,7 @@ class OrderController {
       cartUser.user.email,
       notiUserOrder(
         cartUser.user.user_name,
-        `${process.env.URL_CLIENT}/users/puchases/${order._id}`
+        `${process.env.URL_CLIENT}/users/puchase/${order._id}`
       )
     );
     //send mail to admin to noti order
@@ -89,49 +89,42 @@ class OrderController {
     const { page = 1 } = req.query;
     const idUser = req.user.id;
     const skip = (page - 1) * RESULT_PER_PAGE;
-    const order = await Order.findOne({ user: idUser })
+    const order = await Order.find({ user: idUser })
       .populate({
         path: "cart",
+        select: "status products",
+        populate: {
+          path: "products.product",
+          select: {
+            name_product: 1,
+            images: { $slice: 1 },
+            slug: 1,
+            categories: { $slice: 1 },
+          },
+          populate: {
+            path: "brand",
+            select: {
+              brand_name: 1,
+              brand_thumb: 1,
+              slug: 1,
+            },
+          },
+          populate: {
+            path: "categories",
+            select: {
+              name: 1,
+              slug: 1,
+            },
+          },
+        },
       })
       .limit(RESULT_PER_PAGE)
       .skip(skip);
     res.json({ success: true, order });
   });
 
-  //@desc: get detail order by user
-  //@route: [GET]/v2/api/order/me/:id
-  //@access: auth
-  getDetailOrderByUser = catchSyncErr(async (req, res, next) => {
-    const idUser = req.user.id;
-
-    const order = await Order.findOne({
-      user: idUser,
-      _id: req.params.id,
-    }).populate({
-      path: "cart",
-      select: "status products",
-      populate: {
-        path: "products.product",
-        select: {
-          name_product: 1,
-          images: { $slice: 1 },
-          slug: 1,
-        },
-        populate: {
-          path: "brand",
-          select: {
-            brand_name: 1,
-            brand_thumb: 1,
-            slug: 1,
-          },
-        },
-      },
-    });
-    res.json({ success: true, order });
-  });
-
   //@desc: get order by admin
-  //@route: [GET]/v2/api/order/all
+  //@route: [GET]/v2/api/order/admin/all
   //@access: admin
   getOrderByAdmin = catchSyncErr(async (req, res, next) => {
     const { page = 1 } = req.query;

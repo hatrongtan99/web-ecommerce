@@ -1,5 +1,9 @@
 import { AxiosInstance, AxiosResponse } from "axios";
-import { CreateOrderForm, Order } from "~types/order.type";
+import { CreateOrderForm, OrderUser } from "~types/order.type";
+
+interface OrderUserRes extends OrderUser {
+  success: boolean;
+}
 
 export const createOrder = (
   axiosPrivate: AxiosInstance,
@@ -9,4 +13,8 @@ export const createOrder = (
     never,
     AxiosResponse<{ success: boolean; message: string }>
   >("/order/add", orderForm);
+};
+
+export const getOrderByUser = (axiosPrivate: AxiosInstance) => {
+  return axiosPrivate.get<never, AxiosResponse<OrderUserRes>>("/order/me");
 };
