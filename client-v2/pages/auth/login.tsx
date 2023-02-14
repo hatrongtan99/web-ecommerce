@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import * as cookie from "cookie";
 
@@ -14,7 +15,7 @@ const LoginPage = () => {
   );
 };
 
-LoginPage.getLayout = (page: NextPage) => {
+LoginPage.getLayout = (page: ReactElement) => {
   return <>{page}</>;
 };
 

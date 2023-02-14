@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import Link from "next/link";
-import { ReactNode, useState, useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { useRouter } from "next/router";
 
 import { FcSalesPerformance } from "react-icons/fc";
@@ -17,6 +17,7 @@ import useAxiosPrivate from "~hook/useAxiosPrivate";
 import adminLogo from "../../../../../public/image/adminLogo.webp";
 import styles from "./sidebarAdmin.module.scss";
 import Image from "next/image";
+import useSidebar from "~hook/useSidebarAdmin";
 
 const cx = classNames.bind(styles);
 
@@ -25,7 +26,7 @@ const sidebarBody = [
     hasChild: false,
     label: "Doanh số",
     child: [],
-    path: "doanh-so",
+    path: "/admin/doanh-so",
     icon: <FcSalesPerformance size={30} color="#fff" />,
   },
   {
@@ -35,22 +36,22 @@ const sidebarBody = [
       {
         icon: <GrAddCircle />,
         label: "Thêm sản phẩm",
-        path: "them-san-pham",
+        path: "/admin/products/add",
       },
       {
         icon: <BsCircle />,
         label: "Tất cả sản phẩm",
-        path: "products",
+        path: "/admin/products/list-product",
       },
       {
         icon: <BsCircle />,
         label: "Categories",
-        path: "categories",
+        path: "/admin/products/categories",
       },
       {
         icon: <BsCircle />,
         label: "Hãng",
-        path: "brands",
+        path: "/admin/products/brands",
       },
     ],
     path: "",
@@ -63,7 +64,7 @@ const sidebarBody = [
       {
         icon: <BsCircle />,
         label: "Đơn đặt hàng",
-        path: "/",
+        path: "/admin/orders",
       },
     ],
     path: "",
@@ -75,8 +76,10 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const axiosPrivate = useAxiosPrivate();
   const { setAuth, auth } = useAuth();
-  const [resizeSidebar, setResizeNavbar] = useState(false);
-  const [itemActive, setItemActive] = useState<number[]>([]);
+  const { itemsOpen, resizeSidebar, setItemsOpen, setResizeNavbar } =
+    useSidebar()!;
+
+  const refSidebar = useRef<HTMLDivElement>(null);
 
   const handleLogout = async () => {
     logout(axiosPrivate)
@@ -90,10 +93,10 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
   };
 
   const handleSetItemActive = (index: number) => {
-    if (itemActive.includes(index)) {
-      setItemActive([...itemActive.filter((num) => num !== index)]);
+    if (itemsOpen.includes(index)) {
+      setItemsOpen([...itemsOpen.filter((num) => num !== index)]);
     } else {
-      setItemActive([...itemActive, index]);
+      setItemsOpen([...itemsOpen, index]);
     }
   };
 
@@ -104,22 +107,18 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
           className={cx("side-container", {
             resize: resizeSidebar,
           })}
+          ref={refSidebar}
         >
           <div className={cx("sidebar-top")}>
             <Link href={`/admin`} legacyBehavior>
-              <a className={cx("sidebar-top__link", { resize: resizeSidebar })}>
+              <a className={cx("sidebar-top__link")}>
                 <Image src={adminLogo} alt="admin logo" />
                 <span>Admin dashboard</span>
               </a>
             </Link>
-            <div className={cx("sidebar-top__info", { resize: resizeSidebar })}>
+            <div className={cx("sidebar-top__info")}>
               <div className={cx("sidebar-top__info__avatar")}>
-                <Image
-                  src={auth?.user.avatar.url!}
-                  alt="avatar user"
-                  width={45}
-                  height={45}
-                />
+                <Image src={auth?.user.avatar.url!} alt="avatar user" fill />
               </div>
               <span>{auth?.user.user_name}</span>
             </div>
@@ -130,12 +129,14 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
               return (
                 <li
                   key={index}
-                  className={cx(
-                    "body-item",
-                    { resize: resizeSidebar },
-                    { active: itemActive.includes(index) }
-                  )}
-                  onClick={(e) => handleSetItemActive(index)}
+                  className={cx("body-item", {
+                    "menu-open": itemsOpen.includes(index),
+                    active:
+                      router.pathname == item.path ||
+                      item.child.some(
+                        (child) => child.path === router.pathname
+                      ),
+                  })}
                 >
                   {!item.hasChild ? (
                     <Link href={item.path} className={cx("body-item__main")}>
@@ -147,7 +148,10 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
                       </span>
                     </Link>
                   ) : (
-                    <div className={cx("body-item__main")}>
+                    <div
+                      className={cx("body-item__main")}
+                      onClick={(e) => handleSetItemActive(index)}
+                    >
                       <span className={cx("body-item__icon-l")}>
                         {item.icon}
                       </span>
@@ -164,8 +168,13 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
                   {item.hasChild && (
                     <ul className={cx("body-item__child")}>
                       {item.child.map((child, index) => (
-                        <li className={cx("body-item__child__link")}>
-                          <Link href={child.path} key={index}>
+                        <li
+                          className={cx("body-item__child__link", {
+                            active: router.pathname === child.path,
+                          })}
+                          key={index}
+                        >
+                          <Link href={child.path}>
                             <span
                               className={cx("body-item__child__link__icon")}
                             >
@@ -187,7 +196,7 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
           </ul>
         </div>
 
-        <div className={cx("content")}>
+        <main className={cx("content")}>
           <header className={cx("header")}>
             <div className={cx("header__nav")}>
               <AiOutlineMenu
@@ -205,8 +214,9 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
               <p onClick={handleLogout}>Đăng xuất</p>
             </div>
           </header>
-          <div>{children}</div>
-        </div>
+
+          {children}
+        </main>
       </div>
     </main>
   );

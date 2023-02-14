@@ -2,7 +2,7 @@ import { AxiosInstance, AxiosResponse } from "axios";
 import { Brands, CreateBrand } from "~types/brand.type";
 import axiosClient from "./axiosConfig";
 
-export const getAllBrand = () => {
+export const getAllBrand = async () => {
   return axiosClient
     .get<never, AxiosResponse<{ success: boolean; brands: Brands[] }>>(
       "/brands"

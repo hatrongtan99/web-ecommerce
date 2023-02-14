@@ -5,7 +5,7 @@ import {
   ProductByCategory,
   ProductDetails,
 } from "~types/product.type";
-import axiosClient from "./axiosConfig";
+import axiosClient, { axiosPrivate } from "./axiosConfig";
 
 export const getAllProducts = async (params?: any) => {
   return axiosClient.get("/products", params).then((data) => data.data);
@@ -42,5 +42,23 @@ export const updateProduct = (axiosPrivate: AxiosInstance) => {};
 export const deleteProduct = (axiosPrivate: AxiosInstance, id: string) => {
   return axiosPrivate.delete<never, AxiosResponse<CommonResponse>>(
     `/products/${id}`
+  );
+};
+
+// upload img
+interface ImagesRes {
+  success: boolean;
+  thumb: string;
+  images: string[];
+}
+export const uploadImg = (axiosPrivate: AxiosInstance, data: FormData) => {
+  return axiosPrivate.post<never, AxiosResponse<ImagesRes>>(
+    "/images/upload",
+    data,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
 };

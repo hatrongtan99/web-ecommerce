@@ -1,5 +1,4 @@
-import { NextPage } from "next";
-import { useEffect } from "react";
+import { useEffect, ReactElement } from "react";
 
 const SuccessPage = () => {
   useEffect(() => {
@@ -13,7 +12,7 @@ const SuccessPage = () => {
   return <h2>Đăng nhập thành công!</h2>;
 };
 
-SuccessPage.getLayout = (page: NextPage) => {
+SuccessPage.getLayout = (page: ReactElement) => {
   return <>{page}</>;
 };
 

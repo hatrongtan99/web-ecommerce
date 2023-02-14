@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
+import { ReactElement } from "react";
 import PerisrtLogin from "~components/auth/PerisrtLogin";
 import RequireAuth from "~components/auth/RequireAuth";
 import SidebarAdmin from "./sidebarAdmin/SidebarAdmin";
 
-const LayoutAdmin = ({ children }: { children: ReactNode }) => {
+const LayoutAdmin = ({ children }: { children: ReactElement }) => {
   return (
     <PerisrtLogin>
       <RequireAuth authValid={["Admin"]}>

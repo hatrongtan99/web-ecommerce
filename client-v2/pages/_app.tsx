@@ -18,6 +18,7 @@ import AuthProvider from "~context/AuthProvider";
 
 // layout
 import MainLayout from "~components/common/mainLayout/MainLayout";
+import SidebarAdminProvider from "~context/SidebarAdminProvider";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -40,7 +41,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
+        <AuthProvider>
+          <SidebarAdminProvider>
+            {getLayout(<Component {...pageProps} />)}
+          </SidebarAdminProvider>
+        </AuthProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </Hydrate>
     </QueryClientProvider>

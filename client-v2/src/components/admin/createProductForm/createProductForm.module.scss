@@ -1,0 +1,48 @@
+@use "~/styles/mixins" as mixins;
+@import "~/styles/variable";
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 500;
+  color: $text-color;
+  padding: 10px 0;
+}
+
+.wrapper {
+  display: flex;
+  margin: 0 auto;
+  padding: 14px 16px;
+  border-radius: 6px;
+  width: 90%;
+  background-color: #fff;
+  box-shadow: $form-shadow;
+
+  form {
+    width: 100%;
+    text-align: end;
+
+    .img-desc {
+      @include mixins.flex(center, flex-start);
+
+      &__item {
+        position: relative;
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        border: 1px solid $border-color;
+      }
+    }
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+
+    input,
+    select {
+      min-width: 450px;
+      max-width: 700px;
+      margin-left: auto;
+    }
+  }
+}

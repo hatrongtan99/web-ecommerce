@@ -1,12 +1,11 @@
 import { ReactElement } from "react";
 import LayoutAdmin from "~components/layout/admin/LayoutAdmin";
 
-const DoanhSoPage = () => {
-  return <div>aabcbcb</div>;
+const CategoriesPage = () => {
+  return <>categoripage</>;
 };
 
-DoanhSoPage.getLayout = (page: ReactElement) => {
+CategoriesPage.getLayout = (page: ReactElement) => {
   return <LayoutAdmin>{page}</LayoutAdmin>;
 };
-
-export default DoanhSoPage;
+export default CategoriesPage;

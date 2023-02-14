@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { ReactElement } from "react";
 import FormLayout from "~components/auth/formLoginRegis/FormLayout";
 import FormRegisterUi from "~components/auth/formLoginRegis/FormRegisterUi";
 
@@ -10,7 +10,7 @@ const RegisterPage = () => {
   );
 };
 
-RegisterPage.getLayout = (page: NextPage) => {
+RegisterPage.getLayout = (page: ReactElement) => {
   return <>{page}</>;
 };
 

@@ -1,4 +1,4 @@
-import { ReactNode, useState, useLayoutEffect } from "react";
+import { ReactNode, useState, useEffect } from "react";
 
 import Spinner from "~components/common/spiner/Spiner";
 import { loginSuccess } from "~api/user.api";
@@ -10,7 +10,7 @@ const PerisrtLogin = ({ children }: { children: ReactNode }) => {
   const { auth, setAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (auth && auth.token) {
       setIsLoading(false);
       return;

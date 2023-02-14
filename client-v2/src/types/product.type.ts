@@ -1,12 +1,16 @@
 export interface CreateProduct {
   name_product: string;
   brand: string;
+  specialField?: [];
+  discount?: number;
   price: number;
   images: string[];
+  in_stock: number;
   insurance: string;
   sku: string;
   catalog: Catalog[];
-  category: string;
+  desc?: string;
+  categories: string[];
 }
 
 export interface Catalog {
