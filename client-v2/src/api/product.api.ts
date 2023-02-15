@@ -8,7 +8,9 @@ import {
 import axiosClient, { axiosPrivate } from "./axiosConfig";
 
 export const getAllProducts = async (params?: any) => {
-  return axiosClient.get("/products", params).then((data) => data.data);
+  return axiosClient
+    .get<never, AxiosResponse>("/products", params)
+    .then((data) => data.data);
 };
 
 export const getProductByCategory = async (slug: string, params?: any) => {
@@ -37,7 +39,13 @@ export const getDetailsProduct = async (slug: string) => {
     .then((data) => data.data);
 };
 
-export const updateProduct = (axiosPrivate: AxiosInstance) => {};
+export const updateProduct = (
+  axiosPrivate: AxiosInstance,
+  id: string,
+  data: any
+) => {
+  return axiosPrivate.put(`/products/${id}`, data);
+};
 
 export const deleteProduct = (axiosPrivate: AxiosInstance, id: string) => {
   return axiosPrivate.delete<never, AxiosResponse<CommonResponse>>(

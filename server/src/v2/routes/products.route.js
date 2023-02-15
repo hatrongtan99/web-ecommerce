@@ -34,7 +34,7 @@ router.route("/:slug").get(productsController.getDetailsProduct);
 
 // update product / delete product
 router
-  .route(":id")
+  .route("/:id")
   .put(
     auth.protectRoute,
     auth.authAdmin(["Admin"]),

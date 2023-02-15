@@ -1,81 +1,109 @@
-@use '~/styles/mixins';
-@import '~/styles/variable';
-
+@use "~/styles/mixins";
+@import "~/styles/variable";
 
 .title {
-    padding: 20px 0;
-    font-size: 2rem;
-    font-weight: 500;
+  padding: 20px 0;
+  font-size: 2rem;
+  font-weight: 500;
 }
 
 .product-list {
-    padding: 20px;
-    background-color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 10px;
+  background-color: #fff;
 }
 
 .product-item {
+  @include mixins.flex(center, unset);
+  flex-direction: column;
+  position: relative;
+  border: 1px solid #999;
+  padding: 10px 10px;
+  min-height: 250px;
+  width: 100%;
+
+  &:hover {
+    background-color: rgba(49, 103, 235, 0.075);
+    cursor: pointer;
+  }
+
+  &__img {
+    display: inline-block;
     position: relative;
-    border-bottom: 1px solid #ccc;
-    padding: 8px 0;
-    min-height: 100px;
+    width: 200px;
+    height: 200px;
+    padding: 0.25rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 0.1rem 0.25rem rgb(0 0 0 / 8%);
+    flex-shrink: 0;
+  }
+
+  &__title {
+    line-height: 1.4;
+    padding: 4px 0;
+    span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #666;
+    }
+  }
+
+  &__price {
+    width: 100%;
+    margin-top: auto;
+
+    strong {
+      color: $text-color;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+  }
+
+  &__brand {
+    width: 100%;
+    margin-top: auto;
+  }
+
+  .btn-more {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    height: 40px;
+    width: 40px;
+    border: 1px solid rgba(108, 117, 125, 0.7);
+    border-radius: 4px;
+    background-color: #fff;
+    transition: all 100ms linear;
 
     &:hover {
-        background-color: rgba(49, 103, 235, 0.075);
-        cursor: pointer;
+      border-color: #999;
     }
+  }
 
-    img {
-        width: 60px;
-        height: 60px;
-        padding: 0.25rem;
+  .dropdown {
+    padding: 4px 0;
+    position: absolute;
+    background-color: #fff;
+    list-style-type: none;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
+    top: 72%;
+    right: 1%;
+    width: auto;
+    z-index: 10;
+
+    li {
+      padding: 2px 26px 2px 14px;
+      color: $text-color;
+
+      &:hover {
         background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 0.25rem;
-        box-shadow: 0 0.1rem 0.25rem rgb(0 0 0 / 8%);
-        max-width: 100%;
+      }
     }
-
-    .align-center {
-        @include mixins.flex (center, flex-start);
-    }
-
-    .btn-more {
-        position: absolute;
-        top: 50%;
-        right: 20px;
-        transform: translateY(-50%);
-        height: 40px;
-        width: 40px;
-        border: 1px solid rgba(108, 117, 125, 0.25);
-        border-radius: 4px;
-        background-color: #fff;
-        transition: all 100ms linear;
-
-        &:hover {
-            border-color: #999;
-        }
-    }
-
-    .dropdown {
-        padding: 4px 0;
-        position: absolute;
-        background-color: #fff;
-        border: 1px solid rgba(0,0,0,.15);
-        border-radius: 0.25rem;
-        box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-        top: 72%;
-        right: 1%;
-        width: auto;
-        z-index: 1;
-
-        li {
-            padding: 2px 26px 2px 14px;
-            color: $text-color;
-
-            &:hover {
-                background-color: #f8f9fa;
-            }
-        }
-    }
-
+  }
 }

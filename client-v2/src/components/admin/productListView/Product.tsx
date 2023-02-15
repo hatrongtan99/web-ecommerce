@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import classNames from "classnames/bind";
 import { BsThreeDots } from "react-icons/bs";
 import Image from "next/image";
-import { ToastContainer } from "react-toastify";
 
 import styles from "./productListView.module.scss";
 import Spinner from "~components/common/spiner/Spiner";
@@ -13,9 +12,12 @@ import useClickOutSide from "~hook/useClickOutSide";
 
 const cx = classNames.bind(styles);
 
-interface ProductListProps {}
+interface ProductListProps {
+  data: any;
+}
 
-const ProductList = ({}: ProductListProps) => {
+const ProductList = ({ data }: ProductListProps) => {
+  const router = useRouter();
   const [active, setActive] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -24,57 +26,52 @@ const ProductList = ({}: ProductListProps) => {
 
   useClickOutSide(btnDropDownRef, () => setActive(false));
 
-  const hanldeViewDetal = () => {};
-
-  const handleNavigateEditProduct = () => {};
-
   const handleDeleteProduct = () => {};
 
   return (
-    <>
-      <div className={`row ${cx("product-item")}`}>
-        <div className={`col-1 ${cx("align-center")}`}>
+    <div className="col-3 g-2">
+      <div className={cx("product-item")}>
+        <Link href={``} className={cx("product-item__img")}>
+          <Image src={data.images[0]} alt={""} fill sizes="auto" />
+        </Link>
+
+        <div className={cx("product-item__title")}>
           <Link href={``}>
-            <Image
-              src={`http://api.dienmaykimkhi.com/public/imagesV2/500x-may-khoan-van-vit-dung-pin-18v-makita-df488dwe-1-1639707151.jpg`}
-              alt={""}
-              width={30}
-              height={30}
-            />
+            <span>{data.name_product}</span>
           </Link>
         </div>
 
-        <div className={`col-5 ${cx("align-center")}`}>
-          <Link href={``}>
-            <h3 style={{ fontWeight: "500", padding: "20px 0" }}>
-              name products
-            </h3>
-          </Link>
+        <div className={cx("product-item__price")}>
+          <strong>{data.price.toLocaleString()}đ</strong>
         </div>
 
-        <div className={`col-2 ${cx("align-center")}`}>
-          <strong>{(20000).toLocaleString()} đ</strong>
-        </div>
-
-        <div className={`col-2 ${cx("align-center")}`}>
+        <div className={cx("product-item__brand")}>
           <p>
-            Hãng: <strong>{"makita"}</strong>
+            Hãng: <Link href={""}>{data.brand.brand_name}</Link>
           </p>
         </div>
+
         <div
-          className={cx("btn-more", "align-center")}
+          className={`d-flex justify-content-center align-items-center ${cx(
+            "btn-more"
+          )}`}
           onClick={() => setActive(!active)}
-          ref={btnDropDownRef}
         >
           <BsThreeDots color="#999" />
         </div>
         {active && (
-          <ul className={cx("dropdown")}>
-            <li onClick={() => hanldeViewDetal()}>Xem chi tiết</li>
-            <li onClick={() => handleNavigateEditProduct()}>Chỉnh sửa</li>
+          <ul className={cx("dropdown")} ref={btnDropDownRef}>
+            <li
+              onClick={() => {
+                router.push(`/admin/products/update/${data.slug}`);
+                console.log("runn");
+              }}
+            >
+              Chỉnh sửa
+            </li>
             <li
               data-bs-toggle="modal"
-              data-bs-target={`#deletePeoduct${1}`}
+              data-bs-target={`#deletePeoduct${data._id}`}
               style={{ color: "#f40052 " }}
             >
               Xóa
@@ -83,13 +80,13 @@ const ProductList = ({}: ProductListProps) => {
         )}
         <BackdropModal
           body="Chắc chắn xóa sản phẩm này"
-          id={`deletePeoduct${1}`}
+          id={`deletePeoduct${data._id}`}
           titleDismiss="Hủy"
           titleAgree="Xóa"
           handleAgree={() => handleDeleteProduct()}
         />
       </div>
-    </>
+    </div>
   );
 };
 

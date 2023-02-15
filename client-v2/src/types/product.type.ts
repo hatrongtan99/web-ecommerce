@@ -9,7 +9,6 @@ export interface CreateProduct {
   insurance: string;
   sku: string;
   catalog: Catalog[];
-  desc?: string;
   categories: string[];
 }
 
@@ -63,9 +62,13 @@ export interface ProductDetails {
   insurance: string;
   sku: string;
   catalog: Catalog[];
-  desc: any;
+  desc: {
+    _id: string;
+    created: string;
+    desc: string;
+  } | null;
   deleted: boolean;
   created: string;
   slug: string;
-  categories: [{ name: string; slug: string }];
+  categories: [{ name: string; slug: string; _id: string }];
 }

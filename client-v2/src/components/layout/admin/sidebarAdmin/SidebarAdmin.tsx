@@ -118,7 +118,12 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
             </Link>
             <div className={cx("sidebar-top__info")}>
               <div className={cx("sidebar-top__info__avatar")}>
-                <Image src={auth?.user.avatar.url!} alt="avatar user" fill />
+                <Image
+                  src={auth?.user.avatar.url!}
+                  alt="avatar user"
+                  fill
+                  sizes="auto"
+                />
               </div>
               <span>{auth?.user.user_name}</span>
             </div>

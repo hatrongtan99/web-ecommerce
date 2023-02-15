@@ -1,11 +1,13 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { ChangeEvent, useRef, useEffect, useMemo, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import classNames from "classnames/bind";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import * as Yup from "yup";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FieldArray } from "formik";
 import { ToastContainer } from "react-toastify";
 
+import filter from "~data/filter";
 import styles from "./createProductForm.module.scss";
 import InputForm from "~components/custom/inputForm/InputForm";
 import Button from "~components/custom/button/Button";
@@ -14,26 +16,29 @@ import type { CreateProduct } from "~types/product.type";
 import useAxiosPrivate from "~hook/useAxiosPrivate";
 import { createProduct, uploadImg } from "~api/product.api";
 import notify from "~utils/toastify";
-import SelectForm from "~components/custom/selectForm/SelectForm";
 import { getAllBrand } from "~api/brand.api";
 import { getAllCategory } from "~api/categories.api";
-import EditDescripton from "../editDescription/EditDescription";
+import SelectForm from "~components/custom/selectForm/SelectForm";
 
 const cx = classNames.bind(styles);
 
 const createProductValidates = Yup.object({
   name_product: Yup.string().required("*Vui lòng nhập tên sản phẩm!"),
   brand: Yup.string().required("*Vui lòng chọn hãng sản xuất!"),
-  price: Yup.number().required("*Vui lòng nhập giá sản phẩm!"),
-  images: Yup.mixed().required("*Vui lòng chọn thêm ảnh mô tả cho sản phẩm"),
+  price: Yup.number()
+    .positive("*Giá bán phải lớn hơn 0")
+    .required("*Vui lòng nhập giá sản phẩm!"),
+  images: Yup.mixed(),
   insurance: Yup.string().required("*Vui lòng nhập thời hạn bảo hành!"),
   discount: Yup.number()
     .default(0)
     .min(0, "*Khuyến mãi phải từ 0 - 99 %")
     .max(99, "*Khuyến mãi phải từ 0 - 99 %"),
   sku: Yup.string().required("*Vui lòng nhập mã hàng!"),
-  category: Yup.mixed(),
-  in_stock: Yup.number().required("*Vui lòng nhập số lượng!"),
+  categories: Yup.array().min(1, "*Chọn ít nhất 1 loại!"),
+  in_stock: Yup.number()
+    .positive("*Số lượng phải lớn hơn 0!")
+    .required("*Vui lòng nhập số lượng!"),
 });
 
 interface HandleInputProps {
@@ -43,8 +48,7 @@ interface HandleInputProps {
 
 const CreateProductForm = () => {
   const [images, setImages] = useState<string[]>([]);
-
-  const [description, setDescription] = useState("");
+  const [categoriesSelct, setCategoriesSelect] = useState([]);
 
   const aixosPrivate = useAxiosPrivate();
 
@@ -59,16 +63,36 @@ const CreateProductForm = () => {
       setImages(result);
     }
   };
+  const refInputImg = useRef<HTMLInputElement>(null);
+
+  const handleResetForm = (cb: any) => {
+    if (refInputImg.current) {
+      refInputImg.current.value = "";
+      cb();
+      setImages([]);
+    }
+  };
+
+  const mutation = useMutation((data: CreateProduct) =>
+    createProduct(aixosPrivate, data)
+  );
 
   // fetch data;
-  const { data: allBrand, isSuccess: getAllBrandSuccess } = useQuery(
+  const { data: allBrand, isLoading: isLoadingBrand } = useQuery(
     ["brands"],
     getAllBrand
   );
-  const { data: allCategory, isSuccess: getAllCategorySuccess } = useQuery(
+  const { data: allCategory, isLoading: isLoadingCate } = useQuery(
     ["all-category"],
     getAllCategory
   );
+
+  const MultiSelect = useMemo(() => {
+    return dynamic(
+      import("react-multi-select-component").then((mod) => mod.MultiSelect),
+      { ssr: false }
+    );
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -97,28 +121,41 @@ const CreateProductForm = () => {
               catalog: [],
               categories: [],
             }}
-            // validationSchema={createProductValidates}
-            onSubmit={async (values) => {
+            validationSchema={createProductValidates}
+            onSubmit={async (values, { resetForm, setFieldError }) => {
               const formData = new FormData();
-
-              if (values.images.length > 0) {
-                for (let i = 0; i < values.images.length; i++) {
-                  formData.append("images", values.images[i]);
-                }
-              }
-
               try {
+                if (values.images.length > 0) {
+                  for (let i = 0; i < values.images.length; i++) {
+                    formData.append("images", values.images[i]);
+                  }
+                } else {
+                  setFieldError(
+                    "images",
+                    "*Vui lòng chọn ít nhất 1 ảnh mô tả!"
+                  );
+                  return;
+                }
+
                 const uploadImgRes = await uploadImg(aixosPrivate, formData);
                 if (uploadImgRes.data.success) {
                   values.images = uploadImgRes.data.images;
+                  values.specialField = values.specialField?.map((i: any) => ({
+                    [i.title]: i.content,
+                  })) as [];
 
-                  const newProductRes = await createProduct(
-                    aixosPrivate,
-                    values
-                  );
-                  if (newProductRes.data.success) {
-                    notify("success", "Tạo mới thành công.");
-                  }
+                  mutation
+                    .mutateAsync(values)
+                    .then((data) => {
+                      console.log(data);
+                      if (data.data.success) {
+                        notify("success", "Tạo mới thành công!");
+                      }
+                      handleResetForm(resetForm);
+                    })
+                    .catch((err) =>
+                      notify("error", err?.response?.data?.message)
+                    );
                 }
               } catch (error: any) {
                 console.log(error);
@@ -126,7 +163,14 @@ const CreateProductForm = () => {
               }
             }}
           >
-            {({ setFieldValue, errors, touched, isSubmitting }) => (
+            {({
+              setFieldValue,
+              errors,
+              touched,
+              isSubmitting,
+              values,
+              resetForm,
+            }) => (
               <Form>
                 <div className={cx("form-group")}>
                   <Field
@@ -138,52 +182,159 @@ const CreateProductForm = () => {
                 </div>
 
                 {/* brands */}
-                {/* <div className={cx("form-group")}>
-                  <Field
-                    component={SelectForm}
-                    name="brand"
-                    className="form-select"
-                    leftlabel="Hãng sản xuất:"
-                    aria-label=".form-select-sm"
-                  >
-                    <option value={""} disabled hidden>
-                      Chọn hãng sản xuất:
-                    </option>
-                    {getAllBrandSuccess &&
-                      allBrand.brands.map((brand) => (
-                        <option key={brand._id} value={brand._id}>
+                {!isLoadingBrand && (
+                  <div className={cx("form-group")}>
+                    <Field
+                      component={SelectForm}
+                      name="brand"
+                      leftlabel="Hãng sản xuất:"
+                      className="form-control"
+                    >
+                      <option disabled value="">
+                        Chọn hãng sản xuất
+                      </option>
+                      {allBrand?.brands.map((brand) => (
+                        <option value={brand._id} key={brand._id}>
                           {brand.brand_name}
                         </option>
                       ))}
-                  </Field>
-                </div> */}
+                    </Field>
+                  </div>
+                )}
 
                 {/* categories */}
-                {/* <div className={cx("form-group")}>
-                  <Field
-                    component={SelectForm}
-                    name="categories"
-                    className="form-select"
-                    leftlabel="Loại hàng:"
-                    aria-label=".form-select-sm"
-                  >
-                    <option value={""} disabled hidden>
-                      Chọn loại hàng:
-                    </option>
-                    {getAllCategorySuccess &&
-                      allCategory.lists.map((category) => (
-                        <option key={category._id} value={category._id}>
-                          {category.name}
-                        </option>
-                      ))}
-                  </Field>
-                </div> */}
-
                 <div className={cx("form-group")}>
                   <div className="d-flex">
-                    <label>specialField:</label>
-                    <input name="specialField" className="form-control" />
+                    <label>Categories:</label>
+                    <div
+                      style={{
+                        marginLeft: "auto",
+                        maxWidth: "700px",
+                        minWidth: "450px",
+                        flex: 1,
+                      }}
+                    >
+                      {!isLoadingCate && (
+                        <MultiSelect
+                          options={
+                            allCategory?.lists.map((cate) => ({
+                              label: cate.name,
+                              value: cate._id,
+                            }))!
+                          }
+                          value={categoriesSelct}
+                          onChange={(e: any) => {
+                            setCategoriesSelect(e);
+                            setFieldValue(
+                              "categories",
+                              e.map((i: any) => i.value)
+                            );
+                          }}
+                          labelledBy=""
+                          valueRenderer={(selected, _options) => {
+                            return selected.length
+                              ? selected.map(({ label }) => "✔️ " + label)
+                              : "Chọn ít nhất 1";
+                          }}
+                        />
+                      )}
+                    </div>
                   </div>
+                  {touched.categories && errors.categories && (
+                    <div
+                      className="mt-1"
+                      style={{
+                        color: "red",
+                        fontSize: "0.8rem",
+                      }}
+                    >
+                      {errors.categories as string}
+                    </div>
+                  )}
+                </div>
+
+                <div
+                  className={`d-flex py-3 px-2 ${cx("form-group")}`}
+                  style={{
+                    border: "1px solid #666",
+                  }}
+                >
+                  <label>SpecialField:</label>
+                  <FieldArray
+                    name="specialField"
+                    render={(arrayHelpers) => {
+                      return (
+                        <div
+                          style={{
+                            marginLeft: "auto",
+                          }}
+                        >
+                          {values.specialField && values.specialField.length > 0
+                            ? values.specialField.map((item, index) => (
+                                <div
+                                  className="d-flex align-items-center my-2"
+                                  key={index}
+                                >
+                                  <Field
+                                    component={SelectForm}
+                                    name={`specialField.${index}.title`}
+                                    placeholder="title"
+                                    className="form-control"
+                                  >
+                                    <option disabled value=""></option>
+                                    {Object.keys(
+                                      filter.filter.specialField
+                                    ).map((i, index) => (
+                                      <option key={index} value={i}>
+                                        {i}
+                                      </option>
+                                    ))}
+                                  </Field>
+                                  <span className="px-2">:</span>
+                                  <Field
+                                    component={SelectForm}
+                                    name={`specialField.${index}.content`}
+                                    placeholder="content"
+                                    className="form-control"
+                                  >
+                                    <option value="" disabled></option>
+                                    {(
+                                      filter.filter.specialField[
+                                        values.specialField![index]["title"]
+                                      ] as [] | undefined
+                                    )?.map((i: any, index) => (
+                                      <option key={index} value={i.title}>
+                                        {i.title}
+                                      </option>
+                                    ))}
+                                  </Field>
+                                  <Button
+                                    size="sm"
+                                    type="button"
+                                    style={{ marginLeft: "6px" }}
+                                    onClick={() => arrayHelpers.remove(index)}
+                                  >
+                                    -
+                                  </Button>
+                                </div>
+                              ))
+                            : null}
+                          <div style={{ float: "right" }}>
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              type="button"
+                              onClick={() =>
+                                arrayHelpers.push({ title: "", content: "" })
+                              }
+                            >
+                              Thêm
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    }}
+                  />
                 </div>
 
                 <div className={cx("form-group")}>
@@ -209,6 +360,7 @@ const CreateProductForm = () => {
                   <div className="d-flex">
                     <label>Ảnh mô tả:</label>
                     <input
+                      ref={refInputImg}
                       name="images"
                       type="file"
                       className="form-control"
@@ -233,18 +385,13 @@ const CreateProductForm = () => {
                     </div>
                   )}
                 </div>
-                {images.map((image, index) => (
-                  <div className={cx("img-desc")} key={index}>
-                    <span className={cx("img-desc__item")}>
-                      <Image
-                        src={image}
-                        key={index}
-                        alt="product image desc"
-                        fill
-                      />
+                <div className={cx("img-desc")}>
+                  {images.map((image, index) => (
+                    <span className={cx("img-desc__item")} key={index}>
+                      <Image src={image} alt="product image desc" fill />
                     </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
 
                 <div className={cx("form-group")}>
                   <Field
@@ -274,43 +421,90 @@ const CreateProductForm = () => {
                   />
                 </div>
 
-                <div className={cx("form-group")}>
-                  <Field
-                    component={InputForm}
-                    name="catalog"
-                    leftlabel="Catalog:"
-                    className="form-control"
-                  />
-                </div>
-
-                <div className={cx("form-group")}>
-                  <Field
-                    component={InputForm}
-                    name="desc"
-                    leftlabel="Mô tả:"
-                    className="form-control"
-                  />
-                </div>
-
-                <Button
-                  variant="primary"
-                  style={{ float: "right" }}
-                  type="submit"
+                <div
+                  className={`d-flex py-3 px-2 ${cx("form-group")}`}
+                  style={{
+                    border: "1px solid #666",
+                  }}
                 >
-                  Lưu
-                </Button>
+                  <label>Catalog:</label>
+                  <FieldArray
+                    name="catalog"
+                    render={(arrayHelpers) => {
+                      return (
+                        <div
+                          style={{
+                            marginLeft: "auto",
+                          }}
+                        >
+                          {values.catalog && values.catalog.length > 0
+                            ? values.catalog.map((item, index) => (
+                                <div
+                                  className="d-flex align-items-center my-2"
+                                  key={index}
+                                >
+                                  <Field
+                                    component={InputForm}
+                                    name={`catalog.${index}.title`}
+                                    placeholder="title"
+                                    className="form-control"
+                                  />
+                                  <span className="px-2">:</span>
+                                  <Field
+                                    component={InputForm}
+                                    name={`catalog.${index}.content`}
+                                    placeholder="content"
+                                    className="form-control"
+                                  />
+                                  <Button
+                                    size="sm"
+                                    type="button"
+                                    style={{ marginLeft: "6px" }}
+                                    onClick={() => arrayHelpers.remove(index)}
+                                  >
+                                    -
+                                  </Button>
+                                </div>
+                              ))
+                            : null}
+                          <div style={{ float: "right" }}>
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              type="button"
+                              onClick={() =>
+                                arrayHelpers.push({ title: "", content: "" })
+                              }
+                            >
+                              Thêm
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    }}
+                  />
+                </div>
+
+                <div className="d-flex justify-content-end">
+                  <Button
+                    variant="secondary"
+                    style={{ marginTop: "10px" }}
+                    onClick={() => handleResetForm(resetForm)}
+                    type="button"
+                  >
+                    Reset
+                  </Button>
+
+                  <Button style={{ marginTop: "10px" }} type="submit">
+                    Tạo mới
+                  </Button>
+                </div>
                 {isSubmitting && <Spinner />}
               </Form>
             )}
           </Formik>
         </div>
         <ToastContainer />
-      </div>
-      <div className="container mb-5">
-        <EditDescripton
-          description={description}
-          setDescription={setDescription}
-        />
       </div>
     </>
   );

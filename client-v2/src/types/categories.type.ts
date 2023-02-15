@@ -8,3 +8,9 @@ export interface AllCategory {
     slug: string;
   }[];
 }
+
+export interface NewCategory {
+  name: string;
+  image: string;
+  description?: string;
+}

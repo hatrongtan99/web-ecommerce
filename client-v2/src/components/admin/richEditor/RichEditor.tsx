@@ -9,7 +9,7 @@ import {
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 
-import styles from "./editDescripton.module.scss";
+import styles from "./richEditor.module.scss";
 import { uploadImg } from "~api/product.api";
 import useAxiosPrivate from "~hook/useAxiosPrivate";
 
@@ -17,15 +17,12 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const cx = classNames.bind(styles);
 
-interface EditDescriptonProps {
-  description: string;
-  setDescription: Dispatch<SetStateAction<string>>;
+interface RichEditorProps {
+  rawHtml: string;
+  setRawHtml: any;
 }
 
-const EditDescripton = ({
-  description,
-  setDescription,
-}: EditDescriptonProps) => {
+const RichEditor = ({ rawHtml, setRawHtml }: RichEditorProps) => {
   const Editor = useMemo(() => {
     return dynamic(
       () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
@@ -38,11 +35,11 @@ const EditDescripton = ({
 
   const handleOnchange = (e: EditorState) => {
     setEditorState(e);
-    setDescription(draftToHtml(convertToRaw(e.getCurrentContent())));
+    setRawHtml(draftToHtml(convertToRaw(e.getCurrentContent())));
   };
 
   useEffect(() => {
-    const blocksFromHTML = convertFromHTML(description);
+    const blocksFromHTML = convertFromHTML(rawHtml);
     const state = ContentState.createFromBlockArray(
       blocksFromHTML.contentBlocks,
       blocksFromHTML.entityMap
@@ -52,7 +49,6 @@ const EditDescripton = ({
 
   const uploadImageCallBack = async (file: File) => {
     const formData = new FormData();
-    console.log(file);
     formData.append("images", file);
     const imgData = await uploadImg(aixosPrivate, formData);
     return Promise.resolve({
@@ -89,11 +85,11 @@ const EditDescripton = ({
       <div className="col-6">
         <div
           id={cx("preview")}
-          dangerouslySetInnerHTML={{ __html: description }}
+          dangerouslySetInnerHTML={{ __html: rawHtml }}
         ></div>
       </div>
     </div>
   );
 };
 
-export default EditDescripton;
+export default RichEditor;

@@ -1,8 +1,9 @@
 import { ReactElement } from "react";
+import Categories from "~components/admin/categories/Categories";
 import LayoutAdmin from "~components/layout/admin/LayoutAdmin";
 
 const CategoriesPage = () => {
-  return <>categoripage</>;
+  return <Categories />;
 };
 
 CategoriesPage.getLayout = (page: ReactElement) => {

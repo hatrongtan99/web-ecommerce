@@ -21,8 +21,21 @@ class ProductsController {
       ...search(req.query, "name_product"),
       ...query,
     })
+      .select({
+        name_product: 1,
+        discount: 1,
+        price: 1,
+        rating: 1,
+        sold: 1,
+        images: { $slice: 1 },
+        in_stock: 1,
+        insurance: 1,
+        sku: 1,
+        deleted: 1,
+        created: 1,
+        slug: 1,
+      })
       .populate({ path: "brand", select: "brand_name brand_thumb slug" })
-      .select("name_product brand discount price images in_stock slug")
       .sort(sort ? { price: sort } : {})
       .limit(RESULT_PER_PAGE)
       .skip(skip);
@@ -48,7 +61,7 @@ class ProductsController {
     let products = await Categories.findOne({ slug })
       .populate({
         path: "products",
-        match: { deleted: false, ...query },
+        match: { ...query },
         select: {
           name_product: 1,
           discount: 1,
@@ -81,8 +94,7 @@ class ProductsController {
       images,
       insurance,
       sku,
-      catalog,
-      category,
+      categories,
       in_stock,
     } = req.body;
     if (
@@ -92,8 +104,7 @@ class ProductsController {
       !images ||
       !insurance ||
       !sku ||
-      !catalog ||
-      !category ||
+      !categories ||
       !in_stock
     ) {
       return next(new ThrowError("Invalid infomation create product!", 400));
@@ -105,7 +116,7 @@ class ProductsController {
     req.body.images = images;
     const newProduct = await Products.create(req.body);
 
-    const pushProductToCategory = category.map((i) => {
+    const pushProductToCategory = categories.map((i) => {
       return {
         updateOne: {
           filter: { _id: i, isActive: true },
@@ -123,11 +134,10 @@ class ProductsController {
   getDetailsProduct = catchSyncErr(async (req, res, next) => {
     const product = await Products.findOne({
       slug: req.params.slug,
-      deleted: false,
     })
       .populate("brand")
       .populate({ path: "desc", select: "-product -__v" })
-      .populate({ path: "categories", select: "name slug -_id" });
+      .populate({ path: "categories", select: "name slug id" });
     if (!product) {
       return next(new ThrowError("Product not found!", 400));
     }
