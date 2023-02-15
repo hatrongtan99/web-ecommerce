@@ -5,44 +5,44 @@ import classNames from "classnames/bind";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import { BsThreeDots } from "react-icons/bs";
-import { useRouter } from "next/router";
 
-import styles from "./categories.module.scss";
-import { createNewCategory, getAllCategory } from "~api/categories.api";
+import useClickOutSide from "~hook/useClickOutSide";
+import styles from "./brands.module.scss";
 import useAxiosPrivate from "~hook/useAxiosPrivate";
-import { NewCategory } from "~types/categories.type";
+import { createNewBrand, getAllBrand } from "~api/brand.api";
+import { CreateBrand } from "~types/brand.type";
 import Spinner from "~components/common/spiner/Spiner";
-import InputForm from "~components/custom/inputForm/InputForm";
-import RichEditor from "../richEditor/RichEditor";
 import Button from "~components/custom/button/Button";
 import { uploadImg } from "~api/product.api";
 import notify from "~utils/toastify";
+import InputForm from "~components/custom/inputForm/InputForm";
+import RichEditor from "../richEditor/RichEditor";
+import { BsThreeDots } from "react-icons/bs";
 import BackdropModal from "~components/custom/backdropModal/BackdropModal";
-import useClickOutSide from "~hook/useClickOutSide";
 
 const cx = classNames.bind(styles);
 
-const Categories = () => {
+const Brands = () => {
   const axiosPrivate = useAxiosPrivate();
   const queryClient = useQueryClient();
-  const { data, isLoading } = useQuery(["all-category"], getAllCategory);
+  const { data, isLoading } = useQuery(["brands"], getAllBrand);
   const [rawHtml, setRawHtml] = useState("");
   const [openForm, setOpenForm] = useState(false);
   const mutaion = useMutation(
-    (data: NewCategory) => createNewCategory(axiosPrivate, data),
+    (data: CreateBrand) => createNewBrand(axiosPrivate, data),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["all-category"]);
+        queryClient.invalidateQueries(["brands"]);
       },
     }
   );
 
   const validateSchema = Yup.object({
-    name: Yup.string().required("*Vui lòng nhập tên!"),
-    image: Yup.string().required("*Vui lòng chọn ảnh!"),
+    brand_name: Yup.string().required("*Vui lòng nhập tên!"),
+    brand_thumb: Yup.string().required("*Vui lòng chọn ảnh!"),
   });
 
   const refInputImg = useRef<HTMLInputElement>(null);
@@ -53,7 +53,7 @@ const Categories = () => {
       ) : (
         <div className="container-fluid">
           <div className="d-flex align-items-center my-2">
-            <h1 className={cx("title")}>Phân loại</h1>
+            <h1 className={cx("title")}>Nhà Sản xuất</h1>
             <Button
               style={{ padding: "4px 10px", marginLeft: "auto" }}
               variant="secondary"
@@ -64,7 +64,7 @@ const Categories = () => {
               Tạo mới
             </Button>
           </div>
-          <div className={cx("category-form", { "open-form": openForm })}>
+          <div className={cx("brands-form", { "open-form": openForm })}>
             <Formik
               initialValues={{ name: "", image: "" } as any}
               validationSchema={validateSchema}
@@ -97,8 +97,8 @@ const Categories = () => {
                   <div className={cx("form-group")}>
                     <Field
                       component={InputForm}
-                      name="name"
-                      leftlabel="Tên Category:"
+                      name="brand_name"
+                      leftlabel="Tên nhà Sản xuất:"
                       className="form-control"
                     />
                   </div>
@@ -106,7 +106,7 @@ const Categories = () => {
                   <div className={cx("form-group")}>
                     <Field
                       component={InputForm}
-                      name="image"
+                      name="brand_thumb"
                       type="file"
                       leftlabel="Ảnh nền:"
                     />
@@ -131,8 +131,8 @@ const Categories = () => {
           </div>
 
           <div className={`row ${cx("cate-list")}`}>
-            {data?.lists.map((cate, index) => (
-              <CateItem data={cate} key={cate._id} />
+            {data?.brands.map((brand, index) => (
+              <BrandItem data={brand} key={brand._id} />
             ))}
           </div>
         </div>
@@ -142,23 +142,23 @@ const Categories = () => {
   );
 };
 
-const CateItem = ({ data }: any) => {
+const BrandItem = ({ data }: any) => {
   const router = useRouter();
   const [active, setActive] = useState(false);
   const btnDropDownRef = useRef(null);
   useClickOutSide(btnDropDownRef, () => setActive(false));
-  const handleDeleteCate = () => {};
+  const handleDeleteBrand = () => {};
 
   return (
     <div className="col-2 g-2">
-      <div className={cx("cate-item")}>
-        <Link href={``} className={cx("cate-item__img")}>
-          <Image src={data.image} alt={""} fill sizes="auto" />
+      <div className={cx("brand-item")}>
+        <Link href={``} className={cx("brand-item__img")}>
+          <Image src={data.brand_thumb} alt={""} fill sizes="auto" />
         </Link>
 
-        <div className={cx("cate-item__title")}>
+        <div className={cx("brand-item__title")}>
           <Link href={``}>
-            <span>{data.name}</span>
+            <span>{data.brand_name}</span>
           </Link>
         </div>
 
@@ -174,7 +174,7 @@ const CateItem = ({ data }: any) => {
           <ul className={cx("dropdown")} ref={btnDropDownRef}>
             <li
               onClick={() => {
-                router.push(`/admin/products/categories/${data.slug}`);
+                router.push(`/admin/products/brands/${data.slug}`);
               }}
             >
               Chỉnh sửa
@@ -189,15 +189,15 @@ const CateItem = ({ data }: any) => {
           </ul>
         )}
         <BackdropModal
-          body="Chắc chắn xóa sản phẩm này"
+          body="Chắc chắn xóa?"
           id={`deletePeoduct${data._id}`}
           titleDismiss="Hủy"
           titleAgree="Xóa"
-          handleAgree={() => handleDeleteCate()}
+          handleAgree={() => handleDeleteBrand()}
         />
       </div>
     </div>
   );
 };
 
-export default Categories;
+export default Brands;

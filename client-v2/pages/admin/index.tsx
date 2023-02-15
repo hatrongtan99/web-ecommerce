@@ -1,17 +1,22 @@
-import { ReactElement, useEffect } from "react";
-import { useRouter } from "next/router";
+import { ReactElement } from "react";
 import LayoutAdmin from "~components/layout/admin/LayoutAdmin";
+import { GetStaticProps } from "next";
 
 const AdminIndex = () => {
-  const router = useRouter();
-  useEffect(() => {
-    router.push("/admin/doanh-so");
-  }, []);
   return <div>AdminIndex</div>;
 };
 
 AdminIndex.getLayout = (page: ReactElement) => {
   return <LayoutAdmin>{page}</LayoutAdmin>;
+};
+
+export const getStaticProps: GetStaticProps = () => {
+  return {
+    redirect: {
+      destination: "/admin/doanh-so",
+      permanent: false,
+    },
+  };
 };
 
 export default AdminIndex;

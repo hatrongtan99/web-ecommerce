@@ -1,24 +1,70 @@
-@use "~/styles/mixins";
-@import "~/styles/variable";
+@use "~styles/mixins" as mixins;
+@import "~styles/variable";
 
 .title {
-  padding: 20px 0;
-  font-size: 2rem;
-  font-weight: 500;
+  font-size: 1.4rem;
+  font-weight: 700;
 }
 
-.product-list {
+.brands-form {
+  margin: 0 auto;
+  border-radius: 6px;
+  width: 90%;
+  max-height: 0;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: $form-shadow;
+  transition: max-height 0.5s ease;
+
+  &.open-form {
+    padding: 14px 16px;
+    max-height: 999px;
+  }
+
+  form {
+    width: 100%;
+    text-align: end;
+
+    .img-desc {
+      @include mixins.flex(center, flex-end);
+      margin-bottom: 20px;
+
+      &__item {
+        position: relative;
+        display: inline-block;
+        margin-left: 4px;
+        height: 100px;
+        width: 100px;
+        border: 1px solid $border-color;
+      }
+    }
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+
+    input,
+    select {
+      min-width: 300px;
+      max-width: 700px;
+      margin-left: auto;
+    }
+  }
+}
+
+///
+.brand-list {
   margin: 0 10px;
   background-color: #fff;
 }
 
-.product-item {
+.brand-item {
   @include mixins.flex(center, unset);
   flex-direction: column;
   position: relative;
   border: 1px solid #999;
   padding: 10px 10px;
-  min-height: 250px;
+  min-height: 150px;
   width: 100%;
 
   &:hover {
@@ -29,8 +75,8 @@
   &__img {
     display: inline-block;
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 100px;
+    height: 50px;
     padding: 0.25rem;
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
@@ -48,22 +94,6 @@
       font-weight: 500;
       color: #666;
     }
-  }
-
-  &__price {
-    width: 100%;
-    margin-top: auto;
-
-    strong {
-      color: $text-color;
-      font-size: 1rem;
-      font-weight: 700;
-    }
-  }
-
-  &__brand {
-    width: 100%;
-    margin-top: auto;
   }
 
   .btn-more {

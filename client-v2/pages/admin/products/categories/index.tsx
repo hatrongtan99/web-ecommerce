@@ -2,11 +2,11 @@ import { ReactElement } from "react";
 import Categories from "~components/admin/categories/Categories";
 import LayoutAdmin from "~components/layout/admin/LayoutAdmin";
 
-const CategoriesPage = () => {
+const CategoriesPageAdmin = () => {
   return <Categories />;
 };
 
-CategoriesPage.getLayout = (page: ReactElement) => {
+CategoriesPageAdmin.getLayout = (page: ReactElement) => {
   return <LayoutAdmin>{page}</LayoutAdmin>;
 };
-export default CategoriesPage;
+export default CategoriesPageAdmin;
