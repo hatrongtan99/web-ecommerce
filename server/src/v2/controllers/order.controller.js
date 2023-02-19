@@ -61,7 +61,13 @@ class OrderController {
       ...req.body,
     });
 
-    // // send mail to user comfim order
+    res.json({
+      success: true,
+      message:
+        "Tạo đơn thành công, vui lòng kiểm tra đơn hàng của bạn qua email!",
+    });
+
+    // send mail to user comfim order
     await sendmail(
       cartUser.user.email,
       notiUserOrder(
@@ -72,14 +78,11 @@ class OrderController {
     //send mail to admin to noti order
     await sendmail(
       maill.emailAdmin,
-      notiUserOrderForAdmin(cartUser.user.user_name),
-      `${process.env.URL_CLIENT}/admin/orders/${order._id}`
+      notiUserOrderForAdmin(
+        cartUser.user.user_name,
+        `${process.env.URL_CLIENT}/admin/orders/${order._id}`
+      )
     );
-    res.json({
-      success: true,
-      message:
-        "Tạo đơn thành công, vui lòng kiểm tra đơn hàng của bạn qua email!",
-    });
   });
 
   //@desc: get order by user
@@ -102,14 +105,6 @@ class OrderController {
             categories: { $slice: 1 },
           },
           populate: {
-            path: "brand",
-            select: {
-              brand_name: 1,
-              brand_thumb: 1,
-              slug: 1,
-            },
-          },
-          populate: {
             path: "categories",
             select: {
               name: 1,
@@ -118,8 +113,43 @@ class OrderController {
           },
         },
       })
+      .sort({
+        created: -1,
+      })
       .limit(RESULT_PER_PAGE)
       .skip(skip);
+    res.json({ success: true, order });
+  });
+
+  //@desc: get detail order by user
+  //@route: [GET]/v2/api/order/me/:id
+  //@access: auth
+  getDetailOrderByUser = catchSyncErr(async (req, res, next) => {
+    const idUser = req.user.id;
+    const { id } = req.params;
+    const order = await Order.findOne({ user: idUser, _id: id }).populate({
+      path: "cart",
+      select: "status products",
+      populate: {
+        path: "products.product",
+        select: {
+          name_product: 1,
+          images: { $slice: 1 },
+          slug: 1,
+          categories: { $slice: 1 },
+        },
+        populate: {
+          path: "categories",
+          select: {
+            name: 1,
+            slug: 1,
+          },
+        },
+      },
+    });
+    if (!order) {
+      return next(new ThrowError("order not found", 400));
+    }
     res.json({ success: true, order });
   });
 
@@ -138,6 +168,21 @@ class OrderController {
           user_name: 1,
         },
       })
+      .populate({
+        path: "cart",
+        select: "status products",
+        populate: {
+          path: "products.product",
+          select: {
+            name_product: 1,
+            images: { $slice: 1 },
+            slug: 1,
+          },
+        },
+      })
+      .sort({
+        created: -1,
+      })
       .limit(RESULT_PER_PAGE)
       .skip(skip);
     res.json({ success: true, orders });
@@ -148,7 +193,7 @@ class OrderController {
   //@access: admin
   getDetailOrderByAdmin = catchSyncErr(async (req, res, next) => {
     const { id } = req.params;
-    const orders = await Order.find({ _id: id })
+    const order = await Order.findOne({ _id: id })
       .populate({
         path: "user",
         select: {
@@ -157,8 +202,19 @@ class OrderController {
           user_name: 1,
         },
       })
-      .populate({ path: "cart" });
-    res.json({ success: true, orders });
+      .populate({
+        path: "cart",
+        select: { created: 1, products: 1 },
+        populate: {
+          path: "products.product",
+          select: {
+            name_product: 1,
+            images: { $slice: 1 },
+            slug: 1,
+          },
+        },
+      });
+    res.json({ success: true, order });
   });
 
   //@desc: change status order by admin
@@ -167,64 +223,69 @@ class OrderController {
   changeStatusOrder = catchSyncErr(async (req, res, next) => {
     const { id } = req.params;
     const { role, id: idUser } = req.user;
-    const { status } = req.body;
-    let isInvalid = [
-      "not processed",
-      "processed",
-      "shipping",
-      "delivered",
-      "cancelled",
-    ].includes(status);
+    const { status, noteByAdmin = "" } = req.body;
+    if (status) {
+      let isInvalid = [
+        "not processed",
+        "processed",
+        "shipping",
+        "delivered",
+        "cancelled",
+      ].includes(status);
 
-    if (role == "User") {
-      isInvalid = ["cancelled"].includes(status);
-    }
-    if (!isInvalid) {
-      return next(new ThrowError("Can't update this resouce!", 401));
-    }
+      if (role == "User") {
+        isInvalid = ["cancelled"].includes(status);
+      }
+      if (!isInvalid) {
+        return next(new ThrowError("Can't update this resouce!", 401));
+      }
 
-    if (status === "delivered") {
-      const listProductSold = await Order.aggregate([
-        {
-          $match: {
-            _id: mongoose.Types.ObjectId(id),
-            user: role === "User" ? idUser : { $exists: true },
-          },
-        },
-        {
-          $lookup: {
-            from: "Cart",
-            localField: "cart",
-            foreignField: "_id",
-            as: "cart",
-          },
-        },
-        {
-          $unwind: "$cart",
-        },
-        {
-          $unwind: "$cart.products",
-        },
-        {
-          $group: {
-            _id: "$cart.products.product",
-            quantity: {
-              $sum: "$cart.products.quantity",
+      if (status === "delivered") {
+        const listProductSold = await Order.aggregate([
+          {
+            $match: {
+              _id: mongoose.Types.ObjectId(id),
+              user: role === "User" ? idUser : { $exists: true },
             },
           },
-        },
-      ]);
+          {
+            $lookup: {
+              from: "Cart",
+              localField: "cart",
+              foreignField: "_id",
+              as: "cart",
+            },
+          },
+          {
+            $unwind: "$cart",
+          },
+          {
+            $unwind: "$cart.products",
+          },
+          {
+            $group: {
+              _id: "$cart.products.product",
+              quantity: {
+                $sum: "$cart.products.quantity",
+              },
+            },
+          },
+        ]);
 
-      await updateProduct(listProductSold);
+        await updateProduct(listProductSold);
+      }
     }
 
     const order = await Order.findOneAndUpdate(
       { _id: id, user: role === "User" ? idUser : { $exists: true } },
-      {
-        $set: {
-          status,
+      [
+        {
+          $set: {
+            status: status ? status : "$status",
+            noteByAdmin: role === "Admin" ? noteByAdmin : "$noteByAdmin",
+          },
         },
-      },
+      ],
       { new: true }
     );
 

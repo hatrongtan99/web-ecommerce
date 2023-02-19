@@ -1,43 +1,47 @@
-const { Schema, model, ObjectId } = require('mongoose');
+const { Schema, model, ObjectId } = require("mongoose");
 
 const ordersSchema = new Schema(
-    {
-        user: { type: ObjectId, ref: 'Users' },
-        cart: { type: ObjectId, ref: 'Cart' },
-        totalPrice: { type: Number, default: 0 },
-        status: {
-            type: String,
-            enum: [
-                'pending',
-                'not processed',
-                'processed',
-                'shipping',
-                'delivered',
-                'cancelled',
-            ],
-            default: 'pending',
-        },
-        sex: {
-            type: String,
-            enum: ['male', 'femaile'],
-            default: 'male',
-        },
-        phoneNumber: {
-            type: String,
-            require: true,
-        },
-        address: {
-            type: String,
-            require: true,
-        },
-        note: {
-            type: String,
-        },
-        created: { type: Date, default: Date.now() },
-        updated: Date,
+  {
+    user: { type: ObjectId, ref: "Users" },
+    cart: { type: ObjectId, ref: "Cart" },
+    totalPrice: { type: Number, default: 0 },
+    status: {
+      type: String,
+      enum: [
+        "pending",
+        "not processed",
+        "processed",
+        "shipping",
+        "delivered",
+        "cancelled",
+      ],
+      default: "pending",
     },
-    { collection: 'Order' }
+    sex: {
+      type: String,
+      enum: ["male", "femaile"],
+      default: "male",
+    },
+    phoneNumber: {
+      type: String,
+      require: true,
+    },
+    address: {
+      type: String,
+      require: true,
+    },
+    note: {
+      type: String,
+    },
+    noteByAdmin: {
+      type: String,
+      default: "",
+    },
+    created: { type: Date, default: Date.now() },
+    updated: Date,
+  },
+  { collection: "Order" }
 );
-const Order = model('Order', ordersSchema);
+const Order = model("Order", ordersSchema);
 
 module.exports = Order;

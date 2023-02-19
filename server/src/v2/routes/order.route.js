@@ -5,6 +5,11 @@ const auth = require("../middleware/auth");
 //get all order user
 router.route("/me").get(auth.protectRoute, orderController.getOrderByUser);
 
+//get detail order by user
+router
+  .route("/me/:id")
+  .get(auth.protectRoute, orderController.getDetailOrderByUser);
+
 // create new order
 router.route("/add").post(auth.protectRoute, orderController.createNewOrder);
 
