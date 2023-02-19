@@ -49,6 +49,7 @@ const Header = () => {
         if (data.data.success) {
           setAuth(null);
         }
+        router.push("/");
       })
       .catch((err) => console.log(err));
   };

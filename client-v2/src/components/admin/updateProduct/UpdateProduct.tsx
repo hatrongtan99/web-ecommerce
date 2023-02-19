@@ -134,7 +134,7 @@ const UpdateProduct = () => {
   return isLoading && !isSuccess ? (
     <Spinner />
   ) : (
-    <div className="container-fluid mb-5">
+    <div className="container-fluid mb-2">
       <h1 className={cx("title")}>Chỉnh sửa</h1>
       <div className={cx("wrapper")}>
         <Formik<CreateProduct>
@@ -585,22 +585,27 @@ const DescriptionProduct = ({
   };
 
   return (
-    <div className="col-12">
+    <>
       <label
         style={{
           width: "100%",
           fontSize: "1.3rem",
           fontWeight: "500",
           color: "#333",
-          margin: "10px",
           textAlign: "center",
+          margin: "10px 0",
         }}
       >
         Mô tả:
       </label>
       <RichEditor rawHtml={rawHtml} setRawHtml={setRawHtml} />
-      <Button onClick={handleSubmit}>Lưu</Button>
-    </div>
+      <Button
+        onClick={handleSubmit}
+        style={{ marginLeft: "auto", marginTop: "10px" }}
+      >
+        Lưu
+      </Button>
+    </>
   );
 };
 

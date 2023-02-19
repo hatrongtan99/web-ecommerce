@@ -22,7 +22,7 @@ const ProductDetail = () => {
   );
 
   return (
-    <main className="main-content">
+    <main className="main-content" style={{ backgroundColor: "#fff" }}>
       {isLoading ? (
         <Spinner />
       ) : (
@@ -100,6 +100,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
+    revalidate: 30,
   };
 };
 

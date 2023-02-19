@@ -7,6 +7,7 @@ const cx = classNames.bind(styles);
 const Catalog = ({ catalog }: { catalog: Catalog[] }) => {
   return (
     <div className={cx("catalog")}>
+      {" "}
       <h3 className={cx("catalog__title")}>THÔNG SỐ KỸ THUẬT</h3>
       <ul className={cx("catalog__list")}>
         {catalog.map((item, index) => (

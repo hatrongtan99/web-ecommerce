@@ -5,7 +5,7 @@ import {
   ProductByCategory,
   ProductDetails,
 } from "~types/product.type";
-import axiosClient, { axiosPrivate } from "./axiosConfig";
+import axiosClient from "./axiosConfig";
 
 export const getAllProducts = async (params?: any) => {
   return axiosClient

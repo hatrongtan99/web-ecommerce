@@ -42,7 +42,9 @@ const Sidebar = ({ children }: { children: ReactNode }) => {
               {body.map((i, index) => (
                 <Link
                   href={i.path}
-                  className={cx("item", { active: router.pathname === i.path })}
+                  className={cx("item", {
+                    active: router.asPath.startsWith(i.path),
+                  })}
                   key={index}
                 >
                   {i.icon}

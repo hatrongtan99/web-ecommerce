@@ -1,0 +1,176 @@
+@use "~styles/mixins" as mixins;
+@import "~styles/variable";
+
+.title {
+  text-align: start;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.wrapper {
+  margin: 20px 0;
+  padding: 14px 20px;
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: $form-shadow;
+}
+
+.detail-top {
+  @include mixins.flex(flex-start, space-between);
+  height: 70px;
+  border-bottom: 1px solid $border-color;
+  &__left {
+    p {
+      color: $text-color;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 2rem;
+    }
+    span {
+      margin-left: 10px;
+      color: #666;
+    }
+  }
+
+  &__right {
+    @include mixins.flex(flex-start, unset);
+    margin-top: 6px;
+
+    #status-order {
+      min-width: 150px;
+      border-radius: 4px;
+      overflow: hidden;
+      outline: none;
+      padding: 4px 0 6px 4px;
+      margin-right: 10px;
+      color: $text-color;
+      font-weight: 500;
+      border: 1px solid #999;
+    }
+
+    .print-icon {
+      background-color: #666;
+      padding: 8px;
+      border-radius: 4px;
+      margin-left: 10px;
+
+      cursor: pointer;
+      svg {
+        color: #fff;
+      }
+      &:hover {
+        background-color: $primary-color;
+      }
+    }
+  }
+}
+
+.detail-body {
+  &__info {
+    @include mixins.flex(flex-start, space-between);
+    padding: 20px 0;
+
+    &__item {
+      @include mixins.flex(flex-start, unset);
+      flex: 0 0 30%;
+      .icon-info {
+        display: inline-block;
+        padding: 10px 12px;
+        border-radius: 100%;
+        background-color: #ebf0fd;
+
+        svg {
+          color: $secondary-color;
+        }
+      }
+
+      p {
+        color: $text-color;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.8rem;
+      }
+      .label {
+        font-weight: 500;
+      }
+    }
+    .admin-note {
+      flex: 1;
+      padding: 0 20px;
+      textarea {
+        padding: 6px 8px;
+        min-height: 120px;
+        width: 100%;
+        color: $text-color;
+        font-size: 1rem;
+        outline: none;
+        border-color: #999;
+        border-radius: 5px;
+      }
+    }
+  }
+}
+
+.detail-body__product {
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  .table-header {
+    @include mixins.flex(flex-start, space-between);
+    border-bottom: 1px solid $border-color;
+    padding: 8px 14px;
+    p {
+      color: #999;
+      font-weight: 500;
+    }
+  }
+
+  .table-item {
+    @include mixins.flex(center, space-between);
+    padding: 8px 14px;
+    &:not(:last-child) {
+      border-bottom: 1px solid $border-color;
+    }
+    p {
+      color: #666;
+      font-weight: normal;
+    }
+
+    &__img {
+      position: relative;
+      display: inline-block;
+      height: 70px;
+      width: 70px;
+      border: 1px solid $border-color;
+      flex-shrink: 0;
+    }
+
+    &__proName {
+      color: $secondary-color !important;
+      font-weight: 500 !important;
+      font-size: 1.1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-left: 10px;
+    }
+  }
+}
+
+.detail-body__footer {
+  width: 100%;
+  padding: 10px 14px;
+  @include mixins.flex(center, flex-end);
+  p {
+    font-size: 1.3rem;
+    color: #666;
+    font-weight: 500;
+    span {
+      margin-left: 10px;
+      font-size: 1.4rem;
+      color: $text-color;
+      font-weight: 500;
+    }
+  }
+}

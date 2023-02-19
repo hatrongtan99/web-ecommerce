@@ -26,8 +26,9 @@
     }
 
     &__status {
-      a {
-        color: #26aa99;
+      p {
+        color: $text-color;
+        font-size: 1rem;
       }
     }
   }

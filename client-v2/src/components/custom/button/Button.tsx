@@ -42,8 +42,11 @@ const Button = <T extends ElementType>({
 
   if (disable) {
     Object.keys(props as {}).forEach((key) => {
-      // @ts-ignore
-      if (key.startsWith("on") && typeof props[key] == "function") {
+      if (
+        // @ts-ignore
+        (key.startsWith("on") && typeof props[key] == "function") ||
+        key.startsWith("data-bs")
+      ) {
         // @ts-ignore
         delete props[key];
       }

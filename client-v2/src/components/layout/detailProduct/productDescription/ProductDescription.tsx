@@ -15,7 +15,7 @@ const ProductDescription = ({
   catalog: CatalogType[];
 }) => {
   return (
-    <div className={`row`}>
+    <>
       {/* main description */}
       <div className="row">
         <div className={`col-8 ${cx("description")}`}>
@@ -26,7 +26,7 @@ const ProductDescription = ({
           <Catalog catalog={catalog} />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

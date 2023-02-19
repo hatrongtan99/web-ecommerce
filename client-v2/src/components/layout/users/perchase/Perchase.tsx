@@ -3,14 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Button from "~components/custom/button/Button";
+import { optionsStatusOrders } from "~data/index";
 
-import type { OrderUser } from "~types/order.type";
+import type { DetailOrderUser } from "~types/order.type";
 import { dFormat } from "~utils/format";
 import styles from "./perchase.module.scss";
 
 const cx = classNames.bind(styles);
 
-const Perchase = ({ data }: { data: OrderUser }) => {
+const Perchase = ({ data }: { data: { order: DetailOrderUser[] } }) => {
   const router = useRouter();
   return (
     <div className={cx("container")}>
@@ -27,6 +28,9 @@ const Perchase = ({ data }: { data: OrderUser }) => {
         </h3>
       ) : (
         data.order.map((order) => {
+          const option = optionsStatusOrders.find(
+            (o) => o.value === order.status
+          );
           return (
             <div className={cx("item")} key={order._id}>
               <div className={cx("item__top")}>
@@ -35,7 +39,12 @@ const Perchase = ({ data }: { data: OrderUser }) => {
                 </p>
                 <p className={cx("item__top__status")}>
                   Trạng thái:{" "}
-                  <Link href={`puchase/${order._id}`}>Chờ xử lý</Link>
+                  <Link
+                    href={`puchase/${order._id}`}
+                    style={{ color: option?.bgColor }}
+                  >
+                    {option?.label}
+                  </Link>
                 </p>
               </div>
 

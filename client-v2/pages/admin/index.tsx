@@ -1,16 +1,16 @@
 import { ReactElement } from "react";
 import LayoutAdmin from "~components/layout/admin/LayoutAdmin";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 
 const AdminIndex = () => {
-  return <div>AdminIndex</div>;
+  return <></>;
 };
 
 AdminIndex.getLayout = (page: ReactElement) => {
   return <LayoutAdmin>{page}</LayoutAdmin>;
 };
 
-export const getStaticProps: GetStaticProps = () => {
+export const getServerSideProps = () => {
   return {
     redirect: {
       destination: "/admin/doanh-so",

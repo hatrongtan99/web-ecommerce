@@ -18,6 +18,7 @@ import adminLogo from "../../../../../public/image/adminLogo.webp";
 import styles from "./sidebarAdmin.module.scss";
 import Image from "next/image";
 import useSidebar from "~hook/useSidebarAdmin";
+import { IoIosArrowBack } from "react-icons/io";
 
 const cx = classNames.bind(styles);
 
@@ -138,8 +139,8 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
                     "menu-open": itemsOpen.includes(index),
                     active:
                       router.pathname == item.path ||
-                      item.child.some(
-                        (child) => child.path === router.pathname
+                      item.child.some((child) =>
+                        router.asPath.startsWith(child.path)
                       ),
                   })}
                 >
@@ -175,7 +176,7 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
                       {item.child.map((child, index) => (
                         <li
                           className={cx("body-item__child__link", {
-                            active: router.pathname === child.path,
+                            active: router.asPath.startsWith(child.path),
                           })}
                           key={index}
                         >
@@ -210,6 +211,9 @@ const SidebarAdmin = ({ children }: { children: ReactNode }) => {
                 onClick={() => setResizeNavbar(!resizeSidebar)}
               />
               <Link href={"/"}>Home</Link>
+              <p onClick={() => router.back()}>
+                <IoIosArrowBack size={20} /> Back
+              </p>
             </div>
 
             <div className={cx("header__nav")}>
