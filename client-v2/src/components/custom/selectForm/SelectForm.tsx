@@ -1,5 +1,5 @@
-import { FieldProps } from 'formik';
-import { ReactNode } from 'react';
+import { FieldProps } from "formik";
+import { ReactNode } from "react";
 
 interface SelectFormProps extends FieldProps {
     children: ReactNode;
@@ -25,7 +25,7 @@ const SelectForm = ({
             {touched[field.name] && errors[field.name] && (
                 <div
                     className="mt-1"
-                    style={{ color: 'red', fontSize: '0.8rem' }}
+                    style={{ color: "red", fontSize: "0.8rem" }}
                 >
                     {errors[field.name] as string}
                 </div>

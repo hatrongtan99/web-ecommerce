@@ -1,4 +1,4 @@
-@use '~/styles/mixins';
+@use "~/styles/mixins";
 
 .policy-box {
     margin: 10px 0;
@@ -16,7 +16,7 @@
     }
 
     .policy-item {
-        @include mixins.flex (center, flex-start);
+        @include mixins.flex(center, flex-start);
         margin-bottom: 8px;
         p {
             font-size: 0.9rem;

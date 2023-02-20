@@ -22,7 +22,7 @@ export interface UserProfile {
     _id: string;
     user_name: string;
     email: string | null;
-    provider: 'facebook' | 'google' | 'email';
+    provider: "facebook" | "google" | "email";
     facebookId: string;
     googleId: string;
     role: string;

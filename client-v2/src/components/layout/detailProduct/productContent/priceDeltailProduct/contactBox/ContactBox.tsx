@@ -1,14 +1,14 @@
-import classNames from 'classnames/bind';
-import {BsFillTelephoneInboundFill} from 'react-icons/bs';
+import classNames from "classnames/bind";
+import { BsFillTelephoneInboundFill } from "react-icons/bs";
 
-import styles from '../../priceDeltailProduct/priceDeltailProduct.module.scss';
+import styles from "../../priceDeltailProduct/priceDeltailProduct.module.scss";
 
 const cx = classNames.bind(styles);
 
 const ContactBox = () => {
-  return (
-    <div className={cx("contact-box")}>
-      {/* <div className='row'>
+    return (
+        <div className={cx("contact-box")}>
+            {/* <div className='row'>
         <div className='col-3 d-flex'>
           <BsFillTelephoneInboundFill/>
           <p>Hotline</p>
@@ -17,8 +17,8 @@ const ContactBox = () => {
           test
         </div>
       </div> */}
-    </div>
-  )
-}
+        </div>
+    );
+};
 
-export default ContactBox
+export default ContactBox;

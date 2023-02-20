@@ -5,23 +5,23 @@ import CheckoutTop from "~components/layout/checkout/checkoutTop/CheckoutTop";
 import CustomerForm from "~components/layout/checkout/cutomerForm/CustomerForm";
 
 const CheckoutPage = () => {
-  return (
-    <main className="main-content">
-      <PerisrtLogin>
-        <RequireAuth authValid={["User", "Admin"]}>
-          <div className="container">
-            <div className="col-6 offset-3">
-              <CheckoutTop />
+    return (
+        <main className="main-content">
+            <PerisrtLogin>
+                <RequireAuth authValid={["User", "Admin"]}>
+                    <div className="container">
+                        <div className="col-6 offset-3">
+                            <CheckoutTop />
 
-              <CheckoutProductList />
+                            <CheckoutProductList />
 
-              <CustomerForm />
-            </div>
-          </div>
-        </RequireAuth>
-      </PerisrtLogin>
-    </main>
-  );
+                            <CustomerForm />
+                        </div>
+                    </div>
+                </RequireAuth>
+            </PerisrtLogin>
+        </main>
+    );
 };
 
 export default CheckoutPage;

@@ -2,82 +2,82 @@
 @import "~styles/variable";
 
 .wrapper {
-  margin: 20px 10px;
-  height: auto;
-  background-color: #fff;
-  padding: 10px 10px 10px 10px;
-  border-radius: 5px;
-  box-shadow: $form-shadow;
+    margin: 20px 10px;
+    height: auto;
+    background-color: #fff;
+    padding: 10px 10px 10px 10px;
+    border-radius: 5px;
+    box-shadow: $form-shadow;
 }
 
 .table {
-  width: 100%;
-  thead {
-    height: 36px;
-    border-bottom: 1px solid $border-color;
+    width: 100%;
+    thead {
+        height: 36px;
+        border-bottom: 1px solid $border-color;
 
-    p {
-      color: $text-color;
-      font-size: 1rem;
-      font-weight: 500;
-      padding: 4px 0 10px 0;
-      cursor: pointer;
-      &:hover {
-        color: $secondary-color;
-      }
-    }
-  }
-
-  tbody {
-    border-top: 4px solid white;
-    .row-item {
-      height: 40px;
-      cursor: pointer;
-      border-radius: 5px;
-
-      &:hover {
-        background-color: rgb(243, 243, 243);
-      }
-    }
-    .text {
-      font-size: 1.1rem;
-      margin-top: 2px;
-      margin-right: 20px;
-
-      &.dark {
         p {
-          color: $text-color;
-          font-weight: 500;
+            color: $text-color;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 4px 0 10px 0;
+            cursor: pointer;
+            &:hover {
+                color: $secondary-color;
+            }
         }
-      }
-
-      &.light {
-        p {
-          color: #666;
-          font-weight: normal;
-        }
-      }
     }
-  }
+
+    tbody {
+        border-top: 4px solid white;
+        .row-item {
+            height: 40px;
+            cursor: pointer;
+            border-radius: 5px;
+
+            &:hover {
+                background-color: rgb(243, 243, 243);
+            }
+        }
+        .text {
+            font-size: 1.1rem;
+            margin-top: 2px;
+            margin-right: 20px;
+
+            &.dark {
+                p {
+                    color: $text-color;
+                    font-weight: 500;
+                }
+            }
+
+            &.light {
+                p {
+                    color: #666;
+                    font-weight: normal;
+                }
+            }
+        }
+    }
 }
 
 .order-status {
-  margin: 4px 10px;
-  padding: 5px 0;
-  background-color: #666;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: $text-color;
+    margin: 4px 10px;
+    padding: 5px 0;
+    background-color: #666;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: $text-color;
 }
 
 .order-icon-note {
-  margin: 0 10px;
-  padding: 5px;
+    margin: 0 10px;
+    padding: 5px;
 
-  &:hover {
-    svg {
-      color: $primary-color;
+    &:hover {
+        svg {
+            color: $primary-color;
+        }
     }
-  }
 }

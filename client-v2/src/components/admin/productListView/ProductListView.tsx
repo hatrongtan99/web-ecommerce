@@ -14,97 +14,99 @@ import BackdropModal from "~components/custom/backdropModal/BackdropModal";
 const cx = classNames.bind(styles);
 
 const ProductListView = () => {
-  const router = useRouter();
+    const router = useRouter();
 
-  const { data, isSuccess } = useQuery(["list-product"], () =>
-    getAllProducts(router.query)
-  );
+    const { data, isSuccess } = useQuery(["list-product"], () =>
+        getAllProducts(router.query)
+    );
 
-  return (
-    <div className="container-fluid">
-      <h1 className={cx("title")}>Danh sách sản phẩm</h1>
-      {isSuccess && (
-        <div className={`row ${cx("product-list")}`}>
-          {data.products.map((product: any) => (
-            <ProductList key={product._id} data={product} />
-          ))}
+    return (
+        <div className="container-fluid">
+            <h1 className={cx("title")}>Danh sách sản phẩm</h1>
+            {isSuccess && (
+                <div className={`row ${cx("product-list")}`}>
+                    {data.products.map((product: any) => (
+                        <ProductList key={product._id} data={product} />
+                    ))}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 const ProductList = ({ data }: any) => {
-  const router = useRouter();
-  const [active, setActive] = useState(false);
-  const [loading, setLoading] = useState<boolean>(false);
+    const router = useRouter();
+    const [active, setActive] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
-  // hanlde click out side
-  const btnDropDownRef = useRef(null);
+    // hanlde click out side
+    const btnDropDownRef = useRef(null);
 
-  useClickOutSide(btnDropDownRef, () => setActive(false));
+    useClickOutSide(btnDropDownRef, () => setActive(false));
 
-  const handleDeleteProduct = () => {};
+    const handleDeleteProduct = () => {};
 
-  return (
-    <div className="col-3 g-2">
-      <div className={cx("product-item")}>
-        <Link href={``} className={cx("product-item__img")}>
-          <Image src={data.images[0]} alt={""} fill sizes="auto" />
-        </Link>
+    return (
+        <div className="col-3 g-2">
+            <div className={cx("product-item")}>
+                <Link href={``} className={cx("product-item__img")}>
+                    <Image src={data.images[0]} alt={""} fill sizes="auto" />
+                </Link>
 
-        <div className={cx("product-item__title")}>
-          <Link href={``}>
-            <span>{data.name_product}</span>
-          </Link>
+                <div className={cx("product-item__title")}>
+                    <Link href={``}>
+                        <span>{data.name_product}</span>
+                    </Link>
+                </div>
+
+                <div className={cx("product-item__price")}>
+                    <strong>{data.price.toLocaleString()}đ</strong>
+                </div>
+
+                <div className={cx("product-item__brand")}>
+                    <p>
+                        Hãng: <Link href={""}>{data.brand.brand_name}</Link>
+                    </p>
+                </div>
+
+                <div
+                    className={`d-flex justify-content-center align-items-center ${cx(
+                        "btn-more"
+                    )}`}
+                    onClick={() => setActive(!active)}
+                >
+                    <BsThreeDots color="#999" />
+                </div>
+                {active && (
+                    <ul className={cx("dropdown")} ref={btnDropDownRef}>
+                        <li
+                            onClick={() => {
+                                router.push(
+                                    `/admin/products/update/${data.slug}`
+                                );
+                            }}
+                        >
+                            Chỉnh sửa
+                        </li>
+                        <li
+                            data-bs-toggle="modal"
+                            data-bs-target={`#deletePeoduct${data._id}`}
+                            style={{ color: "#f40052 " }}
+                        >
+                            Xóa
+                        </li>
+                    </ul>
+                )}
+                <BackdropModal
+                    body="Chắc chắn xóa sản phẩm này"
+                    id={`deletePeoduct${data._id}`}
+                    titleDismiss="Hủy"
+                    titleAgree="Xóa"
+                    handleAgree={() => handleDeleteProduct()}
+                />
+            </div>
         </div>
-
-        <div className={cx("product-item__price")}>
-          <strong>{data.price.toLocaleString()}đ</strong>
-        </div>
-
-        <div className={cx("product-item__brand")}>
-          <p>
-            Hãng: <Link href={""}>{data.brand.brand_name}</Link>
-          </p>
-        </div>
-
-        <div
-          className={`d-flex justify-content-center align-items-center ${cx(
-            "btn-more"
-          )}`}
-          onClick={() => setActive(!active)}
-        >
-          <BsThreeDots color="#999" />
-        </div>
-        {active && (
-          <ul className={cx("dropdown")} ref={btnDropDownRef}>
-            <li
-              onClick={() => {
-                router.push(`/admin/products/update/${data.slug}`);
-              }}
-            >
-              Chỉnh sửa
-            </li>
-            <li
-              data-bs-toggle="modal"
-              data-bs-target={`#deletePeoduct${data._id}`}
-              style={{ color: "#f40052 " }}
-            >
-              Xóa
-            </li>
-          </ul>
-        )}
-        <BackdropModal
-          body="Chắc chắn xóa sản phẩm này"
-          id={`deletePeoduct${data._id}`}
-          titleDismiss="Hủy"
-          titleAgree="Xóa"
-          handleAgree={() => handleDeleteProduct()}
-        />
-      </div>
-    </div>
-  );
+    );
 };
 
 export default ProductListView;

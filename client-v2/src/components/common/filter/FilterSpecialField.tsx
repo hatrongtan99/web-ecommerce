@@ -9,38 +9,38 @@ import { useRouter } from "next/router";
 const cx = classNames.bind(styles);
 
 interface FilterSpecialFieldProps {
-  title: string;
-  data: any;
-  queryField: string;
+    title: string;
+    data: any;
+    queryField: string;
 }
 
 const FilterSpecialField = ({
-  title,
-  data,
-  queryField,
+    title,
+    data,
+    queryField,
 }: FilterSpecialFieldProps) => {
-  const { active, handleClick } = useSetActiveFilterLayout(queryField);
-  const router = useRouter();
-  usepushQueryUrl(queryField, active, router);
+    const { active, handleClick } = useSetActiveFilterLayout(queryField);
+    const router = useRouter();
+    usepushQueryUrl(queryField, active, router);
 
-  return (
-    <div className={cx("filter-group")}>
-      <h4>{title}</h4>
+    return (
+        <section className={cx("filter-group")}>
+            <h4>{title}</h4>
 
-      <div className={`row ${cx("input-group")}`}>
-        {data.map((item: any) => (
-          <div className="col-6 g-0" key={item._id || item.id}>
-            <FilterInput
-              active={active.includes(item.id.toString())}
-              data-id={item.id}
-              handleClick={handleClick}
-              title={item.title}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+            <div className={`row ${cx("input-group")}`}>
+                {data.map((item: any) => (
+                    <div className="col-6 g-0" key={item._id || item.id}>
+                        <FilterInput
+                            active={active.includes(item.id.toString())}
+                            data-id={item.id}
+                            handleClick={handleClick}
+                            title={item.title}
+                        />
+                    </div>
+                ))}
+            </div>
+        </section>
+    );
 };
 
 export default FilterSpecialField;

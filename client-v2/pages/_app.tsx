@@ -5,9 +5,9 @@ import "~styles/index.scss";
 
 import { ReactElement, ReactNode, useEffect, useState } from "react";
 import {
-  QueryClient,
-  QueryClientProvider,
-  Hydrate,
+    QueryClient,
+    QueryClientProvider,
+    Hydrate,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NextPage } from "next";
@@ -21,33 +21,33 @@ import MainLayout from "~components/common/mainLayout/MainLayout";
 import SidebarAdminProvider from "~context/SidebarAdminProvider";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
+    getLayout?: (page: ReactElement) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
+    Component: NextPageWithLayout;
 };
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
-  // import js bootstrap
-  useEffect(() => {
-    require("bootstrap/dist/js/bootstrap");
-  }, []);
+    // import js bootstrap
+    useEffect(() => {
+        require("bootstrap/dist/js/bootstrap");
+    }, []);
 
-  const getLayout =
-    Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
+    const getLayout =
+        Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
 
-  const [queryClient] = useState(() => new QueryClient());
+    const [queryClient] = useState(() => new QueryClient());
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Hydrate state={pageProps.dehydratedState}>
-        <AuthProvider>
-          <SidebarAdminProvider>
-            {getLayout(<Component {...pageProps} />)}
-          </SidebarAdminProvider>
-        </AuthProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </Hydrate>
-    </QueryClientProvider>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <Hydrate state={pageProps.dehydratedState}>
+                <AuthProvider>
+                    <SidebarAdminProvider>
+                        {getLayout(<Component {...pageProps} />)}
+                    </SidebarAdminProvider>
+                </AuthProvider>
+                <ReactQueryDevtools initialIsOpen={false} />
+            </Hydrate>
+        </QueryClientProvider>
+    );
 }

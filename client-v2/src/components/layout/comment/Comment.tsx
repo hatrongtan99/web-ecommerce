@@ -8,51 +8,67 @@ import { dFormat } from "~utils/format";
 const cx = classNames.bind(styles);
 
 const Comment = ({ id }: { id: string }) => {
-  const { data, isSuccess } = useQuery(["comment-list", id], () =>
-    getCommentProduct(id, { page: 1, pageSize: 1 })
-  );
+    const { data, isSuccess } = useQuery(["comment-list", id], () =>
+        getCommentProduct(id, { page: 1, pageSize: 1 })
+    );
 
-  return (
-    <>
-      <CommentBox id={id} />
+    return (
+        <article>
+            <CommentBox id={id} />
 
-      {/* comment item */}
-      {isSuccess ? (
-        <div className="mb-4">
-          {data?.comments?.map((comment) => (
-            <div key={comment._id}>
-              <div className={cx("comment-item")}>
-                <div className={cx("comment-item__avatar")}>
-                  <span>{comment.email.slice(0, 2)}</span>
-                </div>
-                <div className={cx("comment-item__body")}>
-                  <div className={cx("name")}>
-                    <p>{comment.user}</p>
-                    &nbsp;-&nbsp;
-                    <span>{dFormat(new Date(comment.created))}</span>
-                    <span className={cx("reply-btn")}>Trả lời</span>
-                  </div>
+            {/* comment item */}
+            {isSuccess ? (
+                <section className="mb-4">
+                    {data?.comments?.map((comment) => (
+                        <div key={comment._id}>
+                            <div className={cx("comment-item")}>
+                                <div className={cx("comment-item__avatar")}>
+                                    <span>{comment.email.slice(0, 2)}</span>
+                                </div>
+                                <div className={cx("comment-item__body")}>
+                                    <div className={cx("name")}>
+                                        <p>
+                                            {comment.user} &nbsp;-&nbsp;
+                                            <span>
+                                                {dFormat(
+                                                    new Date(comment.created)
+                                                )}
+                                            </span>
+                                            <span className={cx("reply-btn")}>
+                                                Trả lời
+                                            </span>
+                                        </p>
+                                    </div>
 
-                  <div className={cx("content")}>{comment.content}</div>
-                </div>
-              </div>
+                                    <div className={cx("content")}>
+                                        {comment.content}
+                                    </div>
+                                </div>
+                            </div>
 
-              {comment.reply.map((rep: any, index) => (
-                <div className={cx("comment-reply")} key={index}>
-                  <div className={cx("name")}>
-                    <p>{rep.name}</p>
-                    &nbsp;-&nbsp;
-                    <span>{dFormat(new Date(rep.created))}</span>
-                  </div>
-                  <div className={cx("content")}>{rep.content}</div>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      ) : null}
-    </>
-  );
+                            {comment.reply.map((rep: any, index) => (
+                                <div
+                                    className={cx("comment-reply")}
+                                    key={index}
+                                >
+                                    <div className={cx("name")}>
+                                        <p>{rep.name}</p>
+                                        &nbsp;-&nbsp;
+                                        <span>
+                                            {dFormat(new Date(rep.created))}
+                                        </span>
+                                    </div>
+                                    <div className={cx("content")}>
+                                        {rep.content}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </section>
+            ) : null}
+        </article>
+    );
 };
 
 export default Comment;

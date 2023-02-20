@@ -1,5 +1,5 @@
-@use '~/styles/mixins';
-@import '~/styles/variable';
+@use "~/styles/mixins";
+@import "~/styles/variable";
 
 .checkout-top {
     @include mixins.flex(center, space-between);

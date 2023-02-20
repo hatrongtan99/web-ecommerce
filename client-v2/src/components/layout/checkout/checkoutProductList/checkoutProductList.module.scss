@@ -2,26 +2,26 @@
 @import "~/styles/variable";
 
 .wrapper {
-  box-shadow: 0 0 20px rgb(0 0 0 / 15%);
-  background-color: #fff;
-  border-radius: 5px;
+    box-shadow: 0 0 20px rgb(0 0 0 / 15%);
+    background-color: #fff;
+    border-radius: 5px;
 
-  .product-list {
-  }
-
-  .total-pay {
-    @include mixins.flex(center, space-between);
-    padding: 16px 14px;
-
-    p {
-      font-size: 0.9rem;
-      font-weight: 600;
+    .product-list {
     }
 
-    strong {
-      color: #c10017;
-      font-size: 1.2rem;
-      font-weight: bold;
+    .total-pay {
+        @include mixins.flex(center, space-between);
+        padding: 16px 14px;
+
+        p {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        strong {
+            color: #c10017;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
     }
-  }
 }

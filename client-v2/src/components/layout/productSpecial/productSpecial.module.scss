@@ -1,4 +1,4 @@
-@import '~styles/variable';
+@import "~styles/variable";
 
 .special-wrapper {
     width: 100%;
@@ -30,7 +30,7 @@
             top: 0px;
 
             &::before {
-                content: '';
+                content: "";
                 position: absolute;
                 height: 30px;
                 width: 12px;
@@ -41,7 +41,7 @@
             }
 
             &::after {
-                content: '';
+                content: "";
                 position: absolute;
                 height: 30px;
                 width: 12px;

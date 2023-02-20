@@ -1,10 +1,10 @@
-const { Schema, ObjectId, model } = require('mongoose');
+const { Schema, ObjectId, model } = require("mongoose");
 
 const cartItemSchema = new Schema(
     {
         product: {
             type: ObjectId,
-            ref: 'Products',
+            ref: "Products",
         },
         quantity: Number,
         perchasePrice: {
@@ -16,7 +16,7 @@ const cartItemSchema = new Schema(
             default: 0,
         },
     },
-    { collection: 'CartItems' }
+    { collection: "CartItems" }
 );
 
 const cartSchema = new Schema(
@@ -24,12 +24,12 @@ const cartSchema = new Schema(
         products: [cartItemSchema],
         user: {
             type: ObjectId,
-            ref: 'Users',
+            ref: "Users",
         },
         status: {
             type: String,
-            enum: ['idle', 'processed'],
-            default: 'idle',
+            enum: ["idle", "processed"],
+            default: "idle",
         },
         created: {
             type: Date,
@@ -37,11 +37,11 @@ const cartSchema = new Schema(
         },
         updated: Date,
     },
-    { collection: 'Cart' }
+    { collection: "Cart" }
 );
 
-const CartItem = model('CartItem', cartItemSchema);
-const Cart = model('Cart', cartSchema);
+const CartItem = model("CartItem", cartItemSchema);
+const Cart = model("Cart", cartSchema);
 
 module.exports = {
     CartItem,

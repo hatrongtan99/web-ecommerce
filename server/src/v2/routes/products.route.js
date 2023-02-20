@@ -4,46 +4,46 @@ const auth = require("../middleware/auth");
 
 // get all products / create new product
 router
-  .route("/")
-  .get(productsController.getAllProducts)
-  .post(
-    auth.protectRoute,
-    auth.authAdmin(["Admin"]),
-    productsController.createProduct
-  );
+    .route("/")
+    .get(productsController.getAllProducts)
+    .post(
+        auth.protectRoute,
+        auth.authAdmin(["Admin"]),
+        productsController.createProduct
+    );
 
 // get products by categorry
 router.route("/category/:slug").get(productsController.getProductsByCategory);
 
 // desc product
 router
-  .route("/desc/:id")
-  .post(
-    auth.protectRoute,
-    auth.authAdmin(["Admin"]),
-    productsController.description
-  )
-  .delete(
-    auth.protectRoute,
-    auth.authAdmin(["Admin"]),
-    productsController.deleteDesc
-  );
+    .route("/desc/:id")
+    .post(
+        auth.protectRoute,
+        auth.authAdmin(["Admin"]),
+        productsController.description
+    )
+    .delete(
+        auth.protectRoute,
+        auth.authAdmin(["Admin"]),
+        productsController.deleteDesc
+    );
 
 // get detail product
 router.route("/:slug").get(productsController.getDetailsProduct);
 
 // update product / delete product
 router
-  .route("/:id")
-  .put(
-    auth.protectRoute,
-    auth.authAdmin(["Admin"]),
-    productsController.updateProduct
-  )
-  .delete(
-    auth.protectRoute,
-    auth.authAdmin(["Admin"]),
-    productsController.deleteProduct
-  );
+    .route("/:id")
+    .put(
+        auth.protectRoute,
+        auth.authAdmin(["Admin"]),
+        productsController.updateProduct
+    )
+    .delete(
+        auth.protectRoute,
+        auth.authAdmin(["Admin"]),
+        productsController.deleteProduct
+    );
 
 module.exports = router;

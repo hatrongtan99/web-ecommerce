@@ -1,5 +1,5 @@
-const { Schema, ObjectId, model } = require('mongoose');
-const { default: slugify } = require('slugify');
+const { Schema, ObjectId, model } = require("mongoose");
+const { default: slugify } = require("slugify");
 
 const categoriesSchema = new Schema(
     {
@@ -17,21 +17,21 @@ const categoriesSchema = new Schema(
             type: Boolean,
             default: true,
         },
-        products: [{ type: ObjectId, ref: 'Products' }],
+        products: [{ type: ObjectId, ref: "Products" }],
         updated: Date,
         created: {
             type: Date,
             default: Date.now(),
         },
     },
-    { collection: 'Categories' }
+    { collection: "Categories" }
 );
 
-categoriesSchema.pre('save', function (next) {
+categoriesSchema.pre("save", function (next) {
     this.slug = slugify(this.name, { lower: true });
     next();
 });
 
-const Categories = model('Categories', categoriesSchema);
+const Categories = model("Categories", categoriesSchema);
 
 module.exports = Categories;

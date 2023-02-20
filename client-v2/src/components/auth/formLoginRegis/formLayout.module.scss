@@ -2,139 +2,139 @@
 @import "~styles/variable";
 
 .container {
-  height: 100%;
-  width: 100%;
-  background-color: #e4e7ec;
-  padding: 50px 60px;
+    height: 100%;
+    width: 100%;
+    background-color: #e4e7ec;
+    padding: 50px 60px;
 }
 
 .wrapper {
-  height: 100vh;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  border-radius: 14px;
-  background-color: #fff;
+    height: 100vh;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 14px;
+    background-color: #fff;
 
-  .image {
-    background-color: #d65b1e;
-    border-top-right-radius: 14px;
-    border-bottom-right-radius: 14px;
-  }
+    .image {
+        background-color: #d65b1e;
+        border-top-right-radius: 14px;
+        border-bottom-right-radius: 14px;
+    }
 }
 
 .form {
-  padding: 60px 0;
+    padding: 60px 0;
 
-  &__title {
-    color: $text-color;
-    text-align: start;
+    &__title {
+        color: $text-color;
+        text-align: start;
 
-    h2 {
-      font-size: 1.8rem;
-      font-weight: bold;
+        h2 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #999;
+            margin: 10px 0 20px 0;
+        }
     }
 
-    p {
-      font-size: 0.8rem;
-      font-weight: 400;
-      color: #999;
-      margin: 10px 0 20px 0;
-    }
-  }
-
-  &__separate {
-    @include mixins.flex(center, center);
-    width: 100%;
-    margin: 30px 0;
-
-    .separate {
-      display: inline-block;
-      width: 100%;
-      border-top: 1px solid rgb(218, 214, 214);
-    }
-    p {
-      color: #999;
-      padding: 0 4px;
-    }
-  }
-
-  &__group {
-    .form__btn-social {
-      margin: 20px 4px 30px 4px;
-      button {
+    &__separate {
         @include mixins.flex(center, center);
         width: 100%;
-        padding: 6px 0;
-        border: 1px solid rgb(235, 226, 226);
-        color: $text-color;
-        font-weight: 500;
+        margin: 30px 0;
 
-        &:hover {
-          background-color: rgb(235, 226, 226);
-          transition: background-color 0.5s;
+        .separate {
+            display: inline-block;
+            width: 100%;
+            border-top: 1px solid rgb(218, 214, 214);
         }
-      }
-
-      img {
-        margin-right: 10px;
-      }
+        p {
+            color: #999;
+            padding: 0 4px;
+        }
     }
 
-    &__input {
-      @include mixins.flex(flex-start, flex-start);
-      border-bottom: 2px solid rgb(218, 218, 218);
-      padding: 6px 0;
-      margin-bottom: 30px;
+    &__group {
+        .form__btn-social {
+            margin: 20px 4px 30px 4px;
+            button {
+                @include mixins.flex(center, center);
+                width: 100%;
+                padding: 6px 0;
+                border: 1px solid rgb(235, 226, 226);
+                color: $text-color;
+                font-weight: 500;
 
-      label {
-        display: block;
-        color: #999;
-        font-size: 1rem;
-        font-weight: 500;
-        margin-right: 6px;
-      }
+                &:hover {
+                    background-color: rgb(235, 226, 226);
+                    transition: background-color 0.5s;
+                }
+            }
 
-      input {
-        color: $text-color;
-      }
+            img {
+                margin-right: 10px;
+            }
+        }
+
+        &__input {
+            @include mixins.flex(flex-start, flex-start);
+            border-bottom: 2px solid rgb(218, 218, 218);
+            padding: 6px 0;
+            margin-bottom: 30px;
+
+            label {
+                display: block;
+                color: #999;
+                font-size: 1rem;
+                font-weight: 500;
+                margin-right: 6px;
+            }
+
+            input {
+                color: $text-color;
+            }
+        }
     }
-  }
 
-  &__option {
-    @include mixins.flex(center, space-between);
-    color: #666;
-    font-size: 0.9rem;
-    cursor: pointer;
-
-    &__item {
-      label {
-        font-weight: 500;
+    &__option {
+        @include mixins.flex(center, space-between);
+        color: #666;
+        font-size: 0.9rem;
         cursor: pointer;
-        margin-left: 3px;
-      }
 
-      a {
-        font-weight: 500;
-        text-decoration: underline;
-        &:hover {
-          color: $primary-color;
+        &__item {
+            label {
+                font-weight: 500;
+                cursor: pointer;
+                margin-left: 3px;
+            }
+
+            a {
+                font-weight: 500;
+                text-decoration: underline;
+                &:hover {
+                    color: $primary-color;
+                }
+            }
         }
-      }
-    }
-  }
-
-  &__signup {
-    text-align: center;
-    p {
-      color: #999;
-      font-size: 0.8rem;
-      font-weight: 500;
     }
 
-    a {
-      color: #666;
-      &:hover {
-        color: $primary-color;
-      }
+    &__signup {
+        text-align: center;
+        p {
+            color: #999;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        a {
+            color: #666;
+            &:hover {
+                color: $primary-color;
+            }
+        }
     }
-  }
 }

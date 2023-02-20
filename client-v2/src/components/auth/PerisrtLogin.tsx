@@ -6,33 +6,33 @@ import useAxiosPrivate from "~hook/useAxiosPrivate";
 import useAuth from "~hook/useAuth";
 
 const PerisrtLogin = ({ children }: { children: ReactNode }) => {
-  const axiosPrivate = useAxiosPrivate();
-  const { auth, setAuth } = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
+    const axiosPrivate = useAxiosPrivate();
+    const { auth, setAuth } = useAuth();
+    const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (auth && auth.token) {
-      setIsLoading(false);
-      return;
-    }
-    (async function () {
-      try {
-        const res = await loginSuccess(axiosPrivate);
-        if (res.data.success && res.data.token) {
-          setAuth(res.data);
+    useEffect(() => {
+        if (auth && auth.token) {
+            setIsLoading(false);
+            return;
         }
-      } catch (error) {
-        console.log(error);
-      }
-      setIsLoading(false);
-    })();
-  }, []);
+        (async function () {
+            try {
+                const res = await loginSuccess(axiosPrivate);
+                if (res.data.success && res.data.token) {
+                    setAuth(res.data);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+            setIsLoading(false);
+        })();
+    }, []);
 
-  if (isLoading) {
-    return <Spinner />;
-  }
+    if (isLoading) {
+        return <Spinner />;
+    }
 
-  return <>{children}</>;
+    return <>{children}</>;
 };
 
 export default PerisrtLogin;

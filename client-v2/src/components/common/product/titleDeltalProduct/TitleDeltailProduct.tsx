@@ -7,18 +7,18 @@ import { ProductDetails } from "~types/product.type";
 const cx = classNames.bind(styles);
 
 const TitleDeltailProduct = ({ product }: { product: ProductDetails }) => {
-  return (
-    <div className={cx("wrapper")}>
-      <h1 className={cx("name-detail")}>{product.name_product}</h1>
-      <StarEvaluate
-        detail={{
-          sold: product.sold,
-          totalFeedback: product.totalFeedback,
-          rating: product.rating,
-        }}
-      />
-    </div>
-  );
+    return (
+        <section className={cx("wrapper")}>
+            <h1 className={cx("name-detail")}>{product.name_product}</h1>
+            <StarEvaluate
+                detail={{
+                    sold: product.sold,
+                    totalFeedback: product.totalFeedback,
+                    rating: product.rating,
+                }}
+            />
+        </section>
+    );
 };
 
 export default TitleDeltailProduct;

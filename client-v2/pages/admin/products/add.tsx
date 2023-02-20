@@ -3,10 +3,10 @@ import CreateProductForm from "~components/admin/createProductForm/CreateProduct
 import LayoutAdmin from "~components/layout/admin/LayoutAdmin";
 
 const AddProductPage = () => {
-  return <CreateProductForm />;
+    return <CreateProductForm />;
 };
 
 AddProductPage.getLayout = (page: ReactElement) => {
-  return <LayoutAdmin>{page}</LayoutAdmin>;
+    return <LayoutAdmin>{page}</LayoutAdmin>;
 };
 export default AddProductPage;

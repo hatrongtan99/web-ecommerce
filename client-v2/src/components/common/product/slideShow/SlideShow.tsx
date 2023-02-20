@@ -1,8 +1,8 @@
-import { ReactNode, useEffect, useState } from 'react';
-import classNames from 'classnames/bind';
-import { GrNext, GrPrevious } from 'react-icons/gr';
+import { ReactNode, useEffect, useState } from "react";
+import classNames from "classnames/bind";
+import { GrNext, GrPrevious } from "react-icons/gr";
 
-import styles from './slideShow.module.scss';
+import styles from "./slideShow.module.scss";
 const cx = classNames.bind(styles);
 
 interface SlideShowProps {
@@ -19,24 +19,24 @@ const SlideShow = ({
     style,
 }: SlideShowProps) => {
     return (
-        <div className={cx('wrapper')}>
-            <span className={cx('slide-btn', 'prev')}>
-                <button onClick={() => handleMoveSlide('prev')}>
+        <div className={cx("wrapper")}>
+            <div className={cx("slide-btn", "prev")}>
+                <button onClick={() => handleMoveSlide("prev")}>
                     <GrPrevious size={20} />
                 </button>
-            </span>
+            </div>
             <div
-                className={cx('slide-wrapper')}
+                className={cx("slide-wrapper")}
                 onTransitionEnd={handleTransitionEnd}
                 style={style}
             >
                 {children}
             </div>
-            <span className={cx('slide-btn', 'next')}>
-                <button onClick={() => handleMoveSlide('next')}>
+            <div className={cx("slide-btn", "next")}>
+                <button onClick={() => handleMoveSlide("next")}>
                     <GrNext size={20} />
                 </button>
-            </span>
+            </div>
         </div>
     );
 };

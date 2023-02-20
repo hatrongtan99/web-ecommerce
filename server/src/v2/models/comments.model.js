@@ -1,51 +1,51 @@
 const { Schema, ObjectId, model } = require("mongoose");
 
 const CommentsScehma = new Schema(
-  {
-    product: {
-      type: String,
-      required: true,
-    },
-    count: {
-      type: Number,
-      required: true,
-    },
-    comments: [
-      {
-        user: {
-          type: String,
-          default: "",
+    {
+        product: {
+            type: String,
+            required: true,
         },
-        email: {
-          type: String,
+        count: {
+            type: Number,
+            required: true,
         },
-        content: {
-          type: String,
-          default: "",
-        },
-        reply: [
-          {
-            user: {
-              type: String,
-              default: "",
+        comments: [
+            {
+                user: {
+                    type: String,
+                    default: "",
+                },
+                email: {
+                    type: String,
+                },
+                content: {
+                    type: String,
+                    default: "",
+                },
+                reply: [
+                    {
+                        user: {
+                            type: String,
+                            default: "",
+                        },
+                        email: {
+                            type: String,
+                        },
+                        content: {
+                            type: String,
+                            default: "",
+                        },
+                    },
+                ],
+                created: {
+                    type: Date,
+                    default: Date.now(),
+                },
             },
-            email: {
-              type: String,
-            },
-            content: {
-              type: String,
-              default: "",
-            },
-          },
         ],
-        created: {
-          type: Date,
-          default: Date.now(),
-        },
-      },
-    ],
-  },
-  { collection: "Comments" }
+    },
+    { collection: "Comments" }
 );
 
 const Comments = model("Comments", CommentsScehma);

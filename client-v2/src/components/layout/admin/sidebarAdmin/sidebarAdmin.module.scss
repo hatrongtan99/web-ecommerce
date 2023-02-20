@@ -5,249 +5,249 @@ $text-sidebar-color: #c7d0b7;
 $sibar-width: 260px;
 
 .side-container {
-  background-color: #343a40;
-  min-height: 100vh;
-  width: $sibar-width;
-  min-width: 80px;
-  height: auto;
-  box-shadow: rgba(0, 0, 0, 0.5) 1.95px 1.95px 2.6px;
-  z-index: 1;
-  overflow: hidden;
-
-  &.resize {
-    width: 80px;
-    .sidebar-top span,
-    .body-item__label,
-    .body-item__icon-r,
-    .body-item__child li a span:last-child {
-      animation: hideTitle 0.3s ease-in-out;
-      opacity: 0;
-    }
-  }
-
-  &:hover {
+    background-color: #343a40;
+    min-height: 100vh;
     width: $sibar-width;
-    .sidebar-top span,
-    .body-item__label,
-    .body-item__icon-r,
-    .body-item__child li a span:last-child {
-      opacity: 1;
-      animation: unset;
+    min-width: 80px;
+    height: auto;
+    box-shadow: rgba(0, 0, 0, 0.5) 1.95px 1.95px 2.6px;
+    z-index: 1;
+    overflow: hidden;
+
+    &.resize {
+        width: 80px;
+        .sidebar-top span,
+        .body-item__label,
+        .body-item__icon-r,
+        .body-item__child li a span:last-child {
+            animation: hideTitle 0.3s ease-in-out;
+            opacity: 0;
+        }
     }
-  }
+
+    &:hover {
+        width: $sibar-width;
+        .sidebar-top span,
+        .body-item__label,
+        .body-item__icon-r,
+        .body-item__child li a span:last-child {
+            opacity: 1;
+            animation: unset;
+        }
+    }
 }
 
 .content {
-  height: auto;
-  flex: 1;
+    height: auto;
+    flex: 1;
 }
 
 .side-container,
 .content {
-  transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .header {
-  @include mixins.flex(center, space-between);
-  height: $header-height;
-  background-color: white;
-  border-bottom: 1px solid $border-color;
+    @include mixins.flex(center, space-between);
+    height: $header-height;
+    background-color: white;
+    border-bottom: 1px solid $border-color;
 
-  &__nav {
-    color: #666;
-    &__menu,
-    a,
-    p {
-      cursor: pointer;
-      font-weight: 500;
-      display: inline-block;
+    &__nav {
+        color: #666;
+        &__menu,
+        a,
+        p {
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-block;
 
-      &:hover {
-        color: #333;
-      }
-    }
+            &:hover {
+                color: #333;
+            }
+        }
 
-    &__menu,
-    a {
-      margin-left: 20px;
-    }
-    p {
-      margin-right: 16px;
-      padding: 4px;
-    }
+        &__menu,
+        a {
+            margin-left: 20px;
+        }
+        p {
+            margin-right: 16px;
+            padding: 4px;
+        }
 
-    &__menu {
-      &:hover {
-        transform: scale(1.2);
-        transition: all 0.3s ease;
-      }
+        &__menu {
+            &:hover {
+                transform: scale(1.2);
+                transition: all 0.3s ease;
+            }
+        }
     }
-  }
 }
 
 // sidebar
 .sidebar-top {
-  overflow: hidden;
+    overflow: hidden;
 
-  &__link,
-  &__info {
-    @include mixins.flex(center, unset);
-    white-space: nowrap;
-    padding: 10px;
-    span {
-      margin-left: 10px;
-      font-size: 1rem;
-      color: $text-sidebar-color;
-      font-weight: 500;
-      cursor: pointer;
-      flex: 1;
-      padding: 10px 0;
+    &__link,
+    &__info {
+        @include mixins.flex(center, unset);
+        white-space: nowrap;
+        padding: 10px;
+        span {
+            margin-left: 10px;
+            font-size: 1rem;
+            color: $text-sidebar-color;
+            font-weight: 500;
+            cursor: pointer;
+            flex: 1;
+            padding: 10px 0;
 
-      &:hover {
-        color: white;
-      }
+            &:hover {
+                color: white;
+            }
+        }
     }
-  }
 
-  &__link {
-    border-bottom: 1px solid #485159;
-    img {
-      margin-left: 6px;
-      width: 45px;
-      height: 45px;
-      flex-shrink: 0;
+    &__link {
+        border-bottom: 1px solid #485159;
+        img {
+            margin-left: 6px;
+            width: 45px;
+            height: 45px;
+            flex-shrink: 0;
+        }
     }
-  }
 
-  &__info {
-    border-bottom: 1px solid #485159;
-    &__avatar {
-      position: relative;
-      overflow: hidden;
-      width: 45px;
-      height: 45px;
-      border-radius: 100%;
-      background-color: white;
-      flex-shrink: 0;
-      margin-left: 6px;
-      box-shadow: 3px 4px 8px rgba(99, 99, 99, 0.8);
+    &__info {
+        border-bottom: 1px solid #485159;
+        &__avatar {
+            position: relative;
+            overflow: hidden;
+            width: 45px;
+            height: 45px;
+            border-radius: 100%;
+            background-color: white;
+            flex-shrink: 0;
+            margin-left: 6px;
+            box-shadow: 3px 4px 8px rgba(99, 99, 99, 0.8);
+        }
     }
-  }
 }
 
 .sidebar-body {
-  width: 100%;
+    width: 100%;
 }
 
 .body-item {
-  display: flex;
-  flex-direction: column;
-  white-space: nowrap;
-  margin: 2px 10px 0;
-  max-height: 50px;
-  overflow: hidden;
-  list-style-type: none;
-  cursor: pointer;
-  transition: max-height 0.5s ease;
-
-  &__main {
     display: flex;
-    padding: 10px 0;
-    border-radius: 4px;
-    &:hover {
-      background-color: #494e53;
-      > span,
-      .body-item__icon-r > svg {
-        color: white;
-      }
-    }
-  }
+    flex-direction: column;
+    white-space: nowrap;
+    margin: 2px 10px 0;
+    max-height: 50px;
+    overflow: hidden;
+    list-style-type: none;
+    cursor: pointer;
+    transition: max-height 0.5s ease;
 
-  &__icon-l {
-    margin-left: 16px;
-  }
-
-  &__label {
-    color: $text-sidebar-color;
-    font-size: 1rem;
-    font-weight: 400;
-    margin-left: 10px;
-    margin-top: 2px;
-  }
-
-  &__icon-r {
-    margin-left: auto;
-    transition: transform 0.3s ease;
-    svg {
-      color: $text-sidebar-color;
-    }
-  }
-
-  &.menu-open {
-    max-height: 999px;
-    .body-item__main {
-      background-color: #494e53;
-    }
-    .body-item__icon-r {
-      transform: rotate(-90deg);
-    }
-  }
-
-  &.active {
-    .body-item__main {
-      background-color: #007bff;
-      > span,
-      .body-item__icon-r > svg {
-        color: white;
-      }
-    }
-  }
-
-  &__child {
-    height: auto;
-    &__link {
-      @include mixins.flex(center, flex-start);
-      list-style-type: none;
-      margin-top: 2px;
-
-      a {
+    &__main {
+        display: flex;
         padding: 10px 0;
         border-radius: 4px;
-        flex: 0 0 100%;
-      }
-
-      &:hover {
-        background-color: #494e53;
-      }
-
-      &__icon {
-        margin-left: 24px;
-        svg {
-          color: $text-sidebar-color;
+        &:hover {
+            background-color: #494e53;
+            > span,
+            .body-item__icon-r > svg {
+                color: white;
+            }
         }
-      }
-
-      &__label {
-        margin-left: 10px;
-        color: $text-sidebar-color;
-      }
-
-      &.active {
-        background-color: #ebecec;
-        span,
-        svg {
-          color: $text-color;
-        }
-      }
     }
-  }
+
+    &__icon-l {
+        margin-left: 16px;
+    }
+
+    &__label {
+        color: $text-sidebar-color;
+        font-size: 1rem;
+        font-weight: 400;
+        margin-left: 10px;
+        margin-top: 2px;
+    }
+
+    &__icon-r {
+        margin-left: auto;
+        transition: transform 0.3s ease;
+        svg {
+            color: $text-sidebar-color;
+        }
+    }
+
+    &.menu-open {
+        max-height: 999px;
+        .body-item__main {
+            background-color: #494e53;
+        }
+        .body-item__icon-r {
+            transform: rotate(-90deg);
+        }
+    }
+
+    &.active {
+        .body-item__main {
+            background-color: #007bff;
+            > span,
+            .body-item__icon-r > svg {
+                color: white;
+            }
+        }
+    }
+
+    &__child {
+        height: auto;
+        &__link {
+            @include mixins.flex(center, flex-start);
+            list-style-type: none;
+            margin-top: 2px;
+
+            a {
+                padding: 10px 0;
+                border-radius: 4px;
+                flex: 0 0 100%;
+            }
+
+            &:hover {
+                background-color: #494e53;
+            }
+
+            &__icon {
+                margin-left: 24px;
+                svg {
+                    color: $text-sidebar-color;
+                }
+            }
+
+            &__label {
+                margin-left: 10px;
+                color: $text-sidebar-color;
+            }
+
+            &.active {
+                background-color: #ebecec;
+                span,
+                svg {
+                    color: $text-color;
+                }
+            }
+        }
+    }
 }
 
 @keyframes hideTitle {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }

@@ -1,5 +1,5 @@
-const { maill } = require('../config/key');
-const nodemailer = require('nodemailer');
+const { maill } = require("../config/key");
+const nodemailer = require("nodemailer");
 
 const sendmail = async (to, template) => {
     const transporter = nodemailer.createTransport({
@@ -16,8 +16,8 @@ const sendmail = async (to, template) => {
         from: maill.fromUser, // sender address
         to,
         subject: template.subject,
-        text: template.text || '', // plain text body
-        html: template.html || '', // html body
+        text: template.text || "", // plain text body
+        html: template.html || "", // html body
     };
 
     return await transporter.sendMail(options);

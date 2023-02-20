@@ -15,76 +15,79 @@ import useAxiosPrivate from "~hook/useAxiosPrivate";
 import useAuth from "~hook/useAuth";
 
 const PriceDeltailProduct = ({ product }: { product: ProductDetails }) => {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const { auth, setRedirect } = useAuth();
+    const router = useRouter();
+    const queryClient = useQueryClient();
+    const { auth, setRedirect } = useAuth();
 
-  const axiosPrivate = useAxiosPrivate();
+    const axiosPrivate = useAxiosPrivate();
 
-  const mutation = useMutation(
-    (params: { product: string; quantity: number }) =>
-      addProductToCart(axiosPrivate, params),
-    {
-      onSuccess: () => {
-        return queryClient.invalidateQueries(["cart-user", auth?.user._id]);
-      },
-    }
-  );
+    const mutation = useMutation(
+        (params: { product: string; quantity: number }) =>
+            addProductToCart(axiosPrivate, params),
+        {
+            onSuccess: () => {
+                return queryClient.invalidateQueries([
+                    "cart-user",
+                    auth?.user._id,
+                ]);
+            },
+        }
+    );
 
-  // set redirect and push login page
-  const fnHelper = () => {
-    setRedirect({ pathname: router.pathname, query: router.query });
-    router.push("/auth/login");
-  };
+    // set redirect and push login page
+    const fnHelper = () => {
+        setRedirect({ pathname: router.pathname, query: router.query });
+        router.push("/auth/login");
+    };
 
-  const handleAddCart = () => {
-    if (auth == null || !auth.token) {
-      fnHelper();
-    } else {
-      mutation.mutate({ product: product._id, quantity: 1 });
-    }
-  };
+    const handleAddCart = () => {
+        if (auth == null || !auth.token) {
+            fnHelper();
+        } else {
+            mutation.mutate({ product: product._id, quantity: 1 });
+        }
+    };
 
-  const handleBuyImme = () => {
-    if (auth == null || !auth.token) {
-      fnHelper();
-    } else {
-      mutation.mutate({ product: product._id, quantity: 1 });
-      router.push(`/checkout/${auth.user._id}`);
-    }
-  };
+    const handleBuyImme = () => {
+        if (auth == null || !auth.token) {
+            fnHelper();
+        } else {
+            mutation.mutate({ product: product._id, quantity: 1 });
+            router.push(`/checkout/${auth.user._id}`);
+        }
+    };
 
-  return (
-    <>
-      <PriceBox product={product} />
+    return (
+        <section>
+            <PriceBox product={product} />
 
-      {/* buton */}
-      <div className={cx("button-wrapper")}>
-        <Button
-          size="md"
-          variant="primary-border"
-          leftIcon={<FaCartPlus />}
-          onClick={handleAddCart}
-        >
-          <p className={cx("button-title")}>Thêm Vào Giỏ</p>
-        </Button>
+            {/* buton */}
+            <div className={cx("button-wrapper")}>
+                <Button
+                    size="md"
+                    variant="primary-border"
+                    leftIcon={<FaCartPlus />}
+                    onClick={handleAddCart}
+                >
+                    <p className={cx("button-title")}>Thêm Vào Giỏ</p>
+                </Button>
 
-        <Button size="md" onClick={handleBuyImme}>
-          <p className={cx("button-title")}>Mua Ngay</p>
-        </Button>
+                <Button size="md" onClick={handleBuyImme}>
+                    <p className={cx("button-title")}>Mua Ngay</p>
+                </Button>
 
-        <Button
-          size="md"
-          variant="secondary"
-          onClick={() => alert("Tương tác")}
-        >
-          <p className={cx("button-title")}>Cần Tư Vấn</p>
-        </Button>
-      </div>
+                <Button
+                    size="md"
+                    variant="secondary"
+                    onClick={() => alert("Tương tác")}
+                >
+                    <p className={cx("button-title")}>Cần Tư Vấn</p>
+                </Button>
+            </div>
 
-      <ContactBox />
-    </>
-  );
+            <ContactBox />
+        </section>
+    );
 };
 
 export default PriceDeltailProduct;

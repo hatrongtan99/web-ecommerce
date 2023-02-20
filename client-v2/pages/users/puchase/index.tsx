@@ -10,23 +10,23 @@ import { getOrderByUser } from "~api/order.api";
 import useAxiosPrivate from "~hook/useAxiosPrivate";
 
 const UsersPuchasePage = () => {
-  const { auth } = useAuth();
-  const axiosPrivate = useAxiosPrivate();
-  const { data, isSuccess } = useQuery(
-    ["list-order", auth?.user._id],
-    () => getOrderByUser(axiosPrivate),
-    {
-      enabled: auth !== null && !!auth.token,
-      refetchOnWindowFocus: false,
-    }
-  );
-  return (
-    <PerisrtLogin>
-      <RequireAuth authValid={["Admin", "User"]}>
-        <Sidebar>{isSuccess && <Perchase data={data?.data} />}</Sidebar>
-      </RequireAuth>
-    </PerisrtLogin>
-  );
+    const { auth } = useAuth();
+    const axiosPrivate = useAxiosPrivate();
+    const { data, isSuccess } = useQuery(
+        ["list-order", auth?.user._id],
+        () => getOrderByUser(axiosPrivate),
+        {
+            enabled: auth !== null && !!auth.token,
+            refetchOnWindowFocus: false,
+        }
+    );
+    return (
+        <PerisrtLogin>
+            <RequireAuth authValid={["Admin", "User"]}>
+                <Sidebar>{isSuccess && <Perchase data={data?.data} />}</Sidebar>
+            </RequireAuth>
+        </PerisrtLogin>
+    );
 };
 
 export default UsersPuchasePage;

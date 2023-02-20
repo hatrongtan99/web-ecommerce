@@ -9,22 +9,22 @@ import useAxiosPrivate from "~hook/useAxiosPrivate";
 import DetailOrder from "~components/layout/users/detailOrder/DetailOrder";
 
 const DetailOrderUserPage = () => {
-  const router = useRouter();
-  const axiosPrivate = useAxiosPrivate();
-  const { data, isSuccess } = useQuery(
-    ["order-user", router.query.idOrder],
-    () => getDetailOrderByUser(axiosPrivate, router.query.idOrder as string)
-  );
+    const router = useRouter();
+    const axiosPrivate = useAxiosPrivate();
+    const { data, isSuccess } = useQuery(
+        ["order-user", router.query.idOrder],
+        () => getDetailOrderByUser(axiosPrivate, router.query.idOrder as string)
+    );
 
-  return (
-    <PerisrtLogin>
-      <RequireAuth authValid={["Admin", "User"]}>
-        <Sidebar>
-          {isSuccess && <DetailOrder order={data.data.order} />}
-        </Sidebar>
-      </RequireAuth>
-    </PerisrtLogin>
-  );
+    return (
+        <PerisrtLogin>
+            <RequireAuth authValid={["Admin", "User"]}>
+                <Sidebar>
+                    {isSuccess && <DetailOrder order={data.data.order} />}
+                </Sidebar>
+            </RequireAuth>
+        </PerisrtLogin>
+    );
 };
 
 export default DetailOrderUserPage;

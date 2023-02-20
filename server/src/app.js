@@ -8,20 +8,20 @@ const cloudinary = require("cloudinary");
 
 // apply middlewares
 app.use(
-  cors({
-    credentials: true,
-    origin: ["http://localhost:3000", "http://dienmaykimkhi.com"],
-  })
+    cors({
+        credentials: true,
+        origin: ["http://localhost:3000", "http://dienmaykimkhi.com"],
+    })
 );
 
 app.use(cookieParser(process.env.ACCESS_TOKEN_SECRET));
 app.use(
-  cookieSession({
-    secret: "keyboard cat",
-    resave: false,
-    saveUninitialized: false,
-    name: "session",
-  })
+    cookieSession({
+        secret: "keyboard cat",
+        resave: false,
+        saveUninitialized: false,
+        name: "session",
+    })
 );
 
 app.use(express.json());
@@ -53,9 +53,9 @@ connectMongoose();
 
 // config cloudinary
 cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
 });
 
 // handle error

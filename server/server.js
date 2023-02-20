@@ -1,14 +1,14 @@
-require('dotenv').config();
-const http = require('http');
-const app = require('./src/app');
+require("dotenv").config();
+const http = require("http");
+const app = require("./src/app");
 // create server
 const server = http.createServer(app);
 
 const port = process.env.PORT || 5000;
 server.listen(port, () => {
-    console.log('server is runing on port ' + port);
+    console.log("server is runing on port " + port);
 });
 
-process.on('SIGINT', () => {
-    server.close(() => console.log('server is stopped'));
+process.on("SIGINT", () => {
+    server.close(() => console.log("server is stopped"));
 });

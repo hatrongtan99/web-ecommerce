@@ -9,21 +9,21 @@ import { ProductDetails } from "~types/product.type";
 const cx = classNames.bind(styles);
 
 const ProductContent = ({ product }: { product: ProductDetails }) => {
-  return (
-    <div className={`row ${cx("product_content")}`}>
-      <div className="col-5">
-        <SlideDetailProduct images={product.images} />
-      </div>
+    return (
+        <div className={`row ${cx("product_content")}`}>
+            <div className="col-5">
+                <SlideDetailProduct images={product.images} />
+            </div>
 
-      <div className="col-4">
-        <PriceDeltailProduct product={product} />
-      </div>
+            <div className="col-4">
+                <PriceDeltailProduct product={product} />
+            </div>
 
-      <div className="col-3">
-        <RightDeltailProduct />
-      </div>
-    </div>
-  );
+            <div className="col-3">
+                <RightDeltailProduct />
+            </div>
+        </div>
+    );
 };
 
 export default ProductContent;

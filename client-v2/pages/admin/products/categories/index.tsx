@@ -3,10 +3,10 @@ import Categories from "~components/admin/categories/Categories";
 import LayoutAdmin from "~components/layout/admin/LayoutAdmin";
 
 const CategoriesPageAdmin = () => {
-  return <Categories />;
+    return <Categories />;
 };
 
 CategoriesPageAdmin.getLayout = (page: ReactElement) => {
-  return <LayoutAdmin>{page}</LayoutAdmin>;
+    return <LayoutAdmin>{page}</LayoutAdmin>;
 };
 export default CategoriesPageAdmin;

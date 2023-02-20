@@ -9,28 +9,28 @@ import useSetActiveFilterLayout from "~hook/useSetActiveFilterLayout";
 const cx = classNames.bind(styles);
 
 const FilterByBrand = () => {
-  const { data, isSuccess } = useQuery(["brands"], () => getAllBrand());
-  const { active, handleClick } = useSetActiveFilterLayout("brand");
+    const { data, isSuccess } = useQuery(["brands"], () => getAllBrand());
+    const { active, handleClick } = useSetActiveFilterLayout("brand");
 
-  return (
-    <div className={cx("filter-group")}>
-      <h4>CHỌN THEO HÃNG SẢN XUẤT</h4>
+    return (
+        <section className={cx("filter-group")}>
+            <h4>CHỌN THEO HÃNG SẢN XUẤT</h4>
 
-      <div className={`row ${cx("input-group")}`}>
-        {isSuccess &&
-          data.brands.map((item) => (
-            <div className="col-6 g-0" key={item._id}>
-              <FilterInput
-                active={active.includes(item._id)}
-                image={item.brand_thumb}
-                data-id={item._id}
-                handleClick={handleClick}
-              />
+            <div className={`row ${cx("input-group")}`}>
+                {isSuccess &&
+                    data.brands.map((item) => (
+                        <div className="col-6 g-0" key={item._id}>
+                            <FilterInput
+                                active={active.includes(item._id)}
+                                image={item.brand_thumb}
+                                data-id={item._id}
+                                handleClick={handleClick}
+                            />
+                        </div>
+                    ))}
             </div>
-          ))}
-      </div>
-    </div>
-  );
+        </section>
+    );
 };
 
 export default FilterByBrand;

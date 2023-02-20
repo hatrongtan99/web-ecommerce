@@ -1,14 +1,14 @@
-const brandsController = require('../controllers/brands.controller');
-const router = require('express').Router();
-const auth = require('../middleware/auth');
+const brandsController = require("../controllers/brands.controller");
+const router = require("express").Router();
+const auth = require("../middleware/auth");
 
 // get all brand / create new brand
 router
-    .route('/')
+    .route("/")
     .get(brandsController.getAllBrands)
     .post(
         auth.protectRoute,
-        auth.authAdmin(['Admin']),
+        auth.authAdmin(["Admin"]),
         brandsController.createNewBrand
     );
 

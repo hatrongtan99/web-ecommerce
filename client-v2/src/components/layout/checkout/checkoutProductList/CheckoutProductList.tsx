@@ -11,45 +11,48 @@ import { useRouter } from "next/router";
 const cx = classNames.bind(styles);
 
 const CheckoutProductList = () => {
-  const router = useRouter();
-  const { userId } = router.query!;
+    const router = useRouter();
+    const { userId } = router.query!;
 
-  const axiosPrivate = useAxiosPrivate();
+    const axiosPrivate = useAxiosPrivate();
 
-  const { data, isSuccess, isFetching } = useQuery(
-    ["cart-user", userId],
-    () => getCartUser(axiosPrivate),
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
+    const { data, isSuccess, isFetching } = useQuery(
+        ["cart-user", userId],
+        () => getCartUser(axiosPrivate),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
 
-  const totalPrice = useMemo(() => {
-    if (data?.data.success && data.data.cart) {
-      return data.data.cart.products.reduce(
-        (acc, product) => product.totalPrice + acc,
-        0
-      );
-    } else {
-      return 0;
-    }
-  }, [data]);
+    const totalPrice = useMemo(() => {
+        if (data?.data.success && data.data.cart) {
+            return data.data.cart.products.reduce(
+                (acc, product) => product.totalPrice + acc,
+                0
+            );
+        } else {
+            return 0;
+        }
+    }, [data]);
 
-  return (
-    <div className={cx("wrapper")}>
-      {isSuccess ? (
-        <div className={cx("product-list")}>
-          {data.data?.cart.products.map((item) => (
-            <ProductCheckout key={item.product._id} productItem={item} />
-          ))}
-        </div>
-      ) : null}
-      <div className={cx("total-pay")}>
-        <p>Tổng tiền:</p>
-        <strong>{totalPrice.toLocaleString()} đ</strong>
-      </div>
-    </div>
-  );
+    return (
+        <section className={cx("wrapper")}>
+            {isSuccess ? (
+                <div className={cx("product-list")}>
+                    {data.data?.cart.products.map((item) => (
+                        <ProductCheckout
+                            key={item.product._id}
+                            productItem={item}
+                        />
+                    ))}
+                </div>
+            ) : null}
+            <div className={cx("total-pay")}>
+                <p>Tổng tiền:</p>
+                <strong>{totalPrice.toLocaleString()} đ</strong>
+            </div>
+        </section>
+    );
 };
 
 export default CheckoutProductList;

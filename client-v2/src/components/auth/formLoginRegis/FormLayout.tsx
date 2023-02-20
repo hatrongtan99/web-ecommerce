@@ -6,15 +6,15 @@ import styles from "./formLayout.module.scss";
 const cx = classNames.bind(styles);
 
 const FormLayout = ({ children }: { children: ReactNode }) => {
-  return (
-    <main className={cx("container")}>
-      <div className={`row ${cx("wrapper")}`}>
-        <div className="col-6">{children}</div>
+    return (
+        <main className={cx("container")}>
+            <div className={`row ${cx("wrapper")}`}>
+                <div className="col-6">{children}</div>
 
-        <div className={`col-6 ${cx("image")}`}>image</div>
-      </div>
-    </main>
-  );
+                <div className={`col-6 ${cx("image")}`}>image</div>
+            </div>
+        </main>
+    );
 };
 
 export default FormLayout;

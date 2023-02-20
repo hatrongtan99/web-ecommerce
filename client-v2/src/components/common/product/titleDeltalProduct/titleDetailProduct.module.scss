@@ -1,4 +1,4 @@
-@use '~/styles/mixins';
+@use "~/styles/mixins";
 .wrapper {
     @include mixins.flex(center, flex-start);
     padding: 10px 0;

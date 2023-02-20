@@ -3,11 +3,11 @@ import DetailOrderAdmin from "~components/admin/orders/detailOrder/DetailOrderAd
 import LayoutAdmin from "~components/layout/admin/LayoutAdmin";
 
 const DetailOrderPageAdmin = () => {
-  return <DetailOrderAdmin />;
+    return <DetailOrderAdmin />;
 };
 
 DetailOrderPageAdmin.getLayout = (page: ReactElement) => {
-  return <LayoutAdmin>{page}</LayoutAdmin>;
+    return <LayoutAdmin>{page}</LayoutAdmin>;
 };
 
 export default DetailOrderPageAdmin;

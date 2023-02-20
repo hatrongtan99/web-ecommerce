@@ -2,50 +2,50 @@
 @import "~styles/variable";
 
 .side-bar {
-  height: auto;
-  margin: 20px 0;
-  padding: 0 20px;
+    height: auto;
+    margin: 20px 0;
+    padding: 0 20px;
 
-  &__top {
-    @include mixins.flex(center, center);
-    padding: 10px 0;
-    border-bottom: 1px solid #e7e7e7;
+    &__top {
+        @include mixins.flex(center, center);
+        padding: 10px 0;
+        border-bottom: 1px solid #e7e7e7;
 
-    .avatar {
-      position: relative;
-      display: block;
-      width: 50px;
-      height: 50px;
-      overflow: hidden;
-      border-radius: 100%;
-      border: 1px solid #e7e7e7;
+        .avatar {
+            position: relative;
+            display: block;
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+            border-radius: 100%;
+            border: 1px solid #e7e7e7;
+        }
+
+        p {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-left: 10px;
+            color: $text-color;
+        }
     }
 
-    p {
-      font-size: 1.2rem;
-      font-weight: 500;
-      margin-left: 10px;
-      color: $text-color;
-    }
-  }
+    &__body {
+        @include mixins.flex(flex-start, unset);
+        flex-direction: column;
 
-  &__body {
-    @include mixins.flex(flex-start, unset);
-    flex-direction: column;
-
-    .item {
-      @include mixins.flex(center, flex-start);
-      padding: 6px;
-      width: 100%;
-      cursor: pointer;
-      &__label {
-        margin-left: 10px;
-        font-size: 1rem;
-        font-weight: 400;
-      }
-      &.active {
-        color: $secondary-color;
-      }
+        .item {
+            @include mixins.flex(center, flex-start);
+            padding: 6px;
+            width: 100%;
+            cursor: pointer;
+            &__label {
+                margin-left: 10px;
+                font-size: 1rem;
+                font-weight: 400;
+            }
+            &.active {
+                color: $secondary-color;
+            }
+        }
     }
-  }
 }

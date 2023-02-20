@@ -1,29 +1,29 @@
 @use "~styles/mixins" as mixins;
 @import "~styles/variable";
 .wrapper-editor {
-  border: 1px solid #ccc;
+    border: 1px solid #ccc;
 }
 
 // .toolbar-editor {
 // }
 
 .text-editor {
-  background-color: white;
-  border-top: 1px solid $border-color;
-  width: 100%;
-  min-height: 400px;
-  max-height: 500px;
-  padding: 0 10px;
+    background-color: white;
+    border-top: 1px solid $border-color;
+    width: 100%;
+    min-height: 400px;
+    max-height: 500px;
+    padding: 0 10px;
 }
 
 #preview {
-  padding: 10px 16px;
-  width: 100%;
-  min-height: 476px;
-  max-height: 576px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  outline: none;
-  overflow: scroll;
-  text-align: start;
+    padding: 10px 16px;
+    width: 100%;
+    min-height: 476px;
+    max-height: 576px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    outline: none;
+    overflow: scroll;
+    text-align: start;
 }
