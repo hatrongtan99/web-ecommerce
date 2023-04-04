@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-
 export default function Home() {
     const router = useRouter();
 
@@ -23,7 +22,7 @@ export default function Home() {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            nexxt app
+            <h1>next app</h1>
         </>
     );
 }

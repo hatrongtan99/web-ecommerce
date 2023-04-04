@@ -40,29 +40,47 @@ const filter = (queryStr) => {
     if (sort) {
         sort = sort == "asc" ? 1 : sort == "desc" ? -1 : 0;
     }
-    ["sort", "price", "type", "powerType", "wattage", "battery"].forEach(
-        (key) => delete queryStr[key]
-    );
+    if (queryStr.brand) {
+        queryFilter(queryStr, "brand", query);
+    }
+    [
+        "sort",
+        "price",
+        "type",
+        "powerType",
+        "wattage",
+        "battery",
+        "brand",
+    ].forEach((key) => delete queryStr[key]);
     query = { ...query, ...queryStr };
     return { sort, query };
 };
 
 const queryFilter = (queryStr, field, query, type) => {
-    const idType = queryStr[type].split(",");
-    const obj = {
-        [field]: {
-            $in: idType.map((id) => {
-                const item = keyFilter.filter.specialField[type].find(
-                    (item) => item.id == id
-                );
-                if (item) {
-                    return {
-                        [item.filter]: item.title,
-                    };
-                }
-            }),
-        },
-    };
+    let obj;
+    if (field === "brand") {
+        obj = {
+            brand: {
+                $in: queryStr.brand.split(","),
+            },
+        };
+    } else {
+        const idType = queryStr[type].split(",");
+        obj = {
+            [field]: {
+                $in: idType.map((id) => {
+                    const item = keyFilter.filter.specialField[type].find(
+                        (item) => item.id == id
+                    );
+                    if (item) {
+                        return {
+                            [item.filter]: item.title,
+                        };
+                    }
+                }),
+            },
+        };
+    }
     query.$and ? query.$and.push(obj) : (query.$and = [obj]);
 };
 

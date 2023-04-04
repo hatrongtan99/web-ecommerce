@@ -7,6 +7,7 @@ const categoryRote = require("./category.route");
 const orderRoute = require("./order.route");
 const commentRoute = require("./comment.route");
 const feedbackRoute = require("./feedbacks.route");
+const searchRoute = require("./search.route");
 
 const routes = function (app) {
     // users
@@ -27,6 +28,8 @@ const routes = function (app) {
     app.use("/v2/api/comment", commentRoute);
     // feeback
     app.use("/v2/api/feedback", feedbackRoute);
+    //search
+    app.use("/v2/api/search", searchRoute);
 
     // all
     app.use("*", (req, res) => {

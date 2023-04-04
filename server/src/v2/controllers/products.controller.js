@@ -35,7 +35,10 @@ class ProductsController {
                 created: 1,
                 slug: 1,
             })
-            .populate({ path: "brand", select: "brand_name brand_thumb slug" })
+            .populate({
+                path: "brand",
+                select: "brand_name brand_thumb slug",
+            })
             .sort(sort ? { price: sort } : {})
             .limit(RESULT_PER_PAGE)
             .skip(skip);
@@ -121,15 +124,9 @@ class ProductsController {
         req.body.images = images;
         const newProduct = await Products.create(req.body);
 
-        const pushProductToCategory = categories.map((i) => {
-            return {
-                updateOne: {
-                    filter: { _id: i, isActive: true },
-                    update: { $push: { products: newProduct._id } },
-                },
-            };
-        });
-        await Categories.bulkWrite(pushProductToCategory);
+        await Categories.bulkWrite(
+            pushProductToCategory(categories, newProduct)
+        );
         res.json({ success: true, product: newProduct });
     });
 
@@ -154,10 +151,18 @@ class ProductsController {
     //@access: Admin
     updateProduct = catchSyncErr(async (req, res, next) => {
         const { id } = req.params;
+        const prevProduct = await Products.findOne({ _id: id });
+        // pull prev categories
+        await Categories.bulkWrite(
+            pullProductFromCategory(prevProduct.categories, prevProduct)
+        );
         const product = await Products.findOneAndUpdate({ _id: id }, req.body, {
             upsert: false,
             new: true,
         });
+        await Categories.bulkWrite(
+            pushProductToCategory(product.categories, product)
+        );
         if (!product) {
             return next(new ThrowError("Product not found!", 400));
         }
@@ -214,5 +219,29 @@ class ProductsController {
         });
     });
 }
+
+const pushProductToCategory = (categories, product) => {
+    return categories.map((i) => {
+        return {
+            updateOne: {
+                filter: { _id: i, isActive: true },
+                update: { $push: { products: product._id } },
+            },
+        };
+    });
+};
+
+const pullProductFromCategory = (categories, product) => {
+    return categories.map((i) => {
+        return {
+            updateOne: {
+                filter: { _id: i, isActive: true },
+                update: {
+                    $pull: { products: product._id },
+                },
+            },
+        };
+    });
+};
 
 module.exports = new ProductsController();

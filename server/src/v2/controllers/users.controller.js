@@ -86,7 +86,7 @@ class UsersController {
     });
 
     //@desc: login by goole
-    //@route: [GET]/v2/api/users/google
+    //@route: [GET]/v2/api/users/social-login/success
     //@access: public
     loginSocialSuccess = catchSyncErr(async (req, res, next) => {
         return sendToken(res, req.user);
@@ -99,7 +99,7 @@ class UsersController {
         const refreshToken = req.signedCookies["refreshToken"];
         if (!refreshToken) {
             return next(
-                new ThrowError("Invalid refresh token: " + refreshToken)
+                new ThrowError("Invalid refresh token: " + refreshToken, 401)
             );
         }
         const decode = JWT.verify(
@@ -113,7 +113,7 @@ class UsersController {
             }
             sendToken(res, user);
         } else {
-            return next(new ThrowError("User not found!", 403));
+            return next(new ThrowError("User not found!", 401));
         }
     });
 

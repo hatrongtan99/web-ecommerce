@@ -8,7 +8,7 @@ const sendToken = async function (res, user) {
         signed: true,
     });
     res.cookie("accessToken", token, {
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 60 * 1000,
         httpOnly: true,
         signed: true,
     });

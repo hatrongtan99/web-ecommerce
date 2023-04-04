@@ -38,7 +38,7 @@ const createProductValidates = Yup.object({
         .min(0, "*Khuyến mãi phải từ 0 - 99 %")
         .max(99, "*Khuyến mãi phải từ 0 - 99 %"),
     sku: Yup.string().required("*Vui lòng nhập mã hàng!"),
-    category: Yup.array().min(1, "*Chọn ít nhất 1 loại!"),
+    categories: Yup.array().min(1, "*Chọn ít nhất 1 loại!"),
     in_stock: Yup.number()
         .positive("*Số lượng phải lớn hơn 0!")
         .required("*Vui lòng nhập số lượng!"),

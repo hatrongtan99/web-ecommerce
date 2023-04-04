@@ -27,6 +27,8 @@
 
     // search
     &__search {
+        position: relative;
+
         .form__search {
             position: relative;
             display: flex;
@@ -67,6 +69,15 @@
             &:focus-within {
                 border-color: rgb(197, 198, 201);
             }
+        }
+
+        .pop-search {
+            position: absolute;
+            height: 100px;
+            width: 100px;
+            border: 1px solid $border-color;
+            background-color: #fff;
+            z-index: 2;
         }
     }
 

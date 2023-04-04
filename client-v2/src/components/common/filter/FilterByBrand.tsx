@@ -5,13 +5,16 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllBrand } from "~api/brand.api";
 import FilterInput from "~components/custom/filterInput/FilterInput";
 import useSetActiveFilterLayout from "~hook/useSetActiveFilterLayout";
+import usePushQueryUrl from "~hook/usePushQueryUrl";
+import { useRouter } from "next/router";
 
 const cx = classNames.bind(styles);
 
 const FilterByBrand = () => {
+    const router = useRouter();
     const { data, isSuccess } = useQuery(["brands"], () => getAllBrand());
     const { active, handleClick } = useSetActiveFilterLayout("brand");
-
+    usePushQueryUrl("brand", active, router, data);
     return (
         <section className={cx("filter-group")}>
             <h4>CHỌN THEO HÃNG SẢN XUẤT</h4>

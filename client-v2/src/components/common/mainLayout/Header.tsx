@@ -118,7 +118,7 @@ const Header = () => {
                 </div>
 
                 {/* search */}
-                <div className={`col-3 ${cx("header__search")}`}>
+                <div className="col-3">
                     <SearchInput />
                 </div>
 

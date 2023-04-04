@@ -29,7 +29,10 @@ const useAxiosPrivate = () => {
             },
             async (err: AxiosError) => {
                 const prevRequest = err?.config!;
-                if (err.response?.status === 403) {
+                if (
+                    err.response?.status === 403 ||
+                    err.response?.status === 401
+                ) {
                     if (prevRequest.url !== "/users/refresh-token") {
                         try {
                             const res = await refreshToken(axiosPrivate);
