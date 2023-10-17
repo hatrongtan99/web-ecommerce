@@ -1,4 +1,4 @@
-import { ElementType, ReactNode, ComponentProps, CSSProperties } from "react";
+import { ElementType, ReactNode, ComponentProps, CSSProperties, HtmlHTMLAttributes } from "react";
 import classNames from "classnames/bind";
 import styles from "./button.module.scss";
 

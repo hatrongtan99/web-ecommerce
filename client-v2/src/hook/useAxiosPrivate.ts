@@ -6,7 +6,6 @@ import useAuth from "./useAuth";
 
 const useAxiosPrivate = () => {
     const { auth, persirt, setAuth } = useAuth();
-
     useEffect(() => {
         const token = auth?.token;
         const axiosPrivateRequest = axiosPrivate.interceptors.request.use(

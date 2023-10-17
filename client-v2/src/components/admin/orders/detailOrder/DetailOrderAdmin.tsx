@@ -95,8 +95,9 @@ const DetailOrderAdmin = () => {
     };
 
     const handlePrint = () => {
-        var printContents = document.getElementById("order-details")!.innerHTML;
-        var originalContents = document.body.innerHTML;
+        const printContents =
+            document.getElementById("order-details")!.innerHTML;
+        const originalContents = document.body.innerHTML;
 
         document.body.innerHTML = printContents;
 
